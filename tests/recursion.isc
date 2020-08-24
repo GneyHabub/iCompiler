@@ -1,4 +1,4 @@
-pow2 (n : integer) : integer
+routine pow2 (n : integer) : integer
 	if n > 0 then
 		return 2 * pow2( n - 1 )
 	else
@@ -6,7 +6,7 @@ pow2 (n : integer) : integer
 	end
 end
 
-main (n : integer) : integer
+routine main (n : integer) : integer
 	return pow2 ( n )
 end
 
