@@ -7,7 +7,7 @@ type ex_type is record
 	var r : real
 end
 
-main() : boolean is
+routine main() : boolean is
 	var record1 is ex_type
 	record1.in_type_var.b = false
 	record1.integer5 = 3
