@@ -1,14 +1,15 @@
-import 'dart:async';
 import 'dart:io';
 
 class Token {
-  String value;
-  int start;
-  int end;
-  int type = null;
-  bool isFaulty;
-
-  Token(this.value, this.start, this.end, {this.isFaulty}) {}
+  final String value;
+  final int start;
+  final int end;
+  final int type = null;
+  final bool isFaulty;
+  String toString(){
+    return 'Token "${value == '\n' ? '\\n' : value}", ${start}–${end}';
+  }
+  const Token(this.value, this.start, this.end, {this.isFaulty});
 }
 
 RegExp langTokenPtn = new RegExp(
@@ -16,13 +17,13 @@ RegExp langTokenPtn = new RegExp(
   multiLine: true,
 );
 
-Future<List<Token>> lexer(path) async {
+List<Token> lexer(path){
   var tokens = <Token>[];
-  var fileContents = await new File(path).readAsString();
-  var matches = langTokenPtn.allMatches(fileContents);
-  var previousMatch = null;
+  var fileContents = new File(path).readAsStringSync();
+  Iterable<RegExpMatch> iterator = langTokenPtn.allMatches(fileContents);
 
-  for (var match in matches) {
+  RegExpMatch previousMatch = null;
+  for (RegExpMatch match in iterator) {
     if (previousMatch != null && previousMatch.end != match.start) {
       tokens.add(new Token(
         fileContents.substring(previousMatch.end, match.start),
@@ -31,24 +32,21 @@ Future<List<Token>> lexer(path) async {
         isFaulty: true,
       ));
     }
-
     tokens.add(new Token(
       match.group(1),
       match.start,
       match.end,
       isFaulty: false,
     ));
-
     previousMatch = match;
   }
 
   return tokens;
 }
 
-void main() async {
-  List<Token> tokensList = await lexer('./tests/bubble_sort.isc');
+void main(){
+  List<Token> tokensList = lexer('./tests/bubble_sort.isc');
   tokensList.forEach((element) {
-    print(
-        'Token "${element.value == '\n' ? '\\n' : element.value}", ${element.start}–${element.end}');
+    print(element);
   });
 }
