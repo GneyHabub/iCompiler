@@ -35,7 +35,7 @@ class Program implements Node {
       } else if (declaration[0].value == 'routine') {
         declarations.add(RoutineDeclaration.parse(declaration));
       } else {
-        throw SyntaxError(declaration[0], "Expected declaration, found $declaration[0]");
+        throw SyntaxError(declaration[0], "Expected declaration, found ${declaration[0]}");
       }
     }
 
