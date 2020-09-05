@@ -2,11 +2,11 @@ import 'comparison.dart';
 import 'binary-relation.dart';
 import 'expression.dart';
 
-/// Numeric _greater than_ operator.
+/// Numeric _greater than or equal to_ operator.
 ///
 /// Casts both operands to a numeric type and returns a boolean value.
-class GreaterOperator extends BinaryRelation implements Comparison {
-  GreaterOperator(Expression leftOperand, Expression rightOperand)
+class GreaterEqOperator extends BinaryRelation implements Comparison {
+  GreaterEqOperator(Expression leftOperand, Expression rightOperand)
     : super(leftOperand, rightOperand);
 
   // TODO: implement .parse()
