@@ -1,5 +1,8 @@
 import 'var-type.dart';
 import 'variable-declaration.dart';
+import '../lexer.dart';
+import '../syntax-error.dart';
+import '../iterator-utils.dart';
 import '../print-utils.dart';
 
 /// A compound type that has several [fields] inside.
@@ -8,7 +11,32 @@ class RecordType implements VarType {
 
   RecordType(this.fields);
 
-  // TODO: implement .parse()
+  factory RecordType.parse(Iterable<Token> tokens) {
+    var iterator = tokens.iterator;
+    checkNext(iterator, RegExp('record\$'), "Expected 'record'");
+    iterator.moveNext();
+    var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
+    checkNext(iterator, RegExp('end\$'), "Expected 'end'");
+    checkNoMore(iterator);
+
+    var declarations = <VariableDeclaration>[];
+    var bodyIterator = bodyTokens.iterator;
+
+    while (bodyIterator.moveNext()) {
+      var declarationTokens = consumeUntil(bodyIterator, RegExp("^[\n;]\$"));
+      if (declarationTokens.isEmpty) {
+        continue;
+      }
+
+      declarations.add(VariableDeclaration.parse(declarationTokens));
+    }
+
+    if (declarations.isEmpty) {
+      throw SyntaxError(iterator.current, "Expected at least one field in a record");
+    }
+
+    return RecordType(declarations);
+  }
 
   String toString({int depth = 0, String prefix = ''}) {
     return (
