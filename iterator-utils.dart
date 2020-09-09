@@ -25,6 +25,15 @@ void checkNext(Iterator<Token> iterator, RegExp expected, String errorMessage) {
   }
 }
 
+/// Check that the current token in the [iterator] matches the [expected] regex.
+///
+/// Throws a syntax error with a given [errorMessage] if the check fails.
+void checkThis(Iterator<Token> iterator, RegExp expected, String errorMessage) {
+  if (iterator.current.value == null || !expected.hasMatch(iterator.current.value)) {
+    throw SyntaxError(iterator.current, errorMessage);
+  }
+}
+
 /// Check that the [iterator] doesn't have any more tokens.
 ///
 /// Throws a syntax error if the check fails.

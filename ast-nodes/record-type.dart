@@ -16,7 +16,7 @@ class RecordType implements VarType {
     checkNext(iterator, RegExp('record\$'), "Expected 'record'");
     iterator.moveNext();
     var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
-    checkNext(iterator, RegExp('end\$'), "Expected 'end'");
+    checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
     var declarations = <VariableDeclaration>[];

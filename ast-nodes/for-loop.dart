@@ -22,9 +22,9 @@ class ForLoop implements Statement {
     checkNext(iterator, RegExp('in\$'), "Expected 'in'");
     iterator.moveNext();
     var range = Range.parse(consumeUntil(iterator, RegExp('loop\$')));
-    checkNext(iterator, RegExp('loop\$'), "Expected 'loop'");
+    checkThis(iterator, RegExp('loop\$'), "Expected 'loop'");
     var bodyTokens = consumeUntil(iterator, RegExp('end'));
-    checkNext(iterator, RegExp('end\$'), "Expected 'end'");
+    checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
     var bodyIterator = bodyTokens.iterator;
