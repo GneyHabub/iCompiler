@@ -15,7 +15,7 @@ class TypeDeclaration extends Declaration {
   factory TypeDeclaration.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('type\$'), "Expected 'type'");
-    checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var name = iterator.current.value;
     if (isReserved(name)) {
       throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");

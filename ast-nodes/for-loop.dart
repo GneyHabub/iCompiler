@@ -18,7 +18,7 @@ class ForLoop implements Statement {
   factory ForLoop.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('for\$'), "Expected 'for'");
-    checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     if (isReserved(iterator.current.value)) {
       throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
     }
