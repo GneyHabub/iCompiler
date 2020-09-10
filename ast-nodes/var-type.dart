@@ -7,6 +7,7 @@ import 'record-type.dart';
 import 'named-type.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
+import '../parser-utils.dart';
 import '../syntax-error.dart';
 
 /// A type of a variable.
@@ -36,6 +37,10 @@ abstract class VarType implements Node {
     }
     if (iterator.current.value == 'record') {
       return RecordType.parse(tokens);
+    }
+
+    if (isReserved(iterator.current.value)) {
+      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
     }
 
     var result = NamedType(iterator.current.value);

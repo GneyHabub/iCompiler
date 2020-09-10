@@ -1,7 +1,9 @@
 import 'declaration.dart';
 import 'var-type.dart';
 import '../lexer.dart';
+import '../syntax-error.dart';
 import '../iterator-utils.dart';
+import '../parser-utils.dart';
 import '../print-utils.dart';
 
 /// A type declaration gives a name to some type [value].
@@ -15,6 +17,9 @@ class TypeDeclaration extends Declaration {
     checkNext(iterator, RegExp('type\$'), "Expected 'type'");
     checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
     var name = iterator.current.value;
+    if (isReserved(name)) {
+      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+    }
     checkNext(iterator, RegExp('is\$'), "Expected 'is'");
     var type = VarType.parse(consumeUntil(iterator, RegExp("[\n;]\$")));
     checkNoMore(iterator);

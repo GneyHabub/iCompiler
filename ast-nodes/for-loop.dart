@@ -3,6 +3,7 @@ import 'variable.dart';
 import 'range.dart';
 import '../print-utils.dart';
 import '../iterator-utils.dart';
+import '../parser-utils.dart';
 import '../syntax-error.dart';
 import '../lexer.dart';
 
@@ -18,6 +19,9 @@ class ForLoop implements Statement {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('for\$'), "Expected 'for'");
     checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    if (isReserved(iterator.current.value)) {
+      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+    }
     var loopVariable = Variable(iterator.current.value);
     checkNext(iterator, RegExp('in\$'), "Expected 'in'");
     iterator.moveNext();
