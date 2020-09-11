@@ -19,22 +19,44 @@ class RoutineDeclaration extends Declaration {
     checkNext(iterator, RegExp('routine\$'), "Expected 'routine'");
     checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
     checkNext(iterator, RegExp("\\("), "Expected '('");
-    var par = Parameter.parse(consumeUntil(iterator, RegExp("\\)")));
+    var par = consumeUntil(iterator, RegExp("\\)"));
     checkThis(iterator, RegExp("\\)"), "Expected ')'");
-    var type = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
+    iterator.moveNext();
+    List<Token> type = null;
+    if (iterator.current?.value == ":"){
+      type = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
+    }
     checkThis(iterator, RegExp('is\$'));
     var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
-    if (type.isEmpty) {
-      throw SyntaxError(iterator.current, "Expected a type");
+    var roparameters = <Parameter>[];
+    var parsIterator = par.iterator;
+    while (parsIterator.moveNext()) {
+      var blockTokens = consumeUntil(parsIterator, RegExp(",\$"));
+      if (blockTokens.isEmpty) {
+        continue;
+      }
+      roparameters.add(Parameter.parse(blockTokens));
     }
 
-    var roparameters = List<Parameter>.parse(par);
-    var rotype = VarType.parse(type);
-    var robody = List<Statement>.parse(bodyTokens);
+    VarType rotype = null;
 
+    if (type != null) {
+      rotype = VarType.parse(type);
+    }
+
+    var bodyIterator = bodyTokens.iterator;
+    var robody = <Statement>[];
+    while (bodyIterator.moveNext()) {
+      var blockTokens = consumeUntil(bodyIterator, RegExp("[\n;]\$"));
+      if (blockTokens.isEmpty) {
+        continue;
+      }
+      robody.add(Statement.parse(blockTokens));
+    }
+    
     return RoutineDeclaration(myroutine, roparameters, rotype, robody);
   }
 
