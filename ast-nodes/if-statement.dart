@@ -10,30 +10,56 @@ class IfStatement implements Statement {
 
   IfStatement(this.condition, this.blockTrue, this.blockFalse);
 
-  // TODO: implement .parse()
-
   factory IfStatement.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
     var expressionBody = consumeUntil(iterator, RegExp("^then\$"));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
-    var body = consumeUntil(iterator, RegExp("^else\$"));
-    checkThis(iterator, RegExp('else\$'), "Expected 'else'");
-    var elseBody = consumeUntil(iterator, RegExp("^end\$"));
-    checkThis(iterator, RegExp('end\$'), "Expected 'end'");
-    checkNoMore(iterator);
+    var trueBody = consumeUntil(iterator, RegExp("^(else|end)\$"));
+    List<Token> falseBody = null;
+
+    if (iterator.current?.value == "else") {
+
+      falseBody = consumeUntil(iterator, RegExp("^end\$"));
+      checkThis(iterator, RegExp('end\$'), "Expected 'end'");
+      checkNoMore(iterator);
+    } else if (iterator.current?.value == "end") {
+      checkNoMore(iterator);
+    }
 
     if (expressionBody.isEmpty) {
       throw SyntaxError(iterator.current, "Expected a condition");
     }
 
-    if (body.isEmpty) {
+    if (trueBody.isEmpty) {
       throw SyntaxError(iterator.current, "Expected a true statement");
     }
 
     var expBody = Expression.parse(expressionBody);
-    var trueBlock = List<Statement>.parse(body);
-    var falseBlock = List<Statement>.parse(elseBody);
+
+    var trueIterator = trueBody.iterator;
+    var trueBlock = <Statement>[];
+    while (trueIterator.moveNext()) {
+      var blockTokens = consumeUntil(trueIterator, RegExp("[\n;]\$"));
+      if (blockTokens.isEmpty) {
+        continue;
+      }
+      trueBlock.add(Statement.parse(blockTokens));
+    }
+    
+
+    var falseBlock = <Statement>[];
+    if (falseBody != null) {
+    var falseIterator = falseBody.iterator;
+    while (falseIterator.moveNext()) {
+      var blockTokens = consumeUntil(falseIterator, RegExp("[\n;]\$"));
+      if (blockTokens.isEmpty) {
+        continue;
+      }
+      
+      falseBlock.add(Statement.parse(blockTokens));
+    }
+    }
 
     return IfStatement(expBody, trueBlock, falseBlock);
   }
