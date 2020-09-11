@@ -14,8 +14,28 @@ class RoutineDeclaration extends Declaration {
   RoutineDeclaration(name, this.parameters, this.returnType, this.body) : super(name);
 
   factory RoutineDeclaration.parse(Iterable<Token> tokens) {
-    // TODO: write the actual parser body
-    return RoutineDeclaration('dummy', null, null, null);
+ 
+    var iterator = tokens.iterator;
+    checkNext(iterator, RegExp('routine\$'), "Expected 'routine'");
+    checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    checkNext(iterator, RegExp("\\("), "Expected '('");
+    var par = Parameter.parse(consumeUntil(iterator, RegExp("\\)")));
+    checkThis(iterator, RegExp("\\)"), "Expected ')'");
+    var type = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
+    checkThis(iterator, RegExp('is\$'));
+    var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
+    checkThis(iterator, RegExp('end\$'), "Expected 'end'");
+    checkNoMore(iterator);
+
+    if (type.isEmpty) {
+      throw SyntaxError(iterator.current, "Expected a type");
+    }
+
+    var roparameters = List<Parameter>.parse(par);
+    var rotype = VarType.parse(type);
+    var robody = List<Statement>.parse(bodyTokens);
+
+    return RoutineDeclaration(myroutine, roparameters, rotype, robody);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
