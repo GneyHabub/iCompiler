@@ -16,9 +16,9 @@ class IfStatement implements Statement {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
     var expressionBody = consumeUntil(iterator, RegExp("^then\$"));
-    checkNext(iterator, RegExp('then\$'), "Expected 'then'");
+    checkThis(iterator, RegExp('then\$'), "Expected 'then'");
     var body = consumeUntil(iterator, RegExp("^else\$"));
-    checkNext(iterator, RegExp('else\$'), "Expected 'else'");
+    checkThis(iterator, RegExp('else\$'), "Expected 'else'");
     var elseBody = consumeUntil(iterator, RegExp("^end\$"));
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
