@@ -14,16 +14,16 @@ class IfStatement implements Statement {
   IfStatement(this.condition, this.blockTrue, this.blockFalse);
 
   factory IfStatement.parse(Iterable<Token> tokens) {
+    final nestedBlockStarter = RegExp("(record|for|if|while)\$");
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
-    var expressionBody = consumeUntil(iterator, RegExp("^then\$"));
+    var expressionBody = consumeUntil(iterator, RegExp("then\$"));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
-    List<Token> trueBody = consumeStackUntil(iterator, RegExp("^(for|if|while)\$"), RegExp("^end\$"));
+    List<Token> trueBody = consumeStackUntil(iterator, nestedBlockStarter, RegExp("end\$"));
+
     List<Token> falseBody = null;
-
     if (iterator.current?.value == "else") {
-
-      falseBody = consumeStackUntil(iterator, RegExp("^(for|if|while)\$"), RegExp("^end\$"));
+      falseBody = consumeStackUntil(iterator, nestedBlockStarter, RegExp("end\$"));
       checkThis(iterator, RegExp('end\$'), "Expected 'end'");
       checkNoMore(iterator);
     } else if (iterator.current?.value == "end") {
