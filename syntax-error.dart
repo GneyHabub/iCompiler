@@ -10,6 +10,6 @@ class SyntaxError implements Exception {
   SyntaxError(this.faultyToken, this.cause);
 
   String toString() {
-    return this.cause;
+    return this.cause + ', found ${faultyToken?.value}';
   }
 }
