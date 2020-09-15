@@ -15,37 +15,36 @@ class RoutineDeclaration extends Declaration {
   RoutineDeclaration(name, this.parameters, this.returnType, this.body) : super(name);
 
   factory RoutineDeclaration.parse(Iterable<Token> tokens) {
- 
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('routine\$'), "Expected 'routine'");
     checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    var routineName = iterator.current.value;
+
     checkNext(iterator, RegExp("\\("), "Expected '('");
-    var par = consumeUntil(iterator, RegExp("\\)"));
+    var parameterTokens = consumeUntil(iterator, RegExp("\\)\$"));
     checkThis(iterator, RegExp("\\)"), "Expected ')'");
     iterator.moveNext();
-    List<Token> type = null;
+
+    VarType returnType = null;
     if (iterator.current?.value == ":"){
-      type = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
+      iterator.moveNext();
+      returnType = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
     }
-    checkThis(iterator, RegExp('is\$'));
-    var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
+
+    checkThis(iterator, RegExp('is\$'), "Expected 'is'");
+    var bodyTokens = consumeUntil(iterator, RegExp("end\$"));
+    print(bodyTokens);
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
     var roparameters = <Parameter>[];
-    var parsIterator = par.iterator;
+    var parsIterator = parameterTokens.iterator;
     while (parsIterator.moveNext()) {
       var blockTokens = consumeUntil(parsIterator, RegExp(",\$"));
       if (blockTokens.isEmpty) {
         continue;
       }
       roparameters.add(Parameter.parse(blockTokens));
-    }
-
-    VarType rotype = null;
-
-    if (type != null) {
-      rotype = VarType.parse(type);
     }
 
     var bodyIterator = bodyTokens.iterator;
@@ -57,8 +56,8 @@ class RoutineDeclaration extends Declaration {
       }
       robody.add(Statement.parse(blockTokens));
     }
-    
-    return RoutineDeclaration(myroutine, roparameters, rotype, robody);
+
+    return RoutineDeclaration(routineName, roparameters, returnType, robody);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
