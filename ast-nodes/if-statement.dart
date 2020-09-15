@@ -15,12 +15,12 @@ class IfStatement implements Statement {
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
     var expressionBody = consumeUntil(iterator, RegExp("^then\$"));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
-    var trueBody = consumeUntil(iterator, RegExp("^(else|end)\$"));
+    List<Token> trueBody = consumeStackUntil(iterator, RegExp("^(for|if|while)\$"), RegExp("^end\$"));
     List<Token> falseBody = null;
 
     if (iterator.current?.value == "else") {
 
-      falseBody = consumeUntil(iterator, RegExp("^end\$"));
+      falseBody = consumeStackUntil(iterator, RegExp("^(for|if|while)\$"), RegExp("^end\$"));
       checkThis(iterator, RegExp('end\$'), "Expected 'end'");
       checkNoMore(iterator);
     } else if (iterator.current?.value == "end") {
