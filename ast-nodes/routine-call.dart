@@ -16,40 +16,37 @@ class RoutineCall implements Primary {
   factory RoutineCall.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
     checkNext(iter, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
-    if (isReserved(iter.current.value))
-      throw SyntaxError(
-          iter.current, 'The "${iter.current.value}" keyword is reserved');
-    final tempName = iter.current.value;
-    checkNext(iter, RegExp('^[(]\$'), 'Expected "("');
-    var exprs = <Expression>[]; // Final array of parsed Expressions
-    var expBuffer = []; // Array of Tokens that are located between main braces
-    var argExpected =
-        false; // Flag that is set after encountering a comma (to detect missing arguments)
-    String
-        lastToken; // Store the last Token in the expBuffer in order to prevent trailing comma
-    expBuffer = consumeStackUntil(iter, RegExp('^[(]\$'), RegExp('^[)]\$'));
-    if (iter.current?.value != ')') {
-      throw SyntaxError(null, 'Expected ")"');
+    final routineName = iter.current.value;
+    if (isReserved(routineName)) {
+      throw SyntaxError(iter.current, 'The "$routineName" keyword is reserved');
     }
-    final exprIter = expBuffer.iterator;
-    while (exprIter.moveNext()) {
-      final tokenBuff = consumeUntil(exprIter, RegExp("^[,]\$"));
-      // Check for the case with missing argument
-      if (tokenBuff.isEmpty && argExpected) {
-        throw SyntaxError(null, 'Expected an argument');
-      } else if (!tokenBuff.isEmpty) {
-        exprs.add(Expression.parse(tokenBuff));
+
+    checkNext(iter, RegExp('\\(\$'), 'Expected "("');
+    iter.moveNext();
+    var argumentTokens = consumeStackUntil(iter, RegExp('\\(\$'), RegExp('\\)\$'));
+    checkThis(iter, RegExp('\\)\$'), 'Expected ")"');
+
+    var arguments = <Expression>[];
+    var commaTrailing = false;
+    final argIter = argumentTokens.iterator;
+    while (argIter.moveNext()) {
+      final tokenBuff = consumeUntil(argIter, RegExp(",\$"));
+      if (tokenBuff.isEmpty) {
+        if (argIter.current?.value == ',' || arguments.isNotEmpty) {
+          throw SyntaxError(argIter.current, 'Expected an argument');
+        } else {
+          continue;
+        }
+      } else {
+        arguments.add(Expression.parse(tokenBuff));
+        commaTrailing = argIter.current?.value == ',';
       }
-      if (exprIter.current?.value == ',') {
-        argExpected = true;
-      }
-      lastToken = exprIter.current?.value;
     }
-    // Check for the trailing comma
-    if (lastToken == ',') {
-      throw SyntaxError(null, 'Expected an argument');
+    if (commaTrailing) {
+      throw SyntaxError(argIter.current, 'Expected an argument');
     }
-    return RoutineCall(tempName, exprs);
+
+    return RoutineCall(routineName, arguments);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
