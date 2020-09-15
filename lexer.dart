@@ -6,17 +6,29 @@ class Token {
   final String value;
   final int start;
   final int end;
-  final bool isFaulty;
 
   String toString() {
     return 'Token "${value == '\n' ? '\\n' : value}", ${start}–${end}';
   }
 
-  const Token(this.value, this.start, this.end, {this.isFaulty});
+  const Token(this.value, this.start, this.end);
 }
 
 RegExp langTokenPtn = RegExp(
-  "([a-zA-Z_]\\w*|[0-9]+(?:\\.[0-9]*)?|[:;(),\\[\\]=.<>\/*%+\n-])",
+  '(' +
+      '[a-zA-Z_]\\w*' +
+      '|' // identifiers
+      +
+      '[0-9]+(?:\\.[0-9]*)?' +
+      '|' // numeric literals
+      +
+      ':=|<=|>=|\\/=|\\.\\.' +
+      '|' // compound operators
+      +
+      '[;\n:\\[\\](),<>=*\\/%+-.]'
+      // miscellaneous symbols
+      +
+      ')',
   multiLine: true,
 );
 RegExp allWhitespacePtn = RegExp("^\\s+\$");
@@ -32,7 +44,6 @@ Iterable<Token> splitToTokens(String sourceCode) sync* {
           tokenValue,
           previousMatch.end,
           match.start,
-          isFaulty: true,
         );
       }
     }
@@ -41,7 +52,6 @@ Iterable<Token> splitToTokens(String sourceCode) sync* {
       match.group(1),
       match.start,
       match.end,
-      isFaulty: false,
     );
 
     previousMatch = match;
