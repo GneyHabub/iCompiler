@@ -13,6 +13,7 @@ import '../iterator-utils.dart';
 abstract class Comparison implements Expression {
   factory Comparison.parse(Iterable<Token> tokens) {
     final iterator = tokens.iterator;
+    iterator.moveNext();
     var firstOperand =
         Sum.parse(consumeUntil(iterator, RegExp('([<>]=?|=|\\/=)\$')));
     var operator_ = iterator.current?.value;

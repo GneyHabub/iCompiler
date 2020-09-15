@@ -10,9 +10,9 @@ import '../iterator-utils.dart';
 abstract class Product implements Sum {
   factory Product.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
+    iter.moveNext();
     List<Token> expr = consumeUntil(iter, RegExp('[*/%]\$'));
-
-      if (iter.current?.value == '*') {
+    if (iter.current?.value == '*') {
       iter.moveNext();
       return MulOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
     } else if (iter.current?.value == '/') {

@@ -9,7 +9,7 @@ import 'sub-operator.dart';
 abstract class Sum implements Comparison {
   factory Sum.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
-    List<Token> product;
+    var product = <Token>[];
     Token prevToken = null;
     while (iter.moveNext()) {
       if (['+', '-'].contains(iter.current.value) &&
