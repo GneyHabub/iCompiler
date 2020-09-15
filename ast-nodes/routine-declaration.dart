@@ -4,6 +4,7 @@ import 'var-type.dart';
 import 'statement.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
+import '../iterator-utils.dart';
 
 /// A routine declaration has [parameters], a [returnType] and a [body].
 class RoutineDeclaration extends Declaration {

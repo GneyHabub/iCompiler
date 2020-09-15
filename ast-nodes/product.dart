@@ -1,6 +1,10 @@
 import 'sum.dart';
-import '../lexer.dart';
 import 'expression.dart';
+import 'mul-operator.dart';
+import 'div-operator.dart';
+import 'mod-operator.dart';
+import '../lexer.dart';
+import '../iterator-utils.dart';
 
 /// An abstract multiplying operator.
 abstract class Product implements Sum {

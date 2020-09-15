@@ -1,12 +1,12 @@
 import 'product.dart';
 import '../lexer.dart';
 import '../syntax-error.dart';
-import 'node.dart';
 import '../iterator-utils.dart';
 import 'boolean-literal.dart';
 import 'integer-literal.dart';
 import 'real-literal.dart';
 import 'modifiable-primary.dart';
+
 /// An abstract value.
 abstract class Primary implements Product {
   factory Primary.parse(Iterable<Token> tokens) {
@@ -17,12 +17,12 @@ abstract class Primary implements Product {
     iter.moveNext();
     if (iter.current.value == 'true') {
       checkNoMore(iter);
-      var bLBuffer = new BooleanLiteral(true)
+      var bLBuffer = new BooleanLiteral(true);
       return bLBuffer;
 
     } else if (iter.current.value == 'false') {
       checkNoMore(iter);
-      var bLBuffer = new BooleanLiteral(false)
+      var bLBuffer = new BooleanLiteral(false);
       return bLBuffer;
 
     } else if (int.tryParse(iter.current.value) != null) {
@@ -40,4 +40,3 @@ abstract class Primary implements Product {
     }
   }
 }
-

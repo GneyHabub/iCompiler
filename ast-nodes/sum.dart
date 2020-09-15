@@ -1,5 +1,4 @@
 import '../iterator-utils.dart';
-import '../syntax-error.dart';
 import 'add-operator.dart';
 import 'comparison.dart';
 import '../lexer.dart';

@@ -2,6 +2,7 @@ import '../syntax-error.dart';
 import 'node.dart';
 import 'expression.dart';
 import '../print-utils.dart';
+import '../iterator-utils.dart';
 import '../lexer.dart';
 
 /// An iteration range for the `for` loop.

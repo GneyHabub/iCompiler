@@ -1,6 +1,9 @@
 import 'statement.dart';
 import 'expression.dart';
 import '../print-utils.dart';
+import '../iterator-utils.dart';
+import '../lexer.dart';
+import '../syntax-error.dart';
 
 /// A conditional statement.
 class IfStatement implements Statement {
@@ -46,7 +49,7 @@ class IfStatement implements Statement {
       }
       trueBlock.add(Statement.parse(blockTokens));
     }
-    
+
 
     var falseBlock = <Statement>[];
     if (falseBody != null) {
@@ -56,7 +59,7 @@ class IfStatement implements Statement {
       if (blockTokens.isEmpty) {
         continue;
       }
-      
+
       falseBlock.add(Statement.parse(blockTokens));
     }
     }
