@@ -18,20 +18,14 @@ class Assignment implements Statement {
   factory Assignment.parse(Iterable<Token> tokens) {
     var iter = tokens.iterator;
 
-    if (tokens.isEmpty) {
+    if (!iter.moveNext()) {
       throw SyntaxError(iter.current, "Expected an assignment");
     }
 
-    var tempLhs = consumeUntil(iter, RegExp(":\$"));
-
-    if (tempLhs.isEmpty) {
-      throw SyntaxError(iter.current, "Expected an identifier");
-    }
-
-    checkThis(iter, RegExp(':\$'), 'Expected ":="');
-    checkNext(iter, RegExp('=\$'), 'Expected ":="');
+    var lhs = ModifiablePrimary.parse(consumeUntil(iter, RegExp(":=\$")));
+    checkThis(iter, RegExp(':=\$'), 'Expected ":="');
     iter.moveNext();
-    return Assignment(ModifiablePrimary.parse(tempLhs), Expression.parse(consumeFull(iter)));
+    return Assignment(lhs, Expression.parse(consumeFull(iter)));
   }
 
   String toString({int depth = 0, String prefix = ''}) {

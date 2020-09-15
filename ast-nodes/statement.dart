@@ -13,11 +13,11 @@ import 'assignment.dart';
 /// An abstract statement.
 abstract class Statement implements Node {
   factory Statement.parse(Iterable<Token> tokens) {
-    if (tokens.isEmpty) {
+    var iter = tokens.iterator;
+    if (!iter.moveNext()) {
       throw SyntaxError(tokens.first, 'Expected a statement');
     }
-    var iter = tokens.iterator;
-    iter.moveNext();
+
     if (iter.current.value == 'while') {
       return WhileLoop.parse(tokens);
     } else if (iter.current.value == 'for') {
@@ -33,8 +33,8 @@ abstract class Statement implements Node {
     if (iter.current.value == '(') {
       return RoutineCall.parse(tokens);
     }
-    var identifierBuffer = consumeUntil(iter, RegExp('^[:]\$'));
-    if (iter.current?.value == ':') {
+    var identifierBuffer = consumeUntil(iter, RegExp(':=\$'));
+    if (iter.current?.value == ':=') {
       return Assignment.parse(tokens);
     } else {
       throw SyntaxError(tokens.first, 'Expected a statement');
