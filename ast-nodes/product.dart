@@ -7,16 +7,20 @@ abstract class Product implements Sum {
   factory Product.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
     List<Token> expr = consumeUntil(iter, RegExp('[*/%]\$'));
-    var wholeExpression = Expression.parsePrioritized(expr);
 
-    if (iter.current?.value == '*') {
+      if (iter.current?.value == '*') {
       iter.moveNext();
-      return MulOperator(Product.parse(product), Sum.parse(consumeFull(iter)));
+      return MulOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
     } else if (iter.current?.value == '/') {
       iter.moveNext();
-      return DivOperator(Product.parse(product), Sum.parse(consumeFull(iter)));
+      return DivOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
+    } else if (iter.current?.value == '%') {
+      iter.moveNext();
+      return ModOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
     } else {
-      return Product.parse(product);
+      return Expression.parsePrioritized(expr);
     }
   }
 }
+
+//Product ::= Prioritized [ ( '*' | '/' | '%' ) Product ]
