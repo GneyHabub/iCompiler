@@ -21,8 +21,8 @@ class TypeDeclaration extends Declaration {
       throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
     }
     checkNext(iterator, RegExp('is\$'), "Expected 'is'");
+    iterator.moveNext();
     var type = VarType.parse(consumeFull(iterator));
-    checkNoMore(iterator);
 
     return TypeDeclaration(name, type);
   }
