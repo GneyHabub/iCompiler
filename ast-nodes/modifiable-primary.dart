@@ -32,7 +32,7 @@ abstract class ModifiablePrimary implements Primary {
         ));
         result = IndexAccess(exp, result);
       } else {
-        throw SyntaxError(iterator.current, "Unexpected token");
+        throw SyntaxError(iterator.current, "Expected '.' or '['");
       }
     }
     return result;
