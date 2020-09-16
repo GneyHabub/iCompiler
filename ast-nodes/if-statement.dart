@@ -18,8 +18,10 @@ class IfStatement implements Statement {
     final nestedBlockEnd = RegExp("end\$");
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
+    iterator.moveNext();
     var condition = Expression.parse(consumeUntil(iterator, RegExp("then\$")));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
+    iterator.moveNext();
 
     var trueBlock = Statement.parseBody(consumeAwareUntil(
       iterator,
@@ -32,7 +34,7 @@ class IfStatement implements Statement {
       throw SyntaxError(iterator.current, "Expected at least one statement in the block");
     }
 
-    List<Statement> falseBlock = null;
+    List<Statement> falseBlock = [];
     if (iterator.current?.value == "else") {
       falseBlock = Statement.parseBody(consumeAwareUntil(
         iterator,
