@@ -1,0 +1,8 @@
+routine main() : integer is
+	var seven : integer is 7;
+	var two is 2;
+	var minusone is -1;
+	var realone : real is 1.0;
+	var testbool is true;
+    return 0;
+end
