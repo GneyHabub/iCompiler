@@ -19,7 +19,7 @@ RegExp langTokenPtn = RegExp(
       '[a-zA-Z_]\\w*' +
       '|' // identifiers
       +
-      '[0-9]+(?:\\.[0-9]*)?' +
+      '[0-9]+(?:\\.[0-9]+)?' +
       '|' // numeric literals
       +
       ':=|<=|>=|\\/=|\\.\\.' +
