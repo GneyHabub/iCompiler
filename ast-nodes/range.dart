@@ -15,27 +15,13 @@ class Range implements Node {
   factory Range.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     if (!iterator.moveNext()) {
-      throw SyntaxError(iterator.current, "Expected '..' in range");
+      throw SyntaxError(iterator.current, "Expected range");
     }
 
-    var expStartBuffer = List<Token>();
-    var prevToken = iterator.current;
-    while (iterator.moveNext()) {
-      if (prevToken.value == "." && iterator.current.value == ".") {
-        break;
-      } else {
-        expStartBuffer.add(prevToken);
-        prevToken = iterator.current;
-      }
-    }
-
-    Expression expStart, expEnd;
-    if (iterator.moveNext()) {
-      expStart = Expression.parse(expStartBuffer);
-      expEnd = Expression.parse(consumeFull(iterator));
-    } else {
-      throw SyntaxError(iterator.current, "Expected .. Expression");
-    }
+    var expStart = Expression.parse(consumeUntil(iterator, RegExp('\\.\\.\$')));
+    checkThis(iterator, RegExp('\\.\\.\$'), "Expected '..'");
+    iterator.moveNext();
+    var expEnd = Expression.parse(consumeFull(iterator));
 
     return Range(expStart, expEnd);
   }
