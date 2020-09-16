@@ -16,7 +16,7 @@ abstract class Statement implements Node {
   factory Statement.parse(Iterable<Token> tokens) {
     var iter = tokens.iterator;
     if (!iter.moveNext()) {
-      throw SyntaxError(tokens.first, 'Expected a statement');
+      throw SyntaxError(iter.current, 'Expected a statement');
     }
 
     if (iter.current.value == 'while') {
@@ -32,7 +32,9 @@ abstract class Statement implements Node {
     } else if (iter.current.value == 'type') {
       return TypeDeclaration.parse(tokens);
     }
-    iter.moveNext();
+    if (!iter.moveNext()) {
+      throw SyntaxError(iter.current, 'Expected a statement');
+    }
     if (iter.current.value == '(') {
       return RoutineCall.parse(tokens);
     }
@@ -40,7 +42,7 @@ abstract class Statement implements Node {
     if (iter.current?.value == ':=') {
       return Assignment.parse(tokens);
     } else {
-      throw SyntaxError(tokens.first, 'Expected a statement');
+      throw SyntaxError(iter.current, 'Expected a statement');
     }
   }
 
@@ -77,6 +79,7 @@ abstract class Statement implements Node {
       }
 
       statements.add(Statement.parse(statementTokens));
+      // print(statements.last);
     }
 
     return statements;
