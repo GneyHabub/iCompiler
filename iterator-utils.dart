@@ -26,25 +26,25 @@ List<Token> consumeFull(Iterator<Token> iterator) {
   return tokens;
 }
 
-/// Consume tokens from the [iterator] until one of them matches the [terminal].
+/// Consume tokens from the [iterator] until one of them matches the [terminal], ignoring certain areas.
 ///
-/// The difference with [consumeUntil] is that terminals are cancelled by [starting] tokens.
+/// The difference with [consumeUntil] is the search for terminals only happens outside of regions
+/// defined by [starting] and [ending] tokens.
 /// In this way, sequences like parentheses with nesting can be correctly consumed:
 /// ```dart
-/// consumeStackUntil(iterator, RegExp('\\(\$'), RegExp('\\)\$'));
+/// consumeStackUntil(iterator, RegExp('\\(\$'), RegExp('\\)\$'),  RegExp('\\)\$'));
 /// ```
-List<Token> consumeStackUntil(
-    Iterator<Token> iterator, RegExp starting, RegExp terminal) {
+List<Token> consumeAwareUntil(
+    Iterator<Token> iterator, RegExp starting, RegExp ending, RegExp terminal) {
   var tokens = <Token>[];
-  var count = 1;
+  var stackCount = 0;
 
   do {
     if (starting.hasMatch(iterator.current.value)) {
-      count++;
-    } else if (terminal.hasMatch(iterator.current.value)) {
-      count--;
-    }
-    if (count == 0) {
+      stackCount++;
+    } else if (ending.hasMatch(iterator.current.value) && stackCount > 0) {
+      stackCount--;
+    } else if (terminal.hasMatch(iterator.current.value) && stackCount == 0) {
       break;
     }
     tokens.add(iterator.current);

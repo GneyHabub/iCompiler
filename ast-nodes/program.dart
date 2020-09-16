@@ -6,6 +6,7 @@ import 'routine-declaration.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
 import '../print-utils.dart';
+import '../syntax-error.dart';
 
 /// A program is a list of [Declaration]s.
 ///
@@ -22,23 +23,70 @@ class Program implements Node {
     var iterator = tokens.iterator;
     var declarations = <Declaration>[];
 
-    while (iterator.moveNext()) {
-      var declarationTokens = consumeUntil(iterator, RegExp("^[\n;]\$"));
-      if (declarationTokens.isEmpty) {
-        continue;
-      }
+    var hadSemicolonBefore = false;
 
-      declarations.add(Declaration.parse(declarationTokens));
+    while (iterator.moveNext()) {
+      if (iterator.current.value == 'routine') {
+        var routineTokens = consumeAwareUntil(
+          iterator,
+          RegExp('(record|while|for|if)\$'),
+          RegExp('end\$'),
+          RegExp('end\$'),
+        );
+        routineTokens.add(iterator.current);
+        declarations.add(Declaration.parse(routineTokens));
+
+        if (!iterator.moveNext()) {
+          break;
+        }
+
+        if (iterator.current.value == ';') {
+          hadSemicolonBefore = true;
+        } else if (iterator.current.value == '\n') {
+          hadSemicolonBefore = false;
+        } else {
+          throw SyntaxError(
+              iterator.current, "Expected a newline or a semicolon");
+        }
+      } else {
+        var declarationTokens = <Token>[];
+        var recordCount = 0;
+        do {
+          if (iterator.current.value == 'record') {
+            recordCount++;
+          } else if (iterator.current.value == 'end') {
+            recordCount--;
+          }
+          if ((iterator.current.value == ';' ||
+                  iterator.current.value == '\n') &&
+              recordCount == 0) {
+            break;
+          }
+
+          declarationTokens.add(iterator.current);
+        } while (iterator.moveNext());
+
+        if (declarationTokens.isEmpty) {
+          if (iterator.current.value == ';' && hadSemicolonBefore) {
+            throw SyntaxError(iterator.current, 'Expected declaration');
+          } else {
+            continue;
+          }
+        }
+
+        declarations.add(Declaration.parse(declarationTokens));
+      }
     }
 
     return Program(declarations);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}Program', depth)
-      + drawDepth('declarations:', depth + 1)
-      + this.declarations.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('${prefix}Program', depth) +
+        drawDepth('declarations:', depth + 1) +
+        this
+            .declarations
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 }

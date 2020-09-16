@@ -14,8 +14,12 @@ abstract class Comparison implements Expression {
   factory Comparison.parse(Iterable<Token> tokens) {
     final iterator = tokens.iterator;
     iterator.moveNext();
-    var firstOperand =
-        Sum.parse(consumeUntil(iterator, RegExp('([<>]=?|=|\\/=)\$')));
+    final firstOperand = Sum.parse(consumeAwareUntil(
+      iterator,
+      RegExp('\\(\$'),
+      RegExp('\\)\$'),
+      RegExp('([<>]=?|=|\\/=)\$'),
+    ));
     var operator_ = iterator.current?.value;
     iterator.moveNext();
     Comparison secondOperand = null;

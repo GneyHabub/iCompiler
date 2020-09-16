@@ -14,6 +14,8 @@ class RoutineCall implements Primary {
   RoutineCall(this.name, this.arguments);
 
   factory RoutineCall.parse(Iterable<Token> tokens) {
+    final openingParenthesis = RegExp('\\(\$');
+    final closingParenthesis = RegExp('\\)\$');
     final iter = tokens.iterator;
     checkNext(iter, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
     final routineName = iter.current.value;
@@ -21,10 +23,15 @@ class RoutineCall implements Primary {
       throw SyntaxError(iter.current, 'The "$routineName" keyword is reserved');
     }
 
-    checkNext(iter, RegExp('\\(\$'), 'Expected "("');
+    checkNext(iter, openingParenthesis, 'Expected "("');
     iter.moveNext();
-    var argumentTokens = consumeStackUntil(iter, RegExp('\\(\$'), RegExp('\\)\$'));
-    checkThis(iter, RegExp('\\)\$'), 'Expected ")"');
+    var argumentTokens = consumeAwareUntil(
+      iter,
+      openingParenthesis,
+      closingParenthesis,
+      closingParenthesis,
+    );
+    checkThis(iter, closingParenthesis, 'Expected ")"');
 
     var arguments = <Expression>[];
     var commaTrailing = false;

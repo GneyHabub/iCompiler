@@ -19,8 +19,12 @@ abstract class Expression implements Statement {
       iterator.moveNext();
       return NotOperator(Expression.parse(consumeFull(iterator)));
     } else {
-      final firstOperand =
-          Comparison.parse(consumeUntil(iterator, RegExp("(xor|or|and)\$")));
+      final firstOperand = Comparison.parse(consumeAwareUntil(
+        iterator,
+        RegExp('\\(\$'),
+        RegExp('\\)\$'),
+        RegExp("(xor|or|and)\$"),
+      ));
       var operator_ = iterator.current?.value;
       iterator.moveNext();
       Comparison secondOperand = null;
@@ -50,10 +54,10 @@ abstract class Expression implements Statement {
 
     if (iterator.current.value == "(") {
       iterator.moveNext();
-      final expressionBuffer = consumeUntil(iterator, RegExp("\\)\$"));
+      final expressionBuffer = consumeAwareUntil(iterator, RegExp("\\(\$"), RegExp("\\)\$"), RegExp("\\)\$"));
       checkThis(iterator, RegExp('\\)\$'), "Expected ')'");
       checkNoMore(iterator);
-      
+
       return Expression.parse(expressionBuffer);
     } else {
       return Primary.parse(consumeFull(iterator));

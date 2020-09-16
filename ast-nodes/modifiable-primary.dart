@@ -12,18 +12,24 @@ import 'expression.dart';
 /// For example, a variable, a record field or an array slot.
 abstract class ModifiablePrimary implements Primary {
   factory ModifiablePrimary.parse(Iterable<Token> tokens) {
+    final identifierPattern = RegExp('[a-zA-Z_]\\w*\$');
     var iterator = tokens.iterator;
     ModifiablePrimary result;
-    checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
+    checkNext(iterator, identifierPattern, "Expected identifier");
     result = Variable(iterator.current.value);
 
     while (iterator.moveNext()) {
       if (iterator.current.value == ".") {
-        checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
+        checkNext(iterator, identifierPattern, "Expected identifier");
         result = FieldAccess(iterator.current.value, result);
       } else if (iterator.current.value == "[") {
-        var exp = Expression.parse(
-            consumeStackUntil(iterator, RegExp('\\[\$'), RegExp('\\]\$')));
+        iterator.moveNext();
+        var exp = Expression.parse(consumeAwareUntil(
+          iterator,
+          RegExp('\\[\$'),
+          RegExp('\\]\$'),
+          RegExp('\\]\$'),
+        ));
         result = IndexAccess(exp, result);
       } else {
         throw SyntaxError(iterator.current, "Unexpected token");

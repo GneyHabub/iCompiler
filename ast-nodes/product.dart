@@ -5,26 +5,39 @@ import 'div-operator.dart';
 import 'mod-operator.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
+import '../syntax-error.dart';
 
 /// An abstract multiplying operator.
 abstract class Product implements Sum {
   factory Product.parse(Iterable<Token> tokens) {
-    final iter = tokens.iterator;
-    iter.moveNext();
-    List<Token> expr = consumeUntil(iter, RegExp('[*/%]\$'));
-    if (iter.current?.value == '*') {
-      iter.moveNext();
-      return MulOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
-    } else if (iter.current?.value == '/') {
-      iter.moveNext();
-      return DivOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
-    } else if (iter.current?.value == '%') {
-      iter.moveNext();
-      return ModOperator(Expression.parsePrioritized(expr), Product.parse(consumeFull(iter)));
-    } else {
-      return Expression.parsePrioritized(expr);
+    final iterator = tokens.iterator;
+
+    if (!iterator.moveNext()) {
+      throw SyntaxError(iterator.current, "Expected expression");
+    }
+
+    final firstOperand = Expression.parsePrioritized(consumeAwareUntil(
+      iterator,
+      RegExp('\\(\$'),
+      RegExp('\\)\$'),
+      RegExp("[*/%]\$"),
+    ));
+    var operator_ = iterator.current?.value;
+    iterator.moveNext();
+    Product secondOperand = null;
+    if (operator_ != null) {
+      secondOperand = Expression.parse(consumeFull(iterator));
+    }
+
+    switch (operator_) {
+      case '*':
+        return MulOperator(firstOperand, secondOperand);
+      case '/':
+        return DivOperator(firstOperand, secondOperand);
+      case '%':
+        return ModOperator(firstOperand, secondOperand);
+      default:
+        return firstOperand;
     }
   }
 }
-
-//Product ::= Prioritized [ ( '*' | '/' | '%' ) Product ]

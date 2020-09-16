@@ -14,17 +14,28 @@ class IfStatement implements Statement {
   IfStatement(this.condition, this.blockTrue, this.blockFalse);
 
   factory IfStatement.parse(Iterable<Token> tokens) {
-    final nestedBlockStarter = RegExp("(record|for|if|while)\$");
+    final nestedBlockStart = RegExp("(record|for|if|while)\$");
+    final nestedBlockEnd = RegExp("end\$");
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
     var expressionBody = consumeUntil(iterator, RegExp("then\$"));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
-    List<Token> trueBody = consumeStackUntil(iterator, nestedBlockStarter, RegExp("end\$"));
+    List<Token> trueBody = consumeAwareUntil(
+      iterator,
+      nestedBlockStart,
+      nestedBlockEnd,
+      nestedBlockEnd,
+    );
 
     List<Token> falseBody = null;
     if (iterator.current?.value == "else") {
-      falseBody = consumeStackUntil(iterator, nestedBlockStarter, RegExp("end\$"));
-      checkThis(iterator, RegExp('end\$'), "Expected 'end'");
+      falseBody = consumeAwareUntil(
+        iterator,
+        nestedBlockStart,
+        nestedBlockEnd,
+        nestedBlockEnd
+      );
+      checkThis(iterator, nestedBlockEnd, "Expected 'end'");
       checkNoMore(iterator);
     } else if (iterator.current?.value == "end") {
       checkNoMore(iterator);
@@ -50,18 +61,17 @@ class IfStatement implements Statement {
       trueBlock.add(Statement.parse(blockTokens));
     }
 
-
     var falseBlock = <Statement>[];
     if (falseBody != null) {
-    var falseIterator = falseBody.iterator;
-    while (falseIterator.moveNext()) {
-      var blockTokens = consumeUntil(falseIterator, RegExp("[\n;]\$"));
-      if (blockTokens.isEmpty) {
-        continue;
-      }
+      var falseIterator = falseBody.iterator;
+      while (falseIterator.moveNext()) {
+        var blockTokens = consumeUntil(falseIterator, RegExp("[\n;]\$"));
+        if (blockTokens.isEmpty) {
+          continue;
+        }
 
-      falseBlock.add(Statement.parse(blockTokens));
-    }
+        falseBlock.add(Statement.parse(blockTokens));
+      }
     }
 
     return IfStatement(expBody, trueBlock, falseBlock);
