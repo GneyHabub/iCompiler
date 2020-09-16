@@ -23,7 +23,12 @@ class RecordType implements VarType {
     var bodyIterator = bodyTokens.iterator;
 
     while (bodyIterator.moveNext()) {
-      var declarationTokens = consumeUntil(bodyIterator, RegExp("^[\n;]\$"));
+      var declarationTokens = consumeAwareUntil(
+        bodyIterator,
+        RegExp('record\$'),
+        RegExp('end\$'),
+        RegExp("^[\n;]\$")
+      );
       if (declarationTokens.isEmpty) {
         continue;
       }

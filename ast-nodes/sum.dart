@@ -10,9 +10,18 @@ abstract class Sum implements Comparison {
   factory Sum.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
     var product = <Token>[];
+
+    var parentheses = 0;
     Token prevToken = null;
     while (iter.moveNext()) {
-      if (['+', '-'].contains(iter.current.value) &&
+      if (iter.current.value == '(') {
+        parentheses++;
+      }
+      if (iter.current.value == ')') {
+        parentheses--;
+      }
+      if (parentheses == 0 &&
+        ['+', '-'].contains(iter.current.value) &&
           !['(', '%', '*', '/', null].contains(prevToken?.value)) {
         break;
       }
