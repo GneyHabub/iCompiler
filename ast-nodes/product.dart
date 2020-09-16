@@ -1,5 +1,7 @@
 import 'sum.dart';
 import 'expression.dart';
+import 'prioritized.dart';
+import 'primary.dart';
 import 'mul-operator.dart';
 import 'div-operator.dart';
 import 'mod-operator.dart';
@@ -16,12 +18,19 @@ abstract class Product implements Sum {
       throw SyntaxError(iterator.current, "Expected expression");
     }
 
-    final firstOperand = Expression.parsePrioritized(consumeAwareUntil(
+    final firstOperandTokens = consumeAwareUntil(
       iterator,
-      RegExp('\\(\$'),
-      RegExp('\\)\$'),
+      RegExp('[(\\[]\$'),
+      RegExp('[)\\]]\$'),
       RegExp("[*/%]\$"),
-    ));
+    );
+
+    Product firstOperand = null;
+    if (firstOperandTokens.first.value == '(') {
+      firstOperand = Prioritized.parse(firstOperandTokens);
+    } else {
+      firstOperand = Primary.parse(firstOperandTokens);
+    }
     var operator_ = iterator.current?.value;
     iterator.moveNext();
     Product secondOperand = null;

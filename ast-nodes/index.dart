@@ -51,3 +51,4 @@ export 'program.dart';
 export 'declaration.dart';
 export 'return-statement.dart';
 export 'pos-operator.dart';
+export 'prioritized.dart';

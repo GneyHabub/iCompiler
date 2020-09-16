@@ -20,8 +20,8 @@ abstract class Expression implements Statement {
     } else {
       final firstOperand = Comparison.parse(consumeAwareUntil(
         iterator,
-        RegExp('\\(\$'),
-        RegExp('\\)\$'),
+        RegExp('[(\\[]\$'),
+        RegExp('[)\\]]\$'),
         RegExp("(xor|or|and)\$"),
       ));
       var operator_ = iterator.current?.value;
@@ -41,25 +41,6 @@ abstract class Expression implements Statement {
         default:
           return firstOperand;
       }
-    }
-  }
-
-  factory Expression.parsePrioritized(Iterable<Token> tokens) {
-    var iterator = tokens.iterator;
-
-    if (!iterator.moveNext()) {
-      throw SyntaxError(iterator.current, "Expected expression");
-    }
-
-    if (iterator.current.value == "(") {
-      iterator.moveNext();
-      final expressionBuffer = consumeAwareUntil(iterator, RegExp("\\(\$"), RegExp("\\)\$"), RegExp("\\)\$"));
-      checkThis(iterator, RegExp('\\)\$'), "Expected ')'");
-      checkNoMore(iterator);
-
-      return Expression.parse(expressionBuffer);
-    } else {
-      return Primary.parse(consumeFull(iterator));
     }
   }
 }

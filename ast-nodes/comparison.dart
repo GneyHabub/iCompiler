@@ -16,8 +16,8 @@ abstract class Comparison implements Expression {
     iterator.moveNext();
     final firstOperand = Sum.parse(consumeAwareUntil(
       iterator,
-      RegExp('\\(\$'),
-      RegExp('\\)\$'),
+      RegExp('[(\\[]\$'),
+      RegExp('[)\\]]\$'),
       RegExp('([<>]=?|=|\\/=)\$'),
     ));
     var operator_ = iterator.current?.value;
