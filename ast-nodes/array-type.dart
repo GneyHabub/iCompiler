@@ -18,6 +18,7 @@ class ArrayType implements VarType {
     iterator.moveNext();
     var sizeTokens = consumeUntil(iterator, RegExp("\\]\$"));
     checkThis(iterator, RegExp('\\]\$'), "Expected ']'");
+    iterator.moveNext();
     var type = VarType.parse(consumeFull(iterator));
 
     Expression size = null;
