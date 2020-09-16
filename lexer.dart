@@ -8,7 +8,7 @@ class Token {
   final int end;
 
   String toString() {
-    return 'Token "${value == '\n' ? '\\n' : value}", ${start}–${end}';
+    return '"${value == '\n' ? '\\n' : value}":${start}–${end}';
   }
 
   const Token(this.value, this.start, this.end);
