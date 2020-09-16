@@ -26,9 +26,7 @@ abstract class VarType implements Node {
 
     if (primitives.containsKey(iterator.current.value)) {
       var result = primitives[iterator.current.value];
-      if (iterator.moveNext()) {
-        throw SyntaxError(iterator.current, "Unexpected token");
-      }
+      checkNoMore(iterator);
       return result;
     }
 
