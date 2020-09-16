@@ -49,3 +49,5 @@ export 'while-loop.dart';
 export 'modifiable-primary.dart';
 export 'program.dart';
 export 'declaration.dart';
+export 'return-statement.dart';
+export 'pos-operator.dart';
