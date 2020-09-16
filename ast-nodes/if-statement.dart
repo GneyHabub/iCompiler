@@ -27,7 +27,7 @@ class IfStatement implements Statement {
       iterator,
       nestedBlockStart,
       nestedBlockEnd,
-      nestedBlockEnd,
+      RegExp('(end|else)\$'),
     ));
 
     if (trueBlock.isEmpty) {
@@ -36,6 +36,7 @@ class IfStatement implements Statement {
 
     List<Statement> falseBlock = [];
     if (iterator.current?.value == "else") {
+      iterator.moveNext();
       falseBlock = Statement.parseBody(consumeAwareUntil(
         iterator,
         nestedBlockStart,
