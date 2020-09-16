@@ -13,6 +13,7 @@ class ReturnStatement implements Statement {
   factory ReturnStatement.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('return\$'), "Expected 'return'");
+    iterator.moveNext();
     return ReturnStatement(Expression.parse(consumeFull(iterator)));
   }
 
