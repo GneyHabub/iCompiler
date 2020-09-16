@@ -76,6 +76,6 @@ void checkThis(Iterator<Token> iterator, RegExp expected, String errorMessage) {
 /// Throws a syntax error if the check fails.
 void checkNoMore(Iterator<Token> iterator) {
   if (iterator.moveNext()) {
-    throw SyntaxError(iterator.current, "Unexpected token");
+    throw SyntaxError(iterator.current, "Expected no more tokens");
   }
 }
