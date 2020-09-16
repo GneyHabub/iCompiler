@@ -7,6 +7,7 @@ import 'variable-declaration.dart';
 import 'while-loop.dart';
 import 'for-loop.dart';
 import 'if-statement.dart';
+import 'return-statement.dart';
 import 'routine-call.dart';
 import 'assignment.dart';
 
@@ -24,6 +25,8 @@ abstract class Statement implements Node {
       return ForLoop.parse(tokens);
     } else if (iter.current.value == 'if') {
       return IfStatement.parse(tokens);
+    } else if (iter.current.value == 'return') {
+      return ReturnStatement.parse(tokens);
     } else if (iter.current.value == 'var') {
       return VariableDeclaration.parse(tokens);
     } else if (iter.current.value == 'type') {
@@ -33,7 +36,7 @@ abstract class Statement implements Node {
     if (iter.current.value == '(') {
       return RoutineCall.parse(tokens);
     }
-    var identifierBuffer = consumeUntil(iter, RegExp(':=\$'));
+    consumeUntil(iter, RegExp(':=\$'));
     if (iter.current?.value == ':=') {
       return Assignment.parse(tokens);
     } else {
