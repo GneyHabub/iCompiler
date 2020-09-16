@@ -3,6 +3,7 @@ import 'boolean-literal.dart';
 import 'integer-literal.dart';
 import 'real-literal.dart';
 import 'modifiable-primary.dart';
+import 'routine-call.dart';
 import 'neg-operator.dart';
 import 'pos-operator.dart';
 import '../lexer.dart';
@@ -40,6 +41,11 @@ abstract class Primary implements Product {
     if (realLiteral != null) {
       checkNoMore(iter);
       return RealLiteral(realLiteral);
+    }
+
+    iter.moveNext();
+    if (iter.current?.value == '(') {
+      return RoutineCall.parse(tokens);
     }
 
     return ModifiablePrimary.parse(tokens);
