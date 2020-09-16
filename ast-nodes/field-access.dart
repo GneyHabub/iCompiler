@@ -14,8 +14,6 @@ class FieldAccess implements ModifiablePrimary {
 
   FieldAccess(this.name, this.object);
 
-  // TODO: implement .parse()
-
   String toString({int depth = 0, String prefix = ''}) {
     return (
       drawDepth('${prefix}FieldAccess("${this.name}")', depth)

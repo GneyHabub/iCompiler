@@ -3,7 +3,6 @@ import 'var-type.dart';
 import '../print-utils.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
-import '../syntax-error.dart';
 
 /// A routine parameter, characterized by the [name] and the [type].
 class Parameter implements Node {
