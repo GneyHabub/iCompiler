@@ -1,15 +1,15 @@
-routine array_clear (ar: array[10]) is
+routine array_clear (ar: array[10] integer) is
    for i in 1..10 loop
       ar[i]:=0;
    end;
 end;
 
-var massive:array[10] int;
+var massive:array[10] integer;
 
 routine main() is
   for k in 1..10 loop
      massive[k]:=k;
   end;
-  
-  clear (massive);
+
+  array_clear (massive);
 end
