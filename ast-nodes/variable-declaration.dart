@@ -40,8 +40,9 @@ class VariableDeclaration extends Declaration {
       iter.moveNext();
       return VariableDeclaration(
           tempName, null, Expression.parse(consumeFull(iter)));
-    } else
+    } else {
       throw SyntaxError(iter.current, 'Expected ":" or "is"');
+    }
   }
 
   String toString({int depth = 0, String prefix = ''}) {
