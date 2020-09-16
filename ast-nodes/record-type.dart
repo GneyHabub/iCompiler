@@ -15,7 +15,12 @@ class RecordType implements VarType {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('record\$'), "Expected 'record'");
     iterator.moveNext();
-    var bodyTokens = consumeUntil(iterator, RegExp("^end\$"));
+    var bodyTokens = consumeAwareUntil(
+      iterator,
+      RegExp('record\$'),
+      RegExp('end\$'),
+      RegExp("end\$")
+    );
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
@@ -32,7 +37,6 @@ class RecordType implements VarType {
       if (declarationTokens.isEmpty) {
         continue;
       }
-
       declarations.add(VariableDeclaration.parse(declarationTokens));
     }
 

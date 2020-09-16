@@ -31,7 +31,12 @@ class VariableDeclaration extends Declaration {
 
     if (iter.current?.value == ':') {
       iter.moveNext();
-      type = VarType.parse(consumeUntil(iter, RegExp('is\$')));
+      type = VarType.parse(consumeAwareUntil(
+        iter,
+        RegExp('record\$'),
+        RegExp('end\$'),
+        RegExp('is\$'))
+      );
       if (iter.current?.value == 'is') {
         iter.moveNext();
         initialValue = Expression.parse(consumeFull(iter));
