@@ -18,31 +18,32 @@ class VariableDeclaration extends Declaration {
 
   factory VariableDeclaration.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
-    var tempName;
     checkNext(iter, RegExp('var\$'), 'Expected "var"');
     checkNext(iter, RegExp('[A-Za-z_]\\w*\$'), 'Expected identifier');
-    if (isReserved(iter.current.value))
+    if (isReserved(iter.current.value)) {
       throw SyntaxError(
           iter.current, 'The "${iter.current.value}" keyword is reserved');
-    tempName = iter.current.value;
-    if (!iter.moveNext())
-      throw SyntaxError(null, 'Type is required');
-    else if (iter.current.value == ':') {
+    }
+    final name = iter.current.value;
+    iter.moveNext();
+    VarType type = null;
+    Expression initialValue = null;
+
+    if (iter.current?.value == ':') {
       iter.moveNext();
-      final typeBuffer = consumeUntil(iter, RegExp('is\$'));
+      type = VarType.parse(consumeUntil(iter, RegExp('is\$')));
       if (iter.current?.value == 'is') {
-        return VariableDeclaration(tempName, VarType.parse(typeBuffer),
-            Expression.parse(consumeFull(iter)));
-      } else {
-        return VariableDeclaration(tempName, VarType.parse(typeBuffer), null);
+        iter.moveNext();
+        initialValue = Expression.parse(consumeFull(iter));
       }
-    } else if (iter.current.value == 'is') {
+    } else if (iter.current?.value == 'is') {
       iter.moveNext();
-      return VariableDeclaration(
-          tempName, null, Expression.parse(consumeFull(iter)));
+      initialValue = Expression.parse(consumeFull(iter));
     } else {
       throw SyntaxError(iter.current, 'Expected ":" or "is"');
     }
+
+    return VariableDeclaration(name, type, initialValue);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
