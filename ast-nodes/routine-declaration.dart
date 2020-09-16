@@ -17,7 +17,7 @@ class RoutineDeclaration extends Declaration {
   factory RoutineDeclaration.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('routine\$'), "Expected 'routine'");
-    checkNext(iterator, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var routineName = iterator.current.value;
 
     checkNext(iterator, RegExp("\\("), "Expected '('");
@@ -29,7 +29,12 @@ class RoutineDeclaration extends Declaration {
     VarType returnType = null;
     if (iterator.current?.value == ":"){
       iterator.moveNext();
-      returnType = VarType.parse(consumeUntil(iterator, RegExp('is\$')));
+      returnType = VarType.parse(consumeAwareUntil(
+        iterator,
+        RegExp('record\$'),
+        RegExp('end\$'),
+        RegExp('is\$')
+      ));
     }
 
     checkThis(iterator, RegExp('is\$'), "Expected 'is'");

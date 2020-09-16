@@ -17,7 +17,7 @@ class RoutineCall implements Primary {
     final openingParenthesis = RegExp('\\(\$');
     final closingParenthesis = RegExp('\\)\$');
     final iter = tokens.iterator;
-    checkNext(iter, RegExp('[a-zA-Z_]\w*\$'), "Expected identifier");
+    checkNext(iter, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     final routineName = iter.current.value;
     if (isReserved(routineName)) {
       throw SyntaxError(iter.current, 'The "$routineName" keyword is reserved');
