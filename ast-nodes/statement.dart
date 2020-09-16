@@ -43,4 +43,42 @@ abstract class Statement implements Node {
       throw SyntaxError(tokens.first, 'Expected a statement');
     }
   }
+
+  static List<Statement> parseBody(Iterable<Token> tokens) {
+    var iterator = tokens.iterator;
+    var statements = <Statement>[];
+
+    var hadSemicolonBefore = false;
+    var blockStarters = ['record', 'if', 'while', 'for'];
+    while (iterator.moveNext()) {
+      var statementTokens = <Token>[];
+      var blockCount = 0;
+      do {
+        if (blockStarters.contains(iterator.current.value)) {
+          blockCount++;
+        } else if (iterator.current.value == 'end') {
+          blockCount--;
+        }
+        if ((iterator.current.value == ';' ||
+                iterator.current.value == '\n') &&
+            blockCount == 0) {
+          break;
+        }
+
+        statementTokens.add(iterator.current);
+      } while (iterator.moveNext());
+
+      if (statementTokens.isEmpty) {
+        if (iterator.current.value == ';' && hadSemicolonBefore) {
+          throw SyntaxError(iterator.current, 'Expected statement');
+        } else {
+          continue;
+        }
+      }
+
+      statements.add(Statement.parse(statementTokens));
+    }
+
+    return statements;
+  }
 }

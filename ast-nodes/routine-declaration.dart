@@ -21,6 +21,7 @@ class RoutineDeclaration extends Declaration {
     var routineName = iterator.current.value;
 
     checkNext(iterator, RegExp("\\("), "Expected '('");
+    iterator.moveNext();
     var parameterTokens = consumeUntil(iterator, RegExp("\\)\$"));
     checkThis(iterator, RegExp("\\)"), "Expected ')'");
     iterator.moveNext();
@@ -32,32 +33,28 @@ class RoutineDeclaration extends Declaration {
     }
 
     checkThis(iterator, RegExp('is\$'), "Expected 'is'");
-    var bodyTokens = consumeUntil(iterator, RegExp("end\$"));
-    print(bodyTokens);
+    iterator.moveNext();
+    var body = Statement.parseBody(consumeAwareUntil(
+      iterator,
+      RegExp('(record|if|while|for)\$'),
+      RegExp('end\$'),
+      RegExp('end\$'),
+    ));
+
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
-    var roparameters = <Parameter>[];
+    var parameters = <Parameter>[];
     var parsIterator = parameterTokens.iterator;
     while (parsIterator.moveNext()) {
       var blockTokens = consumeUntil(parsIterator, RegExp(",\$"));
       if (blockTokens.isEmpty) {
         continue;
       }
-      roparameters.add(Parameter.parse(blockTokens));
+      parameters.add(Parameter.parse(blockTokens));
     }
 
-    var bodyIterator = bodyTokens.iterator;
-    var robody = <Statement>[];
-    while (bodyIterator.moveNext()) {
-      var blockTokens = consumeUntil(bodyIterator, RegExp("[\n;]\$"));
-      if (blockTokens.isEmpty) {
-        continue;
-      }
-      robody.add(Statement.parse(blockTokens));
-    }
-
-    return RoutineDeclaration(routineName, roparameters, returnType, robody);
+    return RoutineDeclaration(routineName, parameters, returnType, body);
   }
 
   String toString({int depth = 0, String prefix = ''}) {

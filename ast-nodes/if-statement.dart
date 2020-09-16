@@ -18,63 +18,42 @@ class IfStatement implements Statement {
     final nestedBlockEnd = RegExp("end\$");
     var iterator = tokens.iterator;
     checkNext(iterator, RegExp('if\$'), "Expected 'if'");
-    var expressionBody = consumeUntil(iterator, RegExp("then\$"));
+    var condition = Expression.parse(consumeUntil(iterator, RegExp("then\$")));
     checkThis(iterator, RegExp('then\$'), "Expected 'then'");
-    List<Token> trueBody = consumeAwareUntil(
+
+    var trueBlock = Statement.parseBody(consumeAwareUntil(
       iterator,
       nestedBlockStart,
       nestedBlockEnd,
       nestedBlockEnd,
-    );
+    ));
 
-    List<Token> falseBody = null;
+    if (trueBlock.isEmpty) {
+      throw SyntaxError(iterator.current, "Expected at least one statement in the block");
+    }
+
+    List<Statement> falseBlock = null;
     if (iterator.current?.value == "else") {
-      falseBody = consumeAwareUntil(
+      falseBlock = Statement.parseBody(consumeAwareUntil(
         iterator,
         nestedBlockStart,
         nestedBlockEnd,
         nestedBlockEnd
-      );
+      ));
+
+      if (falseBlock.isEmpty) {
+        throw SyntaxError(iterator.current, "Expected at least one statement in the block");
+      }
+
       checkThis(iterator, nestedBlockEnd, "Expected 'end'");
       checkNoMore(iterator);
     } else if (iterator.current?.value == "end") {
       checkNoMore(iterator);
+    } else {
+      throw SyntaxError(iterator.current, "Expected 'else' or 'end'");
     }
 
-    if (expressionBody.isEmpty) {
-      throw SyntaxError(iterator.current, "Expected a condition");
-    }
-
-    if (trueBody.isEmpty) {
-      throw SyntaxError(iterator.current, "Expected a true statement");
-    }
-
-    var expBody = Expression.parse(expressionBody);
-
-    var trueIterator = trueBody.iterator;
-    var trueBlock = <Statement>[];
-    while (trueIterator.moveNext()) {
-      var blockTokens = consumeUntil(trueIterator, RegExp("[\n;]\$"));
-      if (blockTokens.isEmpty) {
-        continue;
-      }
-      trueBlock.add(Statement.parse(blockTokens));
-    }
-
-    var falseBlock = <Statement>[];
-    if (falseBody != null) {
-      var falseIterator = falseBody.iterator;
-      while (falseIterator.moveNext()) {
-        var blockTokens = consumeUntil(falseIterator, RegExp("[\n;]\$"));
-        if (blockTokens.isEmpty) {
-          continue;
-        }
-
-        falseBlock.add(Statement.parse(blockTokens));
-      }
-    }
-
-    return IfStatement(expBody, trueBlock, falseBlock);
+    return IfStatement(condition, trueBlock, falseBlock);
   }
 
   String toString({int depth = 0, String prefix = ''}) {

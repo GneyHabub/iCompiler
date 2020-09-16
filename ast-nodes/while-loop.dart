@@ -18,7 +18,7 @@ class WhileLoop implements Statement {
     checkNext(iter, RegExp('while\$'), "Expected 'while'");
     iter.moveNext();
     var loopCondition = consumeUntil(iter, RegExp('loop\$'));
-    
+
     if (loopCondition.isEmpty) {
       throw SyntaxError(iter.current, "Expected a condition");
     }
@@ -34,16 +34,7 @@ class WhileLoop implements Statement {
     checkThis(iter, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iter);
 
-    var bodyIter = loopBody.iterator;
-    var statements = <Statement>[];
-    while (bodyIter.moveNext()) {
-      var statementLine = consumeUntil(bodyIter, RegExp("[\n;]\$"));
-      if (statementLine.isEmpty) {
-        continue;
-      }
-
-      statements.add(Statement.parse(statementLine));
-    }
+    var statements = Statement.parseBody(loopBody);
 
     return WhileLoop(Expression.parse(loopCondition), statements);
   }
@@ -57,4 +48,3 @@ class WhileLoop implements Statement {
     );
   }
 }
-

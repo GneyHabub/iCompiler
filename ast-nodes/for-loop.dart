@@ -31,17 +31,7 @@ class ForLoop implements Statement {
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
-    var bodyIterator = bodyTokens.iterator;
-    var statements = <Statement>[];
-    while (bodyIterator.moveNext()) {
-      var statementTokens = consumeUntil(bodyIterator, RegExp("[\n;]\$"));
-      if (statementTokens.isEmpty) {
-        continue;
-      }
-
-      statements.add(Statement.parse(statementTokens));
-    }
-
+    var statements = Statement.parseBody(bodyTokens);
     if (statements.isEmpty) {
       throw SyntaxError(iterator.current, 'Expected at least one statement in a loop body');
     }
