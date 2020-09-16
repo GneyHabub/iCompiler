@@ -28,7 +28,12 @@ class ForLoop implements Statement {
     var range = Range.parse(consumeUntil(iterator, RegExp('loop\$')));
     checkThis(iterator, RegExp('loop\$'), "Expected 'loop'");
     iterator.moveNext();
-    var bodyTokens = consumeUntil(iterator, RegExp('end'));
+    var bodyTokens = consumeAwareUntil(
+      iterator,
+      RegExp('(record|for|while|if)\$'),
+      RegExp('end\$'),
+      RegExp('end\$'),
+    );
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
