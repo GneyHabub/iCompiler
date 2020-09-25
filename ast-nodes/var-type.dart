@@ -14,7 +14,8 @@ import '../syntax-error.dart';
 abstract class VarType implements Node {
   factory VarType.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
-    if (!iterator.moveNext()) {
+    iterator.moveNext();
+    if (iterator.current == null) {
       throw SyntaxError(null, "Expected a type");
     }
 
@@ -38,7 +39,8 @@ abstract class VarType implements Node {
     }
 
     if (isReserved(iterator.current.value)) {
-      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+      throw SyntaxError(iterator.current,
+          "The '${iterator.current.value}' keyword is reserved");
     }
 
     var result = NamedType(iterator.current.value);

@@ -9,8 +9,8 @@ import '../syntax-error.dart';
 abstract class Expression implements Statement {
   factory Expression.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
-
-    if (!iterator.moveNext()) {
+    iterator.moveNext();
+    if (iterator.current == null) {
       throw SyntaxError(iterator.current, "Expected expression");
     }
 

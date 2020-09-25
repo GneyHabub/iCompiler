@@ -5,7 +5,8 @@ import 'ast-nodes/index.dart';
 
 void main() {
   try {
-    var tokens = splitToTokens(File('./tests/while.isc').readAsStringSync());
+    var tokens = splitToTokens(
+        File('./tests/bubble_sort_corrected.isc').readAsStringSync());
     print(Program.parse(tokens));
   } on SyntaxError catch (e) {
     print(e);

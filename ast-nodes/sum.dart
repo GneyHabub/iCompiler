@@ -14,14 +14,14 @@ abstract class Sum implements Comparison {
     var parentheses = 0;
     Token prevToken = null;
     while (iter.moveNext()) {
-      if (['(', '['].contains(iter.current.value)) {
+      if (['(', '['].contains(iter.current?.value)) {
         parentheses++;
       }
-      if ([')', ']'].contains(iter.current.value)) {
+      if ([')', ']'].contains(iter.current?.value)) {
         parentheses--;
       }
       if (parentheses == 0 &&
-        ['+', '-'].contains(iter.current.value) &&
+          ['+', '-'].contains(iter.current?.value) &&
           !['(', '%', '*', '/', null].contains(prevToken?.value)) {
         break;
       }

@@ -40,6 +40,9 @@ List<Token> consumeAwareUntil(
   var stackCount = 0;
 
   do {
+    if (iterator.current == null) {
+      throw SyntaxError(null, "Invalid syntax");
+    }
     if (starting.hasMatch(iterator.current.value)) {
       stackCount++;
     } else if (ending.hasMatch(iterator.current.value) && stackCount > 0) {
