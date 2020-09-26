@@ -1,11 +1,12 @@
 import 'primary.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
 import 'field-access.dart';
 import 'variable.dart';
 import 'index-access.dart';
-import '../syntax-error.dart';
 import 'expression.dart';
+import '../lexer.dart';
+import '../iterator-utils.dart';
+import '../parser-utils.dart';
+import '../syntax-error.dart';
 
 /// An abstract writable entity – something that can appear in the LHS of the assignment.
 ///
@@ -16,11 +17,20 @@ abstract class ModifiablePrimary implements Primary {
     var iterator = tokens.iterator;
     ModifiablePrimary result;
     checkNext(iterator, identifierPattern, "Expected identifier");
+    if (isReserved(iterator.current.value)) {
+      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+    }
     result = Variable(iterator.current.value);
 
     while (iterator.moveNext()) {
       if (iterator.current.value == ".") {
         checkNext(iterator, identifierPattern, "Expected identifier");
+        if (isReserved(iterator.current.value)) {
+          throw SyntaxError(
+            iterator.current,
+            "The '${iterator.current.value}' keyword is reserved",
+          );
+        }
         result = FieldAccess(iterator.current.value, result);
       } else if (iterator.current.value == "[") {
         iterator.moveNext();

@@ -4,7 +4,9 @@ import 'var-type.dart';
 import 'statement.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
+import '../parser-utils.dart';
 import '../iterator-utils.dart';
+import '../syntax-error.dart';
 
 /// A routine declaration has [parameters], a [returnType] and a [body].
 class RoutineDeclaration extends Declaration {
@@ -19,6 +21,9 @@ class RoutineDeclaration extends Declaration {
     checkNext(iterator, RegExp('routine\$'), "Expected 'routine'");
     checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var routineName = iterator.current.value;
+    if (isReserved(routineName)) {
+      throw SyntaxError(iterator.current, "The '$routineName' keyword is reserved");
+    }
 
     checkNext(iterator, RegExp("\\("), "Expected '('");
     iterator.moveNext();

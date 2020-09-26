@@ -1,6 +1,8 @@
 import 'node.dart';
 import 'var-type.dart';
 import '../print-utils.dart';
+import '../parser-utils.dart';
+import '../syntax-error.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
 
@@ -15,6 +17,9 @@ class Parameter implements Node {
     var iter = tokens.iterator;
     checkNext(iter, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var nameBuffer = iter.current.value;
+    if (isReserved(nameBuffer)) {
+      throw SyntaxError(iter.current, "The '$nameBuffer' keyword is reserved");
+    }
     checkNext(iter, RegExp(':\$'), "Expected ':'");
     iter.moveNext();
 

@@ -18,7 +18,7 @@ class TypeDeclaration extends Declaration {
     checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var name = iterator.current.value;
     if (isReserved(name)) {
-      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+      throw SyntaxError(iterator.current, "The '$name' keyword is reserved");
     }
     checkNext(iterator, RegExp('is\$'), "Expected 'is'");
     iterator.moveNext();

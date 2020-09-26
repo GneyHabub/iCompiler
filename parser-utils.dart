@@ -21,6 +21,7 @@ const reservedKeywords = [
   "xor",
   "true",
   "false",
+  "not",
 ];
 
 bool isReserved(String identifier) {

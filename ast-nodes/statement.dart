@@ -79,7 +79,6 @@ abstract class Statement implements Node {
       }
 
       statements.add(Statement.parse(statementTokens));
-      // print(statements.last);
     }
 
     return statements;
