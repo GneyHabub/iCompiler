@@ -19,6 +19,9 @@ List<Token> consumeUntil(Iterator<Token> iterator, RegExp terminal) {
 /// Consume all of the tokens from the iterator.
 List<Token> consumeFull(Iterator<Token> iterator) {
   var tokens = <Token>[];
+  if (iterator.current == null) {
+    return [];
+  }
   do {
     tokens.add(iterator.current);
   } while (iterator.moveNext());

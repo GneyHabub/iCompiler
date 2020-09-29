@@ -14,8 +14,7 @@ import '../syntax-error.dart';
 abstract class VarType implements Node {
   factory VarType.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
-    iterator.moveNext();
-    if (iterator.current == null) {
+    if (!iterator.moveNext()) {
       throw SyntaxError(null, "Expected a type");
     }
 
