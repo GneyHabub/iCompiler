@@ -1,5 +1,5 @@
 import 'statement.dart';
-import 'expression.dart';
+import 'expressions/expression.dart';
 import 'declaration.dart';
 import 'scope-creator.dart';
 import '../print-utils.dart';
@@ -8,7 +8,6 @@ import '../iterator-utils.dart';
 import '../syntax-error.dart';
 import '../symbol-table/scope.dart';
 import '../symbol-table/scope-element.dart';
-
 
 /// A `while` loop.
 class WhileLoop implements Statement, ScopeCreator {
@@ -35,7 +34,8 @@ class WhileLoop implements Statement, ScopeCreator {
     var loopBody = consumeUntil(iter, RegExp('end\$'));
 
     if (loopBody.isEmpty) {
-      throw SyntaxError(iter.current, 'Expected at least one statement in a loop body');
+      throw SyntaxError(
+          iter.current, 'Expected at least one statement in a loop body');
     }
 
     checkThis(iter, RegExp('end\$'), "Expected 'end'");
@@ -47,12 +47,14 @@ class WhileLoop implements Statement, ScopeCreator {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}WhileLoop', depth)
-      + (this.condition?.toString(depth: depth + 1, prefix: 'condition: ') ?? '')
-      + drawDepth('body:', depth + 1)
-      + this.body.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('${prefix}WhileLoop', depth) +
+        (this.condition?.toString(depth: depth + 1, prefix: 'condition: ') ??
+            '') +
+        drawDepth('body:', depth + 1) +
+        this
+            .body
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {
@@ -70,9 +72,9 @@ class WhileLoop implements Statement, ScopeCreator {
       }
 
       if (statement is ScopeCreator) {
-        (statement as ScopeCreator).scopes.forEach(
-          (subscope) => scope.addSubscope(subscope)
-        );
+        (statement as ScopeCreator)
+            .scopes
+            .forEach((subscope) => scope.addSubscope(subscope));
       }
     }
   }

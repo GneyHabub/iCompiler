@@ -1,6 +1,6 @@
 import 'declaration.dart';
 import 'parameter.dart';
-import 'var-type.dart';
+import 'types/var-type.dart';
 import 'statement.dart';
 import 'scope-creator.dart';
 import '../lexer.dart';
@@ -20,7 +20,8 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   VarType returnType;
   List<Statement> body;
 
-  RoutineDeclaration(name, this.parameters, this.returnType, this.body) : super(name);
+  RoutineDeclaration(name, this.parameters, this.returnType, this.body)
+      : super(name);
 
   factory RoutineDeclaration.parse(Iterable<Token> tokens) {
     var iterator = tokens.iterator;
@@ -28,7 +29,8 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
     checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     var routineName = iterator.current.value;
     if (isReserved(routineName)) {
-      throw SyntaxError(iterator.current, "The '$routineName' keyword is reserved");
+      throw SyntaxError(
+          iterator.current, "The '$routineName' keyword is reserved");
     }
 
     checkNext(iterator, RegExp("\\("), "Expected '('");
@@ -38,14 +40,10 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
     iterator.moveNext();
 
     VarType returnType = null;
-    if (iterator.current?.value == ":"){
+    if (iterator.current?.value == ":") {
       iterator.moveNext();
       returnType = VarType.parse(consumeAwareUntil(
-        iterator,
-        RegExp('record\$'),
-        RegExp('end\$'),
-        RegExp('is\$')
-      ));
+          iterator, RegExp('record\$'), RegExp('end\$'), RegExp('is\$')));
     }
 
     checkThis(iterator, RegExp('is\$'), "Expected 'is'");
@@ -74,14 +72,19 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}RoutineDeclaration("${this.name}")', depth)
-      + drawDepth('parameters:', depth + 1)
-      + this.parameters.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-      + (this.returnType?.toString(depth: depth + 1, prefix: 'return type: ') ?? '')
-      + drawDepth('body:', depth + 1)
-      + this.body.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('${prefix}RoutineDeclaration("${this.name}")', depth) +
+        drawDepth('parameters:', depth + 1) +
+        this
+            .parameters
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join('') +
+        (this.returnType?.toString(depth: depth + 1, prefix: 'return type: ') ??
+            '') +
+        drawDepth('body:', depth + 1) +
+        this
+            .body
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {
@@ -103,9 +106,9 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       }
 
       if (statement is ScopeCreator) {
-        (statement as ScopeCreator).scopes.forEach(
-          (subscope) => scope.addSubscope(subscope)
-        );
+        (statement as ScopeCreator)
+            .scopes
+            .forEach((subscope) => scope.addSubscope(subscope));
       }
     }
   }

@@ -1,7 +1,7 @@
 import 'unary-relation.dart';
-import 'expression.dart';
-import 'boolean-type.dart';
-import 'var-type.dart';
+import '../expression.dart';
+import '../../types/boolean-type.dart';
+import '../../types/var-type.dart';
 
 /// Logical NOT operator.
 ///

@@ -1,7 +1,7 @@
 import 'binary-relation.dart';
-import 'expression.dart';
-import 'boolean-type.dart';
-import 'var-type.dart';
+import '../expression.dart';
+import '../../types/boolean-type.dart';
+import '../../types/var-type.dart';
 
 /// Logical OR operator.
 ///
@@ -11,7 +11,7 @@ class OrOperator extends BinaryRelation {
   bool isConstant;
 
   OrOperator(Expression leftOperand, Expression rightOperand)
-    : super(leftOperand, rightOperand);
+      : super(leftOperand, rightOperand);
 
   void checkSemantics() {
     // TODO: implement

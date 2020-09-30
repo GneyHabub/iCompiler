@@ -1,8 +1,8 @@
-import 'comparison.dart';
+import '../comparison.dart';
 import 'binary-relation.dart';
-import 'expression.dart';
-import 'boolean-type.dart';
-import 'var-type.dart';
+import '../expression.dart';
+import '../../types/boolean-type.dart';
+import '../../types/var-type.dart';
 
 /// Universal _not equal to_ operator.
 ///
@@ -12,7 +12,7 @@ class NeqOperator extends BinaryRelation implements Comparison {
   bool isConstant;
 
   NeqOperator(Expression leftOperand, Expression rightOperand)
-    : super(leftOperand, rightOperand);
+      : super(leftOperand, rightOperand);
 
   void checkSemantics() {
     // TODO: implement

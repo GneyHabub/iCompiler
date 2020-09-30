@@ -72,7 +72,8 @@ void checkNext(Iterator<Token> iterator, RegExp expected, String errorMessage) {
 ///
 /// Throws a syntax error with a given [errorMessage] if the check fails.
 void checkThis(Iterator<Token> iterator, RegExp expected, String errorMessage) {
-  if (iterator.current?.value == null || !expected.hasMatch(iterator.current.value)) {
+  if (iterator.current?.value == null ||
+      !expected.hasMatch(iterator.current.value)) {
     throw SyntaxError(iterator.current, errorMessage);
   }
 }

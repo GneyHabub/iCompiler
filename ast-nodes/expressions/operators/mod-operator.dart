@@ -1,7 +1,7 @@
-import 'product.dart';
+import '../product.dart';
 import 'binary-relation.dart';
-import 'expression.dart';
-import 'var-type.dart';
+import '../expression.dart';
+import '../../types/var-type.dart';
 
 /// Numeric modulo operator.
 ///
@@ -11,7 +11,7 @@ class ModOperator extends BinaryRelation implements Product {
   bool isConstant;
 
   ModOperator(Expression leftOperand, Expression rightOperand)
-    : super(leftOperand, rightOperand);
+      : super(leftOperand, rightOperand);
 
   void checkSemantics() {
     // TODO: implement

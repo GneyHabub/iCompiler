@@ -1,5 +1,5 @@
 import 'node.dart';
-import 'var-type.dart';
+import 'types/var-type.dart';
 import 'variable-declaration.dart';
 import '../print-utils.dart';
 import '../parser-utils.dart';
@@ -35,10 +35,8 @@ class Parameter implements Node {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}Parameter("${this.name}")', depth)
-      + (this.type?.toString(depth: depth + 1, prefix: 'type: ') ?? '')
-    );
+    return (drawDepth('${prefix}Parameter("${this.name}")', depth) +
+        (this.type?.toString(depth: depth + 1, prefix: 'type: ') ?? ''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {

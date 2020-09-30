@@ -15,3 +15,5 @@ export 'less-eq-operator.dart';
 export 'neg-operator.dart';
 export 'not-operator.dart';
 export 'pos-operator.dart';
+export 'binary-relation.dart';
+export 'unary-relation.dart';

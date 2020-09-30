@@ -1,12 +1,12 @@
 import 'var-type.dart';
-import 'variable-declaration.dart';
-import 'scope-creator.dart';
-import '../lexer.dart';
-import '../syntax-error.dart';
-import '../iterator-utils.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
+import '../variable-declaration.dart';
+import '../scope-creator.dart';
+import '../../lexer.dart';
+import '../../syntax-error.dart';
+import '../../iterator-utils.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A compound type that has several [fields] inside.
 class RecordType implements VarType, ScopeCreator {
@@ -22,11 +22,7 @@ class RecordType implements VarType, ScopeCreator {
     checkNext(iterator, RegExp('record\$'), "Expected 'record'");
     iterator.moveNext();
     var bodyTokens = consumeAwareUntil(
-      iterator,
-      RegExp('record\$'),
-      RegExp('end\$'),
-      RegExp("end\$")
-    );
+        iterator, RegExp('record\$'), RegExp('end\$'), RegExp("end\$"));
     checkThis(iterator, RegExp('end\$'), "Expected 'end'");
     checkNoMore(iterator);
 
@@ -34,12 +30,8 @@ class RecordType implements VarType, ScopeCreator {
     var bodyIterator = bodyTokens.iterator;
 
     while (bodyIterator.moveNext()) {
-      var declarationTokens = consumeAwareUntil(
-        bodyIterator,
-        RegExp('record\$'),
-        RegExp('end\$'),
-        RegExp("^[\n;]\$")
-      );
+      var declarationTokens = consumeAwareUntil(bodyIterator,
+          RegExp('record\$'), RegExp('end\$'), RegExp("^[\n;]\$"));
       if (declarationTokens.isEmpty) {
         continue;
       }
@@ -47,18 +39,20 @@ class RecordType implements VarType, ScopeCreator {
     }
 
     if (declarations.isEmpty) {
-      throw SyntaxError(iterator.current, "Expected at least one field in a record");
+      throw SyntaxError(
+          iterator.current, "Expected at least one field in a record");
     }
 
     return RecordType(declarations);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}RecordType', depth)
-      + drawDepth('fields:', depth + 1)
-      + this.fields.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('${prefix}RecordType', depth) +
+        drawDepth('fields:', depth + 1) +
+        this
+            .fields
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {

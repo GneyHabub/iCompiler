@@ -1,8 +1,8 @@
 import 'primary.dart';
-import 'boolean-type.dart';
-import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../types/boolean-type.dart';
+import '../types/var-type.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A literal boolean value in code.
 class BooleanLiteral implements Primary {

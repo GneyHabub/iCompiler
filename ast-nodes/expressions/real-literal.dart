@@ -1,8 +1,8 @@
 import 'primary.dart';
-import 'real-type.dart';
-import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../types/real-type.dart';
+import '../types/var-type.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A literal floating-point number in code.
 class RealLiteral implements Primary {

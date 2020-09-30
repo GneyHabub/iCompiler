@@ -12,7 +12,8 @@ abstract class ScopeElement {
     var item = this;
     while (item is! ScopeStart) {
       if (item is ScopeDeclaration && item.declaration.name == name) {
-        throw SemanticError(item.declaration, "Another object is declared with the name '$name'");
+        throw SemanticError(item.declaration,
+            "Another object is declared with the name '$name'");
       }
       item = item.next;
     }

@@ -1,5 +1,5 @@
 import 'statement.dart';
-import 'variable.dart';
+import 'expressions/variable.dart';
 import 'range.dart';
 import 'declaration.dart';
 import 'scope-creator.dart';
@@ -27,7 +27,8 @@ class ForLoop implements Statement, ScopeCreator {
     checkNext(iterator, RegExp('for\$'), "Expected 'for'");
     checkNext(iterator, RegExp('[a-zA-Z_]\\w*\$'), "Expected identifier");
     if (isReserved(iterator.current.value)) {
-      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+      throw SyntaxError(iterator.current,
+          "The '${iterator.current.value}' keyword is reserved");
     }
     var loopVariable = Variable(iterator.current.value);
     checkNext(iterator, RegExp('in\$'), "Expected 'in'");
@@ -46,20 +47,25 @@ class ForLoop implements Statement, ScopeCreator {
 
     var statements = Statement.parseBody(bodyTokens);
     if (statements.isEmpty) {
-      throw SyntaxError(iterator.current, 'Expected at least one statement in a loop body');
+      throw SyntaxError(
+          iterator.current, 'Expected at least one statement in a loop body');
     }
 
     return ForLoop(loopVariable, range, statements);
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('ForLoop', depth)
-      + (this.loopVariable?.toString(depth: depth + 1, prefix: 'loop variable: ') ?? '')
-      + (this.range?.toString(depth: depth + 1, prefix: 'range: ') ?? '')
-      + drawDepth('body:', depth + 1)
-      + this.body.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('ForLoop', depth) +
+        (this
+                .loopVariable
+                ?.toString(depth: depth + 1, prefix: 'loop variable: ') ??
+            '') +
+        (this.range?.toString(depth: depth + 1, prefix: 'range: ') ?? '') +
+        drawDepth('body:', depth + 1) +
+        this
+            .body
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {
@@ -78,9 +84,9 @@ class ForLoop implements Statement, ScopeCreator {
       }
 
       if (statement is ScopeCreator) {
-        (statement as ScopeCreator).scopes.forEach(
-          (subscope) => scope.addSubscope(subscope)
-        );
+        (statement as ScopeCreator)
+            .scopes
+            .forEach((subscope) => scope.addSubscope(subscope));
       }
     }
   }

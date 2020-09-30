@@ -8,7 +8,7 @@ import 'while-loop.dart';
 import 'for-loop.dart';
 import 'if-statement.dart';
 import 'return-statement.dart';
-import 'routine-call.dart';
+import 'expressions/routine-call.dart';
 import 'assignment.dart';
 
 /// An abstract statement.
@@ -61,8 +61,7 @@ abstract class Statement implements Node {
         } else if (iterator.current.value == 'end') {
           blockCount--;
         }
-        if ((iterator.current.value == ';' ||
-                iterator.current.value == '\n') &&
+        if ((iterator.current.value == ';' || iterator.current.value == '\n') &&
             blockCount == 0) {
           break;
         }

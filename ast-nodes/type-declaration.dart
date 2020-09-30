@@ -1,5 +1,5 @@
 import 'declaration.dart';
-import 'var-type.dart';
+import 'types/var-type.dart';
 import '../lexer.dart';
 import '../syntax-error.dart';
 import '../iterator-utils.dart';
@@ -31,10 +31,8 @@ class TypeDeclaration extends Declaration {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}TypeDeclaration("${this.name}")', depth)
-      + (this.value?.toString(depth: depth + 1) ?? '')
-    );
+    return (drawDepth('${prefix}TypeDeclaration("${this.name}")', depth) +
+        (this.value?.toString(depth: depth + 1) ?? ''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {

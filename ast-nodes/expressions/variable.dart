@@ -1,7 +1,7 @@
 import 'modifiable-primary.dart';
-import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../types/var-type.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A variable reference by [name] – for either reading or writing.
 class Variable implements ModifiablePrimary {

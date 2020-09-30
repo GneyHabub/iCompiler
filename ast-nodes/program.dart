@@ -111,9 +111,9 @@ class Program implements Node, ScopeCreator {
       currentMark = scope.addDeclaration(declaration);
 
       if (declaration is ScopeCreator) {
-        (declaration as ScopeCreator).scopes.forEach(
-          (subscope) => scope.addSubscope(subscope)
-        );
+        (declaration as ScopeCreator)
+            .scopes
+            .forEach((subscope) => scope.addSubscope(subscope));
       }
     }
   }

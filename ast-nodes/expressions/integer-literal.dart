@@ -1,8 +1,8 @@
 import 'primary.dart';
-import 'integer-type.dart';
-import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../types/integer-type.dart';
+import '../types/var-type.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A literal integer number in code.
 class IntegerLiteral implements Primary {

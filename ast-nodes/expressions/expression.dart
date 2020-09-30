@@ -1,9 +1,13 @@
-import 'index.dart';
-import 'statement.dart';
-import 'and-operator.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../syntax-error.dart';
+import '../statement.dart';
+import 'comparison.dart';
+import '../types/var-type.dart';
+import 'operators/not-operator.dart';
+import 'operators/and-operator.dart';
+import 'operators/or-operator.dart';
+import 'operators/xor-operator.dart';
+import '../../lexer.dart';
+import '../../iterator-utils.dart';
+import '../../syntax-error.dart';
 
 /// An abstract expression that returns a value.
 abstract class Expression implements Statement {

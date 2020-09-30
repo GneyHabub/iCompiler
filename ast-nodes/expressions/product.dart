@@ -2,12 +2,12 @@ import 'sum.dart';
 import 'expression.dart';
 import 'prioritized.dart';
 import 'primary.dart';
-import 'mul-operator.dart';
-import 'div-operator.dart';
-import 'mod-operator.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../syntax-error.dart';
+import 'operators/mul-operator.dart';
+import 'operators/div-operator.dart';
+import 'operators/mod-operator.dart';
+import '../../lexer.dart';
+import '../../iterator-utils.dart';
+import '../../syntax-error.dart';
 
 /// An abstract multiplying operator.
 abstract class Product implements Sum {

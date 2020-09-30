@@ -1,5 +1,5 @@
 import 'statement.dart';
-import 'expression.dart';
+import 'expressions/expression.dart';
 import 'declaration.dart';
 import 'scope-creator.dart';
 import '../print-utils.dart';
@@ -38,21 +38,19 @@ class IfStatement implements Statement, ScopeCreator {
     ));
 
     if (trueBlock.isEmpty) {
-      throw SyntaxError(iterator.current, "Expected at least one statement in the block");
+      throw SyntaxError(
+          iterator.current, "Expected at least one statement in the block");
     }
 
     List<Statement> falseBlock = [];
     if (iterator.current?.value == "else") {
       iterator.moveNext();
       falseBlock = Statement.parseBody(consumeAwareUntil(
-        iterator,
-        nestedBlockStart,
-        nestedBlockEnd,
-        nestedBlockEnd
-      ));
+          iterator, nestedBlockStart, nestedBlockEnd, nestedBlockEnd));
 
       if (falseBlock.isEmpty) {
-        throw SyntaxError(iterator.current, "Expected at least one statement in the block");
+        throw SyntaxError(
+            iterator.current, "Expected at least one statement in the block");
       }
 
       checkThis(iterator, nestedBlockEnd, "Expected 'end'");
@@ -67,14 +65,19 @@ class IfStatement implements Statement, ScopeCreator {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}IfStatement', depth)
-      + (this.condition?.toString(depth: depth + 1, prefix: 'condition: ') ?? '')
-      + drawDepth('true block:', depth + 1)
-      + this.blockTrue.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-      + drawDepth('false block:', depth + 1)
-      + this.blockFalse.map((node) => node?.toString(depth: depth + 2) ?? '').join('')
-    );
+    return (drawDepth('${prefix}IfStatement', depth) +
+        (this.condition?.toString(depth: depth + 1, prefix: 'condition: ') ??
+            '') +
+        drawDepth('true block:', depth + 1) +
+        this
+            .blockTrue
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join('') +
+        drawDepth('false block:', depth + 1) +
+        this
+            .blockFalse
+            .map((node) => node?.toString(depth: depth + 2) ?? '')
+            .join(''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {
@@ -94,9 +97,9 @@ class IfStatement implements Statement, ScopeCreator {
           currentMark = this.scopes[i].addDeclaration(statement);
         }
         if (statement is ScopeCreator) {
-          (statement as ScopeCreator).scopes.forEach(
-            (subscope) => this.scopes[i].addSubscope(subscope)
-          );
+          (statement as ScopeCreator)
+              .scopes
+              .forEach((subscope) => this.scopes[i].addSubscope(subscope));
         }
       }
     }

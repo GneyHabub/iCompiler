@@ -1,7 +1,7 @@
-import 'sum.dart';
+import '../sum.dart';
 import 'binary-relation.dart';
-import 'expression.dart';
-import 'var-type.dart';
+import '../expression.dart';
+import '../../types/var-type.dart';
 
 /// Numeric addition operator.
 ///
@@ -11,7 +11,7 @@ class AddOperator extends BinaryRelation implements Sum {
   bool isConstant;
 
   AddOperator(Expression leftOperand, Expression rightOperand)
-    : super(leftOperand, rightOperand);
+      : super(leftOperand, rightOperand);
 
   void checkSemantics() {
     // TODO: implement

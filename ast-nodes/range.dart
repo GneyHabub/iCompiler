@@ -1,6 +1,6 @@
 import '../syntax-error.dart';
 import 'node.dart';
-import 'expression.dart';
+import 'expressions/expression.dart';
 import '../print-utils.dart';
 import '../iterator-utils.dart';
 import '../lexer.dart';

@@ -1,7 +1,7 @@
-import 'primary.dart';
 import 'unary-relation.dart';
-import 'expression.dart';
-import 'var-type.dart';
+import '../primary.dart';
+import '../expression.dart';
+import '../../types/var-type.dart';
 
 /// Numeric negation operator.
 ///

@@ -2,8 +2,8 @@ import '../iterator-utils.dart';
 import '../parser-utils.dart';
 import '../syntax-error.dart';
 import 'declaration.dart';
-import 'var-type.dart';
-import 'expression.dart';
+import 'types/var-type.dart';
+import 'expressions/expression.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
 import '../symbol-table/scope-element.dart';
@@ -35,11 +35,7 @@ class VariableDeclaration extends Declaration {
     if (iter.current?.value == ':') {
       iter.moveNext();
       type = VarType.parse(consumeAwareUntil(
-        iter,
-        RegExp('record\$'),
-        RegExp('end\$'),
-        RegExp('is\$'))
-      );
+          iter, RegExp('record\$'), RegExp('end\$'), RegExp('is\$')));
       if (iter.current?.value == 'is') {
         iter.moveNext();
         initialValue = Expression.parse(consumeFull(iter));

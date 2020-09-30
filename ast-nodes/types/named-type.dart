@@ -1,8 +1,8 @@
 import 'var-type.dart';
-import 'type-declaration.dart';
-import '../print-utils.dart';
-import '../semantic-error.dart';
-import '../symbol-table/scope-element.dart';
+import '../type-declaration.dart';
+import '../../print-utils.dart';
+import '../../semantic-error.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// A type that was specified by the [name].
 ///

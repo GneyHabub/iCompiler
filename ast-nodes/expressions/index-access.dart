@@ -1,8 +1,8 @@
 import 'modifiable-primary.dart';
 import 'expression.dart';
-import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../types/var-type.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// An array element access by [index] – for either reading or writing.
 ///

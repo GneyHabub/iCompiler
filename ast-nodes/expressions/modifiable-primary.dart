@@ -3,10 +3,10 @@ import 'field-access.dart';
 import 'variable.dart';
 import 'index-access.dart';
 import 'expression.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../parser-utils.dart';
-import '../syntax-error.dart';
+import '../../lexer.dart';
+import '../../iterator-utils.dart';
+import '../../parser-utils.dart';
+import '../../syntax-error.dart';
 
 /// An abstract writable entity – something that can appear in the LHS of the assignment.
 ///
@@ -18,7 +18,8 @@ abstract class ModifiablePrimary implements Primary {
     ModifiablePrimary result;
     checkNext(iterator, identifierPattern, "Expected identifier");
     if (isReserved(iterator.current.value)) {
-      throw SyntaxError(iterator.current, "The '${iterator.current.value}' keyword is reserved");
+      throw SyntaxError(iterator.current,
+          "The '${iterator.current.value}' keyword is reserved");
     }
     result = Variable(iterator.current.value);
 

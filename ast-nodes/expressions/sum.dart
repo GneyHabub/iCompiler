@@ -1,9 +1,9 @@
-import '../iterator-utils.dart';
-import 'add-operator.dart';
 import 'comparison.dart';
-import '../lexer.dart';
 import 'product.dart';
-import 'sub-operator.dart';
+import 'operators/add-operator.dart';
+import 'operators/sub-operator.dart';
+import '../../lexer.dart';
+import '../../iterator-utils.dart';
 
 /// An abstract summing operator.
 abstract class Sum implements Comparison {

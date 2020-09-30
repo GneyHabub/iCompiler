@@ -1,6 +1,6 @@
 import 'var-type.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import '../../print-utils.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// The built-in boolean type.
 class BooleanType implements VarType {

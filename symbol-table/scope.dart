@@ -37,9 +37,7 @@ class Scope extends ScopeElement {
       item = item.next;
     }
 
-    return (
-      drawDepth('Scope', depth)
-      + chain.reversed.map((node) => node.toString(depth: depth + 1)).join('')
-    );
+    return (drawDepth('Scope', depth) +
+        chain.reversed.map((node) => node.toString(depth: depth + 1)).join(''));
   }
 }

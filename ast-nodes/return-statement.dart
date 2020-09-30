@@ -1,5 +1,5 @@
 import 'statement.dart';
-import 'expression.dart';
+import 'expressions/expression.dart';
 import '../print-utils.dart';
 import '../iterator-utils.dart';
 import '../lexer.dart';
@@ -23,10 +23,8 @@ class ReturnStatement implements Statement {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}ReturnStatement', depth)
-      + (this.value?.toString(depth: depth + 1, prefix: 'value: ') ?? '')
-    );
+    return (drawDepth('${prefix}ReturnStatement', depth) +
+        (this.value?.toString(depth: depth + 1, prefix: 'value: ') ?? ''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {

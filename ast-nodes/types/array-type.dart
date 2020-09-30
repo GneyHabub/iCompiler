@@ -1,11 +1,11 @@
 import 'var-type.dart';
-import 'expression.dart';
+import '../expressions/expression.dart';
 import 'integer-type.dart';
-import '../print-utils.dart';
-import '../iterator-utils.dart';
-import '../lexer.dart';
-import '../semantic-error.dart';
-import '../symbol-table/scope-element.dart';
+import '../../print-utils.dart';
+import '../../iterator-utils.dart';
+import '../../lexer.dart';
+import '../../semantic-error.dart';
+import '../../symbol-table/scope-element.dart';
 
 /// An array type with optional [size].
 class ArrayType implements VarType {
@@ -35,11 +35,12 @@ class ArrayType implements VarType {
   }
 
   String toString({int depth = 0, String prefix = ''}) {
-    return (
-      drawDepth('${prefix}ArrayType', depth)
-      + (this.size?.toString(depth: depth + 1, prefix: 'size: ') ?? '')
-      + (this.elementType?.toString(depth: depth + 1, prefix: 'element type: ') ?? '')
-    );
+    return (drawDepth('${prefix}ArrayType', depth) +
+        (this.size?.toString(depth: depth + 1, prefix: 'size: ') ?? '') +
+        (this
+                .elementType
+                ?.toString(depth: depth + 1, prefix: 'element type: ') ??
+            ''));
   }
 
   void propagateScopeMark(ScopeElement parentMark) {
@@ -51,7 +52,8 @@ class ArrayType implements VarType {
   void checkSemantics() {
     this.size.checkSemantics();
     if (!this.size.isConstant) {
-      throw SemanticError(this.size, 'The array size must be a constant expression');
+      throw SemanticError(
+          this.size, 'The array size must be a constant expression');
     }
     if (this.size.resultType is! IntegerType) {
       throw SemanticError(this.size, 'The array size must be integer');
