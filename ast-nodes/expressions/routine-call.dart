@@ -94,7 +94,8 @@ class RoutineCall implements Primary {
     var parameters = (declaration as RoutineDeclaration).parameters;
 
     if (parameters.length != this.arguments.length) {
-      throw SemanticError(this, "Expected ${parameters.length} arguments, found ${this.arguments.length}");
+      throw SemanticError(this,
+          "Expected ${parameters.length} arguments, found ${this.arguments.length}");
     }
 
     for (var i = 0; i < parameters.length; ++i) {

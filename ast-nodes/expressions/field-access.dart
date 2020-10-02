@@ -52,10 +52,14 @@ class FieldAccess implements ModifiablePrimary {
     }
 
     if (this.object.resultType is! RecordType) {
-      throw SemanticError(this, "Cannot access a field on something that is not a record");
+      throw SemanticError(
+          this, "Cannot access a field on something that is not a record");
     }
 
-    var fieldDecl = (this.object.resultType as RecordType).scopes[0].lastChild.resolve(this.name);
+    var fieldDecl = (this.object.resultType as RecordType)
+        .scopes[0]
+        .lastChild
+        .resolve(this.name);
     this.isConstant = false;
     this.resultType = (fieldDecl as VariableDeclaration).type;
   }

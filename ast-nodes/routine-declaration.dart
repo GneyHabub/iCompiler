@@ -130,13 +130,15 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       if (statement is ReturnStatement) {
         hasReturnStatement = true;
         if (statement.value?.resultType != this.returnType) {
-          throw SemanticError(statement, "The returned value doesn't match the return type of the function");
+          throw SemanticError(statement,
+              "The returned value doesn't match the return type of the function");
         }
       }
     }
 
     if (!hasReturnStatement && this.returnType != null) {
-      throw SemanticError(this, "The function has a return type but no return statements");
+      throw SemanticError(
+          this, "The function has a return type but no return statements");
     }
   }
 }
