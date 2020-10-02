@@ -2,12 +2,14 @@ import 'declaration.dart';
 import 'parameter.dart';
 import 'types/var-type.dart';
 import 'statement.dart';
+import 'return-statement.dart';
 import 'scope-creator.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
 import '../parser-utils.dart';
 import '../iterator-utils.dart';
 import '../syntax-error.dart';
+import '../semantic-error.dart';
 import '../symbol-table/scope.dart';
 import '../symbol-table/scope-element.dart';
 
@@ -120,10 +122,21 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       parameter.checkSemantics();
     }
 
-    this.returnType.checkSemantics();
+    this.returnType?.checkSemantics();
 
+    bool hasReturnStatement = false;
     for (var statement in this.body) {
       statement.checkSemantics();
+      if (statement is ReturnStatement) {
+        hasReturnStatement = true;
+        if (statement.value?.resultType != this.returnType) {
+          throw SemanticError(statement, "The returned value doesn't match the return type of the function");
+        }
+      }
+    }
+
+    if (!hasReturnStatement && this.returnType != null) {
+      throw SemanticError(this, "The function has a return type but no return statements");
     }
   }
 }

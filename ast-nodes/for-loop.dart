@@ -2,7 +2,9 @@ import 'statement.dart';
 import 'expressions/variable.dart';
 import 'range.dart';
 import 'declaration.dart';
+import 'variable-declaration.dart';
 import 'scope-creator.dart';
+import 'types/integer-type.dart';
 import '../print-utils.dart';
 import '../iterator-utils.dart';
 import '../parser-utils.dart';
@@ -75,7 +77,8 @@ class ForLoop implements Statement, ScopeCreator {
 
     var scope = Scope();
     this.scopes = [scope];
-    ScopeElement currentMark = scope.lastChild;
+    ScopeElement currentMark = scope.addDeclaration(
+        VariableDeclaration(this.loopVariable.name, IntegerType(), null));
 
     for (var statement in this.body) {
       statement.propagateScopeMark(currentMark);
@@ -92,6 +95,9 @@ class ForLoop implements Statement, ScopeCreator {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.range.checkSemantics();
+    for (var statement in this.body) {
+      statement.checkSemantics();
+    }
   }
 }

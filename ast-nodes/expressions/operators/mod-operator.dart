@@ -5,6 +5,9 @@ import '../integer-literal.dart';
 import '../product.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
+import '../../../semantic-utils.dart';
 
 /// Numeric modulo operator.
 ///
@@ -29,6 +32,21 @@ class ModOperator extends BinaryRelation implements Product {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.leftOperand.checkSemantics();
+    this.rightOperand.checkSemantics();
+    var leftType = this.leftOperand.resultType;
+    var rightType = this.rightOperand.resultType;
+
+    if (leftType is RealType || rightType is RealType) {
+      this.leftOperand = ensureType(this.leftOperand, RealType());
+      this.rightOperand = ensureType(this.rightOperand, RealType());
+      this.resultType = RealType();
+    } else {
+      this.leftOperand = ensureType(this.leftOperand, IntegerType());
+      this.rightOperand = ensureType(this.rightOperand, IntegerType());
+      this.resultType = IntegerType();
+    }
+
+    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }

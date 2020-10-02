@@ -1,11 +1,13 @@
 import 'primary.dart';
 import 'expression.dart';
 import 'literal.dart';
+import '../routine-declaration.dart';
 import '../types/var-type.dart';
 import '../../iterator-utils.dart';
 import '../../lexer.dart';
 import '../../parser-utils.dart';
 import '../../syntax-error.dart';
+import '../../semantic-error.dart';
 import '../../print-utils.dart';
 import '../../symbol-table/scope-element.dart';
 
@@ -84,6 +86,22 @@ class RoutineCall implements Primary {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    var declaration = this.scopeMark.resolve(this.name);
+    if (declaration is! RoutineDeclaration) {
+      throw SemanticError(this, "Can only call routines");
+    }
+
+    var parameters = (declaration as RoutineDeclaration).parameters;
+
+    if (parameters.length != this.arguments.length) {
+      throw SemanticError(this, "Expected ${parameters.length} arguments, found ${this.arguments.length}");
+    }
+
+    for (var i = 0; i < parameters.length; ++i) {
+      this.arguments[i].checkSemantics();
+      if (this.arguments[i].resultType != parameters[i].type) {
+        throw SemanticError(this, "Incorrect argument type");
+      }
+    }
   }
 }

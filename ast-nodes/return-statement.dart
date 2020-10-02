@@ -33,6 +33,6 @@ class ReturnStatement implements Statement {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.value.checkSemantics();
   }
 }
