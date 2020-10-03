@@ -54,8 +54,10 @@ class ArrayType implements VarType {
 
     try {
       return (other is ArrayType &&
-        this.size.evaluate() == other.size.evaluate() &&
-        this.elementType == other.elementType);
+          (this.size == null ||
+              other.size == null ||
+              this.size.evaluate() == other.size.evaluate()) &&
+          this.elementType == other.elementType);
     } on StateError {
       return false;
     }
