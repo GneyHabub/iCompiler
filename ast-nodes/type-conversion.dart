@@ -22,7 +22,8 @@ class TypeConversion implements Expression {
   @override
   String toString({int depth = 0, String prefix = ''}) {
     return (drawDepth(
-            '${prefix}TypeConversion: (${this.resultType.toString()})', depth) +
+            '${prefix}TypeConversion: (${this.resultType.runtimeType})',
+            depth) +
         (this.expression?.toString(depth: depth + 1, prefix: '') ?? ''));
   }
 
