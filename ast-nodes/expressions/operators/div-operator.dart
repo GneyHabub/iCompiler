@@ -1,3 +1,4 @@
+import '../../index.dart';
 import 'binary-relation.dart';
 import '../literal.dart';
 import '../real-literal.dart';
@@ -5,6 +6,7 @@ import '../integer-literal.dart';
 import '../product.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
+import '../../../semantic-utils.dart';
 
 /// Numeric division operator.
 ///
@@ -29,6 +31,9 @@ class DivOperator extends BinaryRelation implements Product {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    leftOperand.checkSemantics();
+    rightOperand.checkSemantics();
+    leftOperand = ensureType(leftOperand, RealType());
+    rightOperand = ensureType(rightOperand, RealType());
   }
 }
