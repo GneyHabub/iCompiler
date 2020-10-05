@@ -1,10 +1,12 @@
 import '../syntax-error.dart';
+import 'index.dart';
 import 'node.dart';
 import 'expressions/expression.dart';
 import '../print-utils.dart';
 import '../iterator-utils.dart';
 import '../lexer.dart';
 import '../symbol-table/scope-element.dart';
+import '../semantic-utils.dart';
 
 /// An iteration range for the `for` loop.
 class Range implements Node {
@@ -42,6 +44,9 @@ class Range implements Node {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    start.checkSemantics();
+    end.checkSemantics();
+    start = ensureType(start, IntegerType());
+    end = ensureType(end, IntegerType());
   }
 }
