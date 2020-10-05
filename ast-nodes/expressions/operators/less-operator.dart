@@ -41,14 +41,12 @@ class LessOperator extends BinaryRelation implements Comparison {
         rightOperand.resultType is RealType) {
       this.leftOperand = ensureType(this.leftOperand, RealType());
       this.rightOperand = ensureType(this.rightOperand, RealType());
-    } else if (leftOperand.resultType is IntegerType ||
+    } else if (leftOperand.resultType is IntegerType &&
         rightOperand.resultType is IntegerType) {
       this.leftOperand = ensureType(this.leftOperand, IntegerType());
       this.rightOperand = ensureType(this.rightOperand, IntegerType());
     } else {
-      if (leftOperand.resultType != rightOperand.resultType) {
-        throw SemanticError(this, "Cannot compare objects of different types");
-      }
+      throw SemanticError(this, "Objects of these types are incomparable!");
     }
   }
 }

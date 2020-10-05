@@ -1,3 +1,5 @@
+import '../../../semantic-error.dart';
+import '../../../syntax-error.dart';
 import '../../index.dart';
 import 'binary-relation.dart';
 import '../literal.dart';
@@ -33,7 +35,22 @@ class DivOperator extends BinaryRelation implements Product {
   void checkSemantics() {
     leftOperand.checkSemantics();
     rightOperand.checkSemantics();
-    leftOperand = ensureType(leftOperand, RealType());
-    rightOperand = ensureType(rightOperand, RealType());
+
+    if ((leftOperand.resultType is RealType &&
+            rightOperand.resultType is IntegerType) ||
+        (rightOperand.resultType is RealType &&
+            leftOperand.resultType is IntegerType)) {
+      leftOperand = ensureType(leftOperand, RealType());
+      rightOperand = ensureType(rightOperand, RealType());
+      resultType = RealType();
+      isConstant = leftOperand.isConstant && rightOperand.isConstant;
+    } else if (leftOperand.resultType is IntegerType &&
+        rightOperand.resultType is IntegerType) {
+      resultType = IntegerType();
+      isConstant = leftOperand.isConstant && rightOperand.isConstant;
+    } else {
+      throw SemanticError(this,
+          'An object of type ${leftOperand.resultType.runtimeType} cannot be divided by an object of type ${rightOperand.resultType.runtimeType}');
+    }
   }
 }
