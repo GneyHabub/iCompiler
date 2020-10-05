@@ -12,12 +12,13 @@ Primary ::= ( '-' Primary | '+' Primary | IntegerLiteral | RealLiteral | Boolean
 ```
 ReturnStatement ::= ‘return’ Expression
 ```
-
 ## * Range and ForLoop:
 ```
 ForLoop ::= for Identifier in [ reverse ] Range loop Body end
 Range ::= Expression .. Expression
 ```
+## * Strengthen bool comparison restrictions:
+It is only possible to check two bools for equality, `<`, `>`, `<=` and `>=` are illegal.
 ### Legend
 * \* - change/choose one of two contradicting
 * \+ - add 
