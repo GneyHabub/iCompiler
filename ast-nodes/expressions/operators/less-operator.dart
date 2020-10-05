@@ -1,3 +1,6 @@
+import '../../../semantic-error.dart';
+import '../../types/integer-type.dart';
+import '../../types/real-type.dart';
 import 'binary-relation.dart';
 import '../literal.dart';
 import '../real-literal.dart';
@@ -6,6 +9,7 @@ import '../comparison.dart';
 import '../expression.dart';
 import '../../types/boolean-type.dart';
 import '../../types/var-type.dart';
+import '../../../semantic-utils.dart';
 
 /// Numeric _less than_ operator.
 ///
@@ -30,6 +34,21 @@ class LessOperator extends BinaryRelation implements Comparison {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    leftOperand.checkSemantics();
+    rightOperand.checkSemantics();
+
+    if (leftOperand.resultType is RealType ||
+        rightOperand.resultType is RealType) {
+      this.leftOperand = ensureType(this.leftOperand, RealType());
+      this.rightOperand = ensureType(this.rightOperand, RealType());
+    } else if (leftOperand.resultType is IntegerType ||
+        rightOperand.resultType is IntegerType) {
+      this.leftOperand = ensureType(this.leftOperand, IntegerType());
+      this.rightOperand = ensureType(this.rightOperand, IntegerType());
+    } else {
+      if (leftOperand.resultType != rightOperand.resultType) {
+        throw SemanticError(this, "Cannot compare objects of different types");
+      }
+    }
   }
 }
