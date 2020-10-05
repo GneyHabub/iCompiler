@@ -58,7 +58,5 @@ class BooleanLiteral implements Literal {
     this.scopeMark = parentMark;
   }
 
-  void checkSemantics() {
-    // TODO: implement
-  }
+  void checkSemantics() {}
 }
