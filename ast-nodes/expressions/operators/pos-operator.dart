@@ -1,3 +1,5 @@
+import '../../../semantic-error.dart';
+import '../../index.dart';
 import 'unary-relation.dart';
 import '../literal.dart';
 import '../real-literal.dart';
@@ -25,6 +27,12 @@ class PosOperator extends UnaryRelation implements Primary {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    operand.checkSemantics();
+    if (operand.resultType is BooleanType) {
+      operand = ensureType(operand, IntegerType()); // Cast to a numeric type
+    } else if (operand.resultType is! IntegerType &&
+        operand.resultType is! RealType) {
+      throw SemanticError(this, "'+' operator cannot be applied to this type!");
+    }
   }
 }
