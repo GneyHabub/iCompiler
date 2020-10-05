@@ -1,3 +1,5 @@
+import '../semantic-error.dart';
+import 'index.dart';
 import 'statement.dart';
 import 'expressions/modifiable-primary.dart';
 import 'expressions/expression.dart';
@@ -6,6 +8,7 @@ import '../lexer.dart';
 import '../iterator-utils.dart';
 import '../syntax-error.dart';
 import '../symbol-table/scope-element.dart';
+import '../semantic-utils.dart';
 
 /// An assignment of the value on the right hand side ([rhs]) to the left hand side ([lhs]).
 class Assignment implements Statement {
@@ -42,6 +45,19 @@ class Assignment implements Statement {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    lhs.checkSemantics();
+    rhs.checkSemantics();
+    if (lhs.resultType != rhs.resultType) {
+      if (lhs.resultType is IntegerType) {
+        rhs = ensureType(rhs, IntegerType());
+      } else if (lhs.resultType is RealType) {
+        rhs = ensureType(rhs, RealType());
+      } else if (lhs.resultType is BooleanType) {
+        rhs = ensureType(rhs, BooleanType());
+      } else {
+        throw SemanticError(this,
+            'Types ${lhs.resultType.runtimeType} and ${lhs.resultType.runtimeType} are inconvertable!');
+      }
+    }
   }
 }
