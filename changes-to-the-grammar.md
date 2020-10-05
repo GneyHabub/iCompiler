@@ -12,10 +12,6 @@ Primary ::= ( '-' Primary | '+' Primary | IntegerLiteral | RealLiteral | Boolean
 ```
 ReturnStatement ::= ‘return’ Expression
 ```
-## + Specification of type convertion from real to boolean:
-If the real is 0.0, it is converted to false,
-if it is greater then 0, it’s converted to true;
-otherwise, assignment is treated as erroneous. assignment is illegal.
 
 ## * Range and ForLoop:
 ```
