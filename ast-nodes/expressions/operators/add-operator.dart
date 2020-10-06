@@ -29,6 +29,22 @@ class AddOperator extends BinaryRelation implements Sum {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.leftOperand.checkSemantics();
+    this.rightOperand.checkSemantics();
+
+    var leftType = this.leftOperand.resultType;
+    var rightType = this.rightOperand.resultType;
+
+    if (leftType is RealType || rightType is RealType) {
+      this.leftOperand = ensureType(this.leftOperand, RealType());
+      this.rightOperand = ensureType(this.rightOperand, RealType());
+      this.resultType = RealType();
+    } else {
+      this.leftOperand = ensureType(this.leftOperand, IntegerType());
+      this.rightOperand = ensureType(this.rightOperand, IntegerType());
+      this.resultType = IntegerType();
+    }
+
+    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }
