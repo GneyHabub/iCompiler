@@ -45,6 +45,6 @@ class Parameter implements Node {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.type.checkSemantics();
   }
 }
