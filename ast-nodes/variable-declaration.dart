@@ -63,6 +63,8 @@ class VariableDeclaration extends Declaration {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.type.checkSemantics();
+    this.value.checkSemantics();
+    ensureType(this.value, this.type);
   }
 }
