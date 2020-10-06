@@ -25,6 +25,7 @@ class NegOperator extends UnaryRelation implements Primary {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.operand.checkSemantics();
+    ensureType(this.operand, this.resultType);
   }
 }
