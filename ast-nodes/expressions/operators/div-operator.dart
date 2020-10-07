@@ -36,16 +36,20 @@ class DivOperator extends BinaryRelation implements Product {
     leftOperand.checkSemantics();
     rightOperand.checkSemantics();
 
-    if ((leftOperand.resultType is RealType &&
-            rightOperand.resultType is IntegerType) ||
-        (rightOperand.resultType is RealType &&
-            leftOperand.resultType is IntegerType)) {
+    if (leftOperand.resultType is RealType ||
+        rightOperand.resultType is RealType) {
       leftOperand = ensureType(leftOperand, RealType());
       rightOperand = ensureType(rightOperand, RealType());
       resultType = RealType();
       isConstant = leftOperand.isConstant && rightOperand.isConstant;
-    } else if (leftOperand.resultType is IntegerType &&
+    } else if (leftOperand.resultType is IntegerType ||
         rightOperand.resultType is IntegerType) {
+      leftOperand = ensureType(leftOperand, IntegerType());
+      rightOperand = ensureType(rightOperand, IntegerType());
+      resultType = IntegerType();
+      isConstant = leftOperand.isConstant && rightOperand.isConstant;
+    } else if (leftOperand.resultType is BooleanType &&
+        rightOperand.resultType is BooleanType) {
       resultType = IntegerType();
       isConstant = leftOperand.isConstant && rightOperand.isConstant;
     } else {
