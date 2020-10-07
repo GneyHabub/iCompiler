@@ -6,6 +6,8 @@ import '../product.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
 import '../../../semantic-utils.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
 
 /// Numeric multiplication operator.
 ///
@@ -34,13 +36,13 @@ class MulOperator extends BinaryRelation implements Product {
     this.rightOperand.checkSemantics();
 
     if (this.leftOperand.resultType is RealType || this.rightOperand.resultType is RealType) {
-      this.leftOperand = ensureType(this.leftOperand, RealType);
-      this.rightOperand = ensureType(this.rightOperand, RealType);
-      this.resultType = RealType;
+      this.leftOperand = ensureType(this.leftOperand, RealType());
+      this.rightOperand = ensureType(this.rightOperand, RealType());
+      this.resultType = RealType();
     } else {
-      this.leftOperand = ensureType(this.leftOperand, IntegerType);
-      this.rightOperand = ensureType(this.rightOperand, IntegerType);
-      this.resultType = IntegerType;
+      this.leftOperand = ensureType(this.leftOperand, IntegerType());
+      this.rightOperand = ensureType(this.rightOperand, IntegerType());
+      this.resultType = IntegerType();
     }
 
     this.isConstant = (this.leftOperand.isConstant && this.rightOperand.isConstant);
