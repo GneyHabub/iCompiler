@@ -26,9 +26,9 @@ class NegOperator extends UnaryRelation implements Primary {
 
   void checkSemantics() {
     this.operand.checkSemantics();
-    if (operand is IntegerType) {
+    if (operand.resultType is IntegerType) {
       resultType = IntegerType();
-    } else if (operand is RealType) {
+    } else if (operand.resultType is RealType) {
       resultType = RealType();
     } else {
       throw SemanticError(this, "Cannot apply operator to object of such type");
