@@ -42,9 +42,7 @@ class GreaterOperator extends BinaryRelation implements Comparison {
       this.leftOperand = ensureType(this.leftOperand, IntegerType());
       this.rightOperand = ensureType(this.rightOperand, IntegerType());
     } else {
-      if (leftType != rightType) {
-        throw SemanticError(this, "Cannot compare objects of different types");
-      }
+      throw SemanticError(this, "Cannot compare objects of such types");
     }
 
     this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
