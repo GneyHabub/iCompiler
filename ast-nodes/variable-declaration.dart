@@ -65,6 +65,21 @@ class VariableDeclaration extends Declaration {
   void checkSemantics() {
     this.type.checkSemantics();
     this.value.checkSemantics();
-    ensureType(this.value, this.type);
+    if (this.type != null && this.value != null) {
+      var expType = this.value.resultType;
+      if (this.type is RecordType || this.type is ArrayType || this.type is NamedType || 
+          expType is RecordType || expType is ArrayType || expType is NamedType) {
+        if (this.type != this.value.returnType) {
+          throw SemanticError(this, "Cannot declare variable from expression of different type");
+        }
+      } else if (expType is RealType && this.type is BooleanType) {
+        if (this.type != this.value.returnType) {
+          throw SemanticError(this, "Cannot declare variable from expression of different type");
+        }
+      }
+    } else {
+      throw SemanticError(this, "Null reference exception");
+    }
+    this.value = ensureType(this.value, this.type);
   }
 }
