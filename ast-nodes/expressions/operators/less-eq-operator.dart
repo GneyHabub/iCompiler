@@ -5,7 +5,11 @@ import '../boolean-literal.dart';
 import '../comparison.dart';
 import '../expression.dart';
 import '../../types/boolean-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
 import '../../types/var-type.dart';
+import '../../../semantic-utils.dart';
+import '../../../semantic-error.dart';
 
 /// Numeric _less than or equal to_ operator.
 ///
@@ -30,6 +34,19 @@ class LessEqOperator extends BinaryRelation implements Comparison {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    leftOperand.checkSemantics();
+    rightOperand.checkSemantics();
+
+    if (leftOperand.resultType is RealType ||
+        rightOperand.resultType is RealType) {
+      this.leftOperand = ensureType(this.leftOperand, RealType());
+      this.rightOperand = ensureType(this.rightOperand, RealType());
+    } else if (leftOperand.resultType is IntegerType &&
+        rightOperand.resultType is IntegerType) {
+      this.leftOperand = ensureType(this.leftOperand, IntegerType());
+      this.rightOperand = ensureType(this.rightOperand, IntegerType());
+    } else {
+      throw SemanticError(this, "Objects of these types are incomparable!");
+    }
   }
 }
