@@ -1,8 +1,10 @@
 import 'literal.dart';
 import 'modifiable-primary.dart';
 import '../types/var-type.dart';
+import '../variable-declaration.dart';
 import '../../print-utils.dart';
 import '../../symbol-table/scope-element.dart';
+import '../../semantic-error.dart';
 
 /// A variable reference by [name] – for either reading or writing.
 class Variable implements ModifiablePrimary {
@@ -27,6 +29,10 @@ class Variable implements ModifiablePrimary {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    var declaration = this.scopeMark.resolve(this.name);
+    if (declaration is! VariableDeclaration) {
+      throw SemanticError(this, "Variable ${this.name} is not declared");
+    }
+    this.resultType = (declaration as VariableDeclaration).type;
   }
 }
