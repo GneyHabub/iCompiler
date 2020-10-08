@@ -119,6 +119,8 @@ class Program implements Node, ScopeCreator {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    for (var declaration in this.declarations) {
+      declaration.checkSemantics();
+    }
   }
 }
