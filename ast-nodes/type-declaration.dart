@@ -41,6 +41,6 @@ class TypeDeclaration extends Declaration {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    value.checkSemantics();
   }
 }
