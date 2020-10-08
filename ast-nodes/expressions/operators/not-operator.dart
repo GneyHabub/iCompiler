@@ -4,6 +4,7 @@ import '../boolean-literal.dart';
 import '../expression.dart';
 import '../../types/boolean-type.dart';
 import '../../types/var-type.dart';
+import '../../../semantic-utils.dart';
 
 /// Logical NOT operator.
 ///
@@ -19,6 +20,7 @@ class NotOperator extends UnaryRelation {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.operand.checkSemantics();
+    this.operand = ensureType(this.operand, BooleanType());
   }
 }
