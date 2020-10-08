@@ -2,9 +2,11 @@ import 'statement.dart';
 import 'expressions/expression.dart';
 import 'declaration.dart';
 import 'scope-creator.dart';
+import 'types/boolean-type.dart';
 import '../print-utils.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
+import '../semantic-utils.dart';
 import '../syntax-error.dart';
 import '../symbol-table/scope.dart';
 import '../symbol-table/scope-element.dart';
@@ -81,6 +83,7 @@ class WhileLoop implements Statement, ScopeCreator {
 
   void checkSemantics() {
     this.condition.checkSemantics();
+    this.condition = ensureType(this.condition, BooleanType());
     for (var statement in this.body) {
       statement.checkSemantics();
     }
