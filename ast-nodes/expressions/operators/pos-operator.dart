@@ -37,5 +37,6 @@ class PosOperator extends UnaryRelation implements Primary {
         operand.resultType is! RealType) {
       throw SemanticError(this, "'+' operator cannot be applied to this type!");
     }
+    this.isConstant = this.operand.isConstant;
   }
 }

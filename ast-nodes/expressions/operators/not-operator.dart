@@ -22,5 +22,6 @@ class NotOperator extends UnaryRelation {
   void checkSemantics() {
     this.operand.checkSemantics();
     this.operand = ensureType(this.operand, BooleanType());
+    this.isConstant = this.operand.isConstant;
   }
 }
