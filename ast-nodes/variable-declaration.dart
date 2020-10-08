@@ -65,7 +65,8 @@ class VariableDeclaration extends Declaration {
   }
 
   void checkSemantics() {
-    if (this.value != null ) {
+    this.scopeMark.ensureNoOther(this.name);
+    if (this.value != null) {
       this.value.checkSemantics();
     }
 
