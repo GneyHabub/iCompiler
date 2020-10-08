@@ -44,6 +44,8 @@ class Prioritized implements Product {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.operand.checkSemantics();
+    this.resultType = this.operand.resultType;
+    this.isConstant = this.operand.isConstant;
   }
 }
