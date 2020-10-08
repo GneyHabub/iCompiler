@@ -8,6 +8,8 @@ import '../lexer.dart';
 import '../syntax-error.dart';
 import '../symbol-table/scope.dart';
 import '../symbol-table/scope-element.dart';
+import '../types/boolean-type.dart';
+import '../../semantic-utils.dart';
 
 /// A conditional statement.
 class IfStatement implements Statement, ScopeCreator {
@@ -106,6 +108,14 @@ class IfStatement implements Statement, ScopeCreator {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.condition.checkSemantics();
+    this.condition = ensureType(this.condition, BooleanType);
+
+    for (var statement in this.blockTrue) {
+      statement.checkSemantics();
+    }
+    for (var statement in this.blockFalse) {
+      statement.checkSemantics();
+    }
   }
 }
