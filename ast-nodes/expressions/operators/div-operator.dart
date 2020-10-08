@@ -42,19 +42,11 @@ class DivOperator extends BinaryRelation implements Product {
       rightOperand = ensureType(rightOperand, RealType());
       resultType = RealType();
       isConstant = leftOperand.isConstant && rightOperand.isConstant;
-    } else if (leftOperand.resultType is IntegerType ||
-        rightOperand.resultType is IntegerType) {
+    } else {
       leftOperand = ensureType(leftOperand, IntegerType());
       rightOperand = ensureType(rightOperand, IntegerType());
       resultType = IntegerType();
       isConstant = leftOperand.isConstant && rightOperand.isConstant;
-    } else if (leftOperand.resultType is BooleanType &&
-        rightOperand.resultType is BooleanType) {
-      resultType = IntegerType();
-      isConstant = leftOperand.isConstant && rightOperand.isConstant;
-    } else {
-      throw SemanticError(this,
-          'An object of type ${leftOperand.resultType.runtimeType} cannot be divided by an object of type ${rightOperand.resultType.runtimeType}');
     }
   }
 }
