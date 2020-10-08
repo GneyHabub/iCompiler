@@ -1,11 +1,13 @@
-import '../iterator-utils.dart';
-import '../parser-utils.dart';
-import '../syntax-error.dart';
 import 'declaration.dart';
 import 'types/var-type.dart';
 import 'expressions/expression.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
+import '../iterator-utils.dart';
+import '../semantic-utils.dart';
+import '../parser-utils.dart';
+import '../syntax-error.dart';
+import '../semantic-error.dart';
 import '../symbol-table/scope-element.dart';
 
 /// A variable declaration contains a [type] and the initial [value].
@@ -73,7 +75,7 @@ class VariableDeclaration extends Declaration {
         this.value = ensureType(this.value, this.type);
       }
     } else if (this.value != null) {
-      this.type = this.value.returnType;
+      this.type = this.value.resultType;
     } else {
       throw SemanticError(this, "Type and value cannot be both null");
     }

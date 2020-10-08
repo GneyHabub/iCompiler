@@ -5,6 +5,9 @@ import '../integer-literal.dart';
 import '../sum.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
+import '../../../semantic-utils.dart';
 
 /// Numeric addition operator.
 ///

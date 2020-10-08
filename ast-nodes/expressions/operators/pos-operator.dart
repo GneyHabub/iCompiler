@@ -1,5 +1,3 @@
-import '../../../semantic-error.dart';
-import '../../index.dart';
 import 'unary-relation.dart';
 import '../literal.dart';
 import '../real-literal.dart';
@@ -7,6 +5,11 @@ import '../integer-literal.dart';
 import '../primary.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
+import '../../types/boolean-type.dart';
+import '../../../semantic-utils.dart';
+import '../../../semantic-error.dart';
 
 /// Numeric unary plus operator.
 ///

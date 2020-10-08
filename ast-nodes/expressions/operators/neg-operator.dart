@@ -5,6 +5,9 @@ import '../integer-literal.dart';
 import '../primary.dart';
 import '../expression.dart';
 import '../../types/var-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
+import '../../../semantic-error.dart';
 
 /// Numeric negation operator.
 ///

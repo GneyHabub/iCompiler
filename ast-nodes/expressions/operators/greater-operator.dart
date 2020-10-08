@@ -6,6 +6,10 @@ import '../comparison.dart';
 import '../expression.dart';
 import '../../types/boolean-type.dart';
 import '../../types/var-type.dart';
+import '../../types/real-type.dart';
+import '../../types/integer-type.dart';
+import '../../../semantic-utils.dart';
+import '../../../semantic-error.dart';
 
 /// Numeric _greater than_ operator.
 ///
