@@ -80,6 +80,9 @@ class WhileLoop implements Statement, ScopeCreator {
   }
 
   void checkSemantics() {
-    // TODO: implement
+    this.condition.checkSemantics();
+    for (var statement in this.body) {
+      statement.checkSemantics();
+    }
   }
 }
