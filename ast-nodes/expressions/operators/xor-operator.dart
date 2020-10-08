@@ -28,7 +28,7 @@ class XorOperator extends BinaryRelation {
 
     this.leftOperand = ensureType(this.leftOperand, BooleanType());
     this.rightOperand = ensureType(this.rightOperand, BooleanType());
-    this.resultType = BooleanType();
+    
     this.isConstant = (this.leftOperand.isConstant && this.rightOperand.isConstant);
   }
 }
