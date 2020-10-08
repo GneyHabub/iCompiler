@@ -6,7 +6,6 @@ import '../iterator-utils.dart';
 import '../parser-utils.dart';
 import '../print-utils.dart';
 import '../symbol-table/scope-element.dart';
-import '../semantic-error.dart';
 
 /// A type declaration gives a name to some type [value].
 class TypeDeclaration extends Declaration {
@@ -42,11 +41,7 @@ class TypeDeclaration extends Declaration {
   }
 
   void checkSemantics() {
+    this.scopeMark.ensureNoOther(this.name);
     value.checkSemantics();
-
-    var declaration = this.scopeMark.resolve(this.name);
-    if (declaration is! null) {
-      throw SemanticError(this, "Variable or type with name ${this.name} is already declared");
-    }
   }
 }
