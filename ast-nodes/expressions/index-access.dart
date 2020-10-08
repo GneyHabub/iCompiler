@@ -3,9 +3,11 @@ import 'literal.dart';
 import 'expression.dart';
 import '../types/var-type.dart';
 import '../types/array-type.dart';
+import '../types/integer-type.dart';
 import '../../print-utils.dart';
 import '../../symbol-table/scope-element.dart';
 import '../../semantic-error.dart';
+import '../../semantic-utils.dart';
 
 /// An array element access by [index] – for either reading or writing.
 ///
@@ -49,6 +51,7 @@ class IndexAccess implements ModifiablePrimary {
   void checkSemantics() {
     this.object.checkSemantics();
     this.index.checkSemantics();
+    this.index = ensureType(this.index, IntegerType());
 
     if (this.object.resultType is! ArrayType) {
       throw SemanticError(this, "Only arrays can be indexed");
