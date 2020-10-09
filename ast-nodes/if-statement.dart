@@ -109,7 +109,7 @@ class IfStatement implements Statement, ScopeCreator {
 
   void checkSemantics() {
     this.condition.checkSemantics();
-    this.condition = ensureType(this.condition, BooleanType);
+    this.condition = ensureType(this.condition, BooleanType());
 
     for (var statement in this.blockTrue) {
       statement.checkSemantics();
