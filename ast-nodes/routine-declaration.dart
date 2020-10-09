@@ -1,16 +1,8 @@
-import 'declaration.dart';
-import 'parameter.dart';
-import 'types/var-type.dart';
-import 'statement.dart';
-import 'scope-creator.dart';
-import '../lexer.dart';
-import '../print-utils.dart';
-import '../parser-utils.dart';
-import '../iterator-utils.dart';
-import '../syntax-error.dart';
-import '../semantic-error.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A routine declaration has [parameters], a [returnType] and a [body].
 class RoutineDeclaration extends Declaration implements ScopeCreator {

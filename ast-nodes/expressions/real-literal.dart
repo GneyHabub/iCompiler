@@ -1,10 +1,6 @@
-import 'literal.dart';
-import 'integer-literal.dart';
-import 'boolean-literal.dart';
-import '../types/real-type.dart';
-import '../types/var-type.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../utils/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A literal floating-point number in code.
 class RealLiteral implements Literal {

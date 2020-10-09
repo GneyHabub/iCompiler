@@ -1,15 +1,8 @@
-import 'statement.dart';
-import 'expressions/expression.dart';
-import 'declaration.dart';
-import 'scope-creator.dart';
-import '../print-utils.dart';
-import '../iterator-utils.dart';
-import '../lexer.dart';
-import '../syntax-error.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
-import 'types/boolean-type.dart';
-import '../semantic-utils.dart';
+import 'index.dart';
+import '../utils/index.dart';
+import '../lexer/token.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A conditional statement.
 class IfStatement implements Statement, ScopeCreator {

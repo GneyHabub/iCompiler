@@ -1,13 +1,5 @@
-import 'binary-relation.dart';
-import '../literal.dart';
-import '../real-literal.dart';
-import '../integer-literal.dart';
-import '../product.dart';
-import '../expression.dart';
-import '../../types/var-type.dart';
-import '../../../semantic-utils.dart';
-import '../../types/real-type.dart';
-import '../../types/integer-type.dart';
+import '../../index.dart';
+import '../../../utils/index.dart';
 
 /// Numeric multiplication operator.
 ///

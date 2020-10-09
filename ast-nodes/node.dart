@@ -1,6 +1,6 @@
-import '../lexer.dart';
-import '../syntax-error.dart';
-import '../symbol-table/scope-element.dart';
+import '../lexer/token.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// An abstract node of the AST.
 abstract class Node {

@@ -1,15 +1,8 @@
-import 'primary.dart';
-import 'expression.dart';
-import 'literal.dart';
-import '../routine-declaration.dart';
-import '../types/var-type.dart';
-import '../../iterator-utils.dart';
-import '../../lexer.dart';
-import '../../parser-utils.dart';
-import '../../syntax-error.dart';
-import '../../semantic-error.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A routine call by [name], passing zero or more [arguments].
 class RoutineCall implements Primary {

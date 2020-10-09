@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'lexer.dart';
-import 'syntax-error.dart';
+import 'lexer/split-to-tokens.dart';
+import 'errors/index.dart';
 import 'ast-nodes/index.dart';
 
 void main(List<String> args) {
@@ -15,7 +15,7 @@ void main(List<String> args) {
   try {
     var tokens = splitToTokens(sourceFile.readAsStringSync());
     var programAST = Program.parse(tokens);
-    var symbolTable = programAST.buildSymbolTable();
+    programAST.buildSymbolTable();
     programAST.checkSemantics();
     print(programAST);
   } on SyntaxError catch (e) {

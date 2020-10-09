@@ -1,11 +1,8 @@
-import 'declaration.dart';
-import 'types/var-type.dart';
-import '../lexer.dart';
-import '../syntax-error.dart';
-import '../iterator-utils.dart';
-import '../parser-utils.dart';
-import '../print-utils.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A type declaration gives a name to some type [value].
 class TypeDeclaration extends Declaration {

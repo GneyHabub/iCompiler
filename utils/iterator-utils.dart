@@ -1,5 +1,5 @@
-import 'lexer.dart';
-import 'syntax-error.dart';
+import '../lexer/token.dart';
+import '../errors/syntax-error.dart';
 
 /// Consume tokens from the [iterator] until one of them matches the [terminal].
 ///

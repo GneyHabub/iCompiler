@@ -1,18 +1,8 @@
-import 'node.dart';
-import 'declaration.dart';
-import 'variable-declaration.dart';
-import 'type-declaration.dart';
-import 'routine-declaration.dart';
-import 'parameter.dart';
-import 'builtin-routine-declaration.dart';
-import 'scope-creator.dart';
-import 'types/integer-type.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../print-utils.dart';
-import '../syntax-error.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A program is a list of [Declaration]s.
 ///

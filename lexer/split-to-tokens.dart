@@ -1,3 +1,5 @@
+import 'token.dart';
+
 RegExp langTokenPtn = RegExp(
   '(' +
       '[a-zA-Z_]\\w*' +

@@ -1,12 +1,5 @@
 import '../../index.dart';
-import 'binary-relation.dart';
-import '../literal.dart';
-import '../real-literal.dart';
-import '../integer-literal.dart';
-import '../product.dart';
-import '../expression.dart';
-import '../../types/var-type.dart';
-import '../../../semantic-utils.dart';
+import '../../../utils/index.dart';
 
 /// Numeric division operator.
 ///

@@ -1,14 +1,7 @@
-import 'product.dart';
-import 'boolean-literal.dart';
-import 'integer-literal.dart';
-import 'real-literal.dart';
-import 'modifiable-primary.dart';
-import 'routine-call.dart';
-import 'operators/neg-operator.dart';
-import 'operators/pos-operator.dart';
-import '../../lexer.dart';
-import '../../syntax-error.dart';
-import '../../iterator-utils.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
 
 /// An abstract value.
 abstract class Primary implements Product {

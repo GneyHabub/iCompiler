@@ -1,12 +1,8 @@
-import 'node.dart';
-import 'types/var-type.dart';
-import 'variable-declaration.dart';
-import '../print-utils.dart';
-import '../parser-utils.dart';
-import '../syntax-error.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../lexer/token.dart';
+import '../symbol-table/index.dart';
 
 /// A routine parameter, characterized by the [name] and the [type].
 class Parameter implements Node {

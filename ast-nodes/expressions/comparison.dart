@@ -1,13 +1,6 @@
-import 'expression.dart';
-import 'sum.dart';
-import 'operators/less-operator.dart';
-import 'operators/less-eq-operator.dart';
-import 'operators/greater-operator.dart';
-import 'operators/greater-eq-operator.dart';
-import 'operators/eq-operator.dart';
-import 'operators/neq-operator.dart';
-import '../../lexer.dart';
-import '../../iterator-utils.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
 
 /// An abstract comparison operator.
 abstract class Comparison implements Expression {

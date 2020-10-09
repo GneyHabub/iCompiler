@@ -1,13 +1,7 @@
-import 'literal.dart';
-import 'modifiable-primary.dart';
-import '../variable-declaration.dart';
-import '../types/var-type.dart';
-import '../types/integer-type.dart';
-import '../types/record-type.dart';
-import '../types/array-type.dart';
-import '../../print-utils.dart';
-import '../../semantic-error.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A record field access by [name] – for either reading or writing.
 ///

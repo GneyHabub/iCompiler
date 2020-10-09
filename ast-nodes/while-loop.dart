@@ -1,15 +1,8 @@
-import 'statement.dart';
-import 'expressions/expression.dart';
-import 'declaration.dart';
-import 'scope-creator.dart';
-import 'types/boolean-type.dart';
-import '../print-utils.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../semantic-utils.dart';
-import '../syntax-error.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A `while` loop.
 class WhileLoop implements Statement, ScopeCreator {

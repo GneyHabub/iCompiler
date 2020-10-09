@@ -1,6 +1,6 @@
-import '../expression.dart';
-import '../../../print-utils.dart';
-import '../../../symbol-table/scope-element.dart';
+import '../../index.dart';
+import '../../../utils/index.dart';
+import '../../../symbol-table/index.dart';
 
 /// An abstract unary relation with one [operand].
 abstract class UnaryRelation implements Expression {

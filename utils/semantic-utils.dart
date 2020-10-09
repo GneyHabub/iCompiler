@@ -1,6 +1,5 @@
-import 'ast-nodes/index.dart';
-import 'ast-nodes/type-conversion.dart';
-import 'semantic-error.dart';
+import '../ast-nodes/index.dart';
+import '../errors/index.dart';
 
 Expression ensureType(Expression expression, VarType type) {
   var expType = expression.resultType;

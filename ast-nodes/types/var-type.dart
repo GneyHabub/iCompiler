@@ -1,14 +1,7 @@
-import '../node.dart';
-import 'integer-type.dart';
-import 'real-type.dart';
-import 'boolean-type.dart';
-import 'array-type.dart';
-import 'record-type.dart';
-import 'named-type.dart';
-import '../../lexer.dart';
-import '../../iterator-utils.dart';
-import '../../parser-utils.dart';
-import '../../syntax-error.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
 
 /// A type of a variable.
 abstract class VarType implements Node {

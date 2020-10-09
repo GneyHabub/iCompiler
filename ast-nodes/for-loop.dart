@@ -1,17 +1,8 @@
-import 'statement.dart';
-import 'expressions/variable.dart';
-import 'range.dart';
-import 'declaration.dart';
-import 'variable-declaration.dart';
-import 'scope-creator.dart';
-import 'types/integer-type.dart';
-import '../print-utils.dart';
-import '../iterator-utils.dart';
-import '../parser-utils.dart';
-import '../syntax-error.dart';
-import '../lexer.dart';
-import '../symbol-table/scope.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../lexer/token.dart';
+import '../symbol-table/index.dart';
 
 /// A `for` loop.
 class ForLoop implements Statement, ScopeCreator {

@@ -1,15 +1,7 @@
-import '../iterator-utils.dart';
-import '../syntax-error.dart';
-import 'node.dart';
-import '../lexer.dart';
-import 'type-declaration.dart';
-import 'variable-declaration.dart';
-import 'while-loop.dart';
-import 'for-loop.dart';
-import 'if-statement.dart';
-import 'return-statement.dart';
-import 'expressions/routine-call.dart';
-import 'assignment.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
 
 /// An abstract statement.
 abstract class Statement implements Node {

@@ -1,16 +1,7 @@
-import 'binary-relation.dart';
-import '../literal.dart';
-import '../real-literal.dart';
-import '../integer-literal.dart';
-import '../boolean-literal.dart';
-import '../comparison.dart';
-import '../expression.dart';
-import '../../types/boolean-type.dart';
-import '../../types/real-type.dart';
-import '../../types/integer-type.dart';
-import '../../types/var-type.dart';
-import '../../../semantic-error.dart';
-import '../../../semantic-utils.dart';
+import '../../index.dart';
+import '../../../utils/index.dart';
+import '../../../errors/index.dart';
+
 
 /// Universal _equal to_ operator.
 ///

@@ -1,12 +1,8 @@
-import 'statement.dart';
-import 'routine-declaration.dart';
-import 'expressions/expression.dart';
-import '../semantic-error.dart';
-import '../print-utils.dart';
-import '../iterator-utils.dart';
-import '../semantic-utils.dart';
-import '../lexer.dart';
-import '../symbol-table/scope-element.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../symbol-table/index.dart';
 
 /// A return statement in a function.
 class ReturnStatement implements Statement {

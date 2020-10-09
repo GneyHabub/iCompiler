@@ -1,9 +1,6 @@
-import 'statement.dart';
-import 'variable-declaration.dart';
-import 'type-declaration.dart';
-import 'routine-declaration.dart';
-import '../lexer.dart';
-import '../syntax-error.dart';
+import 'index.dart';
+import '../lexer/token.dart';
+import '../errors/index.dart';
 
 /// A declaration is a [Statement] that creates a new entity with a [name].
 abstract class Declaration implements Statement {

@@ -1,4 +1,4 @@
-import 'lexer.dart';
+import '../lexer/token.dart';
 
 /// A syntax error in the parsed source code.
 ///

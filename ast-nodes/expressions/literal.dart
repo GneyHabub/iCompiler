@@ -1,6 +1,5 @@
-import 'primary.dart';
-import '../types/var-type.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../symbol-table/index.dart';
 
 /// A literal integer number in code.
 abstract class Literal implements Primary {

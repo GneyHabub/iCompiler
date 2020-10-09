@@ -1,13 +1,8 @@
-import 'var-type.dart';
-import 'integer-type.dart';
-import 'named-type.dart';
-import '../type-declaration.dart';
-import '../expressions/expression.dart';
-import '../../print-utils.dart';
-import '../../iterator-utils.dart';
-import '../../lexer.dart';
-import '../../semantic-error.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
+import '../../symbol-table/index.dart';
 
 /// An array type with optional [size].
 class ArrayType implements VarType {

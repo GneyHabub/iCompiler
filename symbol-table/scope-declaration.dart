@@ -1,6 +1,6 @@
 import 'scope-element.dart';
 import '../ast-nodes/declaration.dart';
-import '../print-utils.dart';
+import '../utils/print-utils.dart';
 
 /// An object declaration in some scope.
 ///

@@ -1,12 +1,7 @@
-import 'primary.dart';
-import 'field-access.dart';
-import 'variable.dart';
-import 'index-access.dart';
-import 'expression.dart';
-import '../../lexer.dart';
-import '../../iterator-utils.dart';
-import '../../parser-utils.dart';
-import '../../syntax-error.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
 
 /// An abstract writable entity – something that can appear in the LHS of the assignment.
 ///

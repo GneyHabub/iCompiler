@@ -2,7 +2,7 @@ import 'scope-element.dart';
 import 'scope-declaration.dart';
 import 'scope-start.dart';
 import '../ast-nodes/declaration.dart';
-import '../print-utils.dart';
+import '../utils/print-utils.dart';
 
 /// The scope of declaring objects.
 ///

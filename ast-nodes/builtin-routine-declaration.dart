@@ -1,5 +1,5 @@
 import 'routine-declaration.dart';
-import '../symbol-table/scope-element.dart';
+import '../symbol-table/index.dart';
 
 /// A built-in routine declaration doesn't appear in code but instead does a predefined action.
 class BuiltinRoutineDeclaration extends RoutineDeclaration {

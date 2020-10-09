@@ -1,11 +1,7 @@
-import 'product.dart';
-import 'expression.dart';
-import 'literal.dart';
-import '../types/var-type.dart';
-import '../../lexer.dart';
-import '../../iterator-utils.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A prioritized expression.
 class Prioritized implements Product {

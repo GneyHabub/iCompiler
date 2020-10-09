@@ -1,8 +1,7 @@
 import 'scope-declaration.dart';
 import 'scope-start.dart';
-import '../semantic-error.dart';
-import '../ast-nodes/declaration.dart';
-import '../ast-nodes/routine-declaration.dart';
+import '../errors/semantic-error.dart';
+import '../ast-nodes/index.dart';
 
 /// An abstract element in the scope's linked list (scope chain).
 abstract class ScopeElement {

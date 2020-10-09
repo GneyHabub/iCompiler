@@ -1,10 +1,6 @@
-import 'literal.dart';
-import 'real-literal.dart';
-import 'boolean-literal.dart';
-import '../types/integer-type.dart';
-import '../types/var-type.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../utils/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A literal integer number in code.
 class IntegerLiteral implements Literal {

@@ -1,10 +1,5 @@
-import 'binary-relation.dart';
-import '../literal.dart';
-import '../boolean-literal.dart';
-import '../expression.dart';
-import '../../types/boolean-type.dart';
-import '../../types/var-type.dart';
-import '../../../semantic-utils.dart';
+import '../../index.dart';
+import '../../../utils/index.dart';
 
 /// Logical OR operator.
 ///

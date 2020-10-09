@@ -1,13 +1,7 @@
-import 'modifiable-primary.dart';
-import 'literal.dart';
-import 'expression.dart';
-import '../types/var-type.dart';
-import '../types/array-type.dart';
-import '../types/integer-type.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
-import '../../semantic-error.dart';
-import '../../semantic-utils.dart';
+import '../index.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
+import '../../symbol-table/index.dart';
 
 /// An array element access by [index] – for either reading or writing.
 ///

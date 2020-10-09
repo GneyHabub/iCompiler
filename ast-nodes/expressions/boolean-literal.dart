@@ -1,10 +1,6 @@
-import 'literal.dart';
-import 'real-literal.dart';
-import 'integer-literal.dart';
-import '../types/boolean-type.dart';
-import '../types/var-type.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../utils/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A literal boolean value in code.
 class BooleanLiteral implements Literal {

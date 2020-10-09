@@ -1,4 +1,4 @@
-import 'ast-nodes/node.dart';
+import '../ast-nodes/node.dart';
 
 /// A semantic error in the AST.
 ///

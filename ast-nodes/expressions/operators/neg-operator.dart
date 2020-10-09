@@ -1,13 +1,5 @@
-import 'unary-relation.dart';
-import '../literal.dart';
-import '../real-literal.dart';
-import '../integer-literal.dart';
-import '../primary.dart';
-import '../expression.dart';
-import '../../types/var-type.dart';
-import '../../types/real-type.dart';
-import '../../types/integer-type.dart';
-import '../../../semantic-error.dart';
+import '../../index.dart';
+import '../../../errors/index.dart';
 
 /// Numeric negation operator.
 ///

@@ -1,14 +1,8 @@
-import '../semantic-error.dart';
 import 'index.dart';
-import 'statement.dart';
-import 'expressions/modifiable-primary.dart';
-import 'expressions/expression.dart';
-import '../print-utils.dart';
-import '../lexer.dart';
-import '../iterator-utils.dart';
-import '../syntax-error.dart';
-import '../symbol-table/scope-element.dart';
-import '../semantic-utils.dart';
+import '../utils/index.dart';
+import '../errors/index.dart';
+import '../lexer/token.dart';
+import '../symbol-table/index.dart';
 
 /// An assignment of the value on the right hand side ([rhs]) to the left hand side ([lhs]).
 class Assignment implements Statement {

@@ -1,14 +1,8 @@
-import 'var-type.dart';
-import 'named-type.dart';
-import '../type-declaration.dart';
-import '../variable-declaration.dart';
-import '../scope-creator.dart';
-import '../../lexer.dart';
-import '../../syntax-error.dart';
-import '../../iterator-utils.dart';
-import '../../print-utils.dart';
-import '../../symbol-table/scope.dart';
-import '../../symbol-table/scope-element.dart';
+import '../index.dart';
+import '../../lexer/token.dart';
+import '../../utils/index.dart';
+import '../../errors/index.dart';
+import '../../symbol-table/index.dart';
 
 /// A compound type that has several [fields] inside.
 class RecordType implements VarType, ScopeCreator {
