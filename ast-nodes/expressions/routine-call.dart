@@ -87,10 +87,14 @@ class RoutineCall implements Primary {
 
   void checkSemantics() {
     var declaration = this.scopeMark.resolve(this.name);
+    if (declaration == null) {
+      throw SemanticError(this, "Name ${this.name} is not defined");
+    }
     if (declaration is! RoutineDeclaration) {
       throw SemanticError(this, "Can only call routines");
     }
 
+    this.resultType = (declaration as RoutineDeclaration).returnType;
     var parameters = (declaration as RoutineDeclaration).parameters;
 
     if (parameters.length != this.arguments.length) {
