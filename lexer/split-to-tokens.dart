@@ -1,19 +1,3 @@
-/// A lexer token.
-///
-/// It isn't a fully formed language token.
-/// Combining the tokens will happen during syntax analysis.
-class Token {
-  final String value;
-  final int start;
-  final int end;
-
-  String toString() {
-    return '"${value == '\n' ? '\\n' : value}":${start}–${end}';
-  }
-
-  const Token(this.value, this.start, this.end);
-}
-
 RegExp langTokenPtn = RegExp(
   '(' +
       '[a-zA-Z_]\\w*' +
