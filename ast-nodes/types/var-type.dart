@@ -46,4 +46,6 @@ abstract class VarType implements Node {
     checkNoMore(iterator);
     return result;
   }
+
+  VarType resolve();
 }

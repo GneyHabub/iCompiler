@@ -34,4 +34,8 @@ class IntegerType implements VarType {
   }
 
   void checkSemantics() {}
+
+  VarType resolve() {
+    return this;
+  }
 }

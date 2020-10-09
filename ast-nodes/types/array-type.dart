@@ -85,4 +85,8 @@ class ArrayType implements VarType {
     }
     this.elementType.checkSemantics();
   }
+
+  VarType resolve() {
+    return this;
+  }
 }

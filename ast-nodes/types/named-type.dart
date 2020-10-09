@@ -43,4 +43,8 @@ class NamedType implements VarType {
       throw SemanticError(this, "'$name' is not a valid type in this scope");
     }
   }
+
+  VarType resolve() {
+    return (this.scopeMark.resolve(this.name) as TypeDeclaration).value;
+  }
 }

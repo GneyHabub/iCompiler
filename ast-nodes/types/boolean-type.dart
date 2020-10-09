@@ -34,4 +34,8 @@ class BooleanType implements VarType {
   }
 
   void checkSemantics() {}
+
+  VarType resolve() {
+    return this;
+  }
 }

@@ -103,4 +103,8 @@ class RecordType implements VarType, ScopeCreator {
       declaration.checkSemantics();
     }
   }
+
+  VarType resolve() {
+    return this;
+  }
 }
