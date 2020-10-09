@@ -56,7 +56,7 @@ class Assignment implements Statement {
         rhs = ensureType(rhs, BooleanType());
       } else {
         throw SemanticError(this,
-            'Types ${lhs.resultType.runtimeType} and ${lhs.resultType.runtimeType} are inconvertable!');
+            'Types ${lhs.resultType.runtimeType} and ${rhs.resultType.runtimeType} are inconvertable!');
       }
     }
   }
