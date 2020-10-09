@@ -3,7 +3,10 @@ import 'declaration.dart';
 import 'variable-declaration.dart';
 import 'type-declaration.dart';
 import 'routine-declaration.dart';
+import 'parameter.dart';
+import 'builtin-routine-declaration.dart';
 import 'scope-creator.dart';
+import 'types/integer-type.dart';
 import '../lexer.dart';
 import '../iterator-utils.dart';
 import '../print-utils.dart';
@@ -104,7 +107,9 @@ class Program implements Node, ScopeCreator {
   void propagateScopeMark(ScopeElement parentMark) {
     var scope = Scope();
     this.scopes = [scope];
-    ScopeElement currentMark = scope.lastChild;
+    var currentMark = scope.lastChild;
+    currentMark = scope.addDeclaration(BuiltinRoutineDeclaration(
+        "print", [Parameter("value", IntegerType())], null));
 
     for (var declaration in this.declarations) {
       declaration.propagateScopeMark(currentMark);
