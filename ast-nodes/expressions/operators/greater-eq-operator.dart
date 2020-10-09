@@ -37,15 +37,15 @@ class GreaterEqOperator extends BinaryRelation implements Comparison {
     this.leftOperand.checkSemantics();
     this.rightOperand.checkSemantics();
 
-    if (this.leftOperand.resultType is RealType || this.rightOperand.resultType is RealType) {
+    if (this.leftOperand.resultType is RealType ||
+        this.rightOperand.resultType is RealType) {
       this.leftOperand = ensureType(this.leftOperand, RealType());
       this.rightOperand = ensureType(this.rightOperand, RealType());
-    }
-    else if (leftType is IntegerType || rightType is IntegerType) {
+    } else if (this.leftOperand.resultType is IntegerType ||
+        this.rightOperand.resultType is IntegerType) {
       this.leftOperand = ensureType(this.leftOperand, IntegerType());
       this.rightOperand = ensureType(this.rightOperand, IntegerType());
-    } 
-    else {
+    } else {
       throw SemanticError(this, "Types of the operands are not comparable");
     }
 
