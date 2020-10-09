@@ -10,6 +10,6 @@ class ScopeStart extends ScopeElement {
   ScopeStart(this.parent);
 
   String toString({int depth = 0}) {
-    return '';
+    return 'Scope start';
   }
 }

@@ -2,7 +2,6 @@ import 'declaration.dart';
 import 'parameter.dart';
 import 'types/var-type.dart';
 import 'statement.dart';
-import 'return-statement.dart';
 import 'scope-creator.dart';
 import '../lexer.dart';
 import '../print-utils.dart';
@@ -21,6 +20,8 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   List<Parameter> parameters;
   VarType returnType;
   List<Statement> body;
+
+  bool hasReturnStatement = false;
 
   RoutineDeclaration(name, this.parameters, this.returnType, this.body)
       : super(name);
@@ -124,19 +125,11 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
 
     this.returnType?.checkSemantics();
 
-    bool hasReturnStatement = false;
     for (var statement in this.body) {
       statement.checkSemantics();
-      if (statement is ReturnStatement) {
-        hasReturnStatement = true;
-        if (statement.value?.resultType != this.returnType) {
-          throw SemanticError(statement,
-              "The returned value doesn't match the return type of the function");
-        }
-      }
     }
 
-    if (!hasReturnStatement && this.returnType != null) {
+    if (!this.hasReturnStatement && this.returnType != null) {
       throw SemanticError(
           this, "The function has a return type but no return statements");
     }

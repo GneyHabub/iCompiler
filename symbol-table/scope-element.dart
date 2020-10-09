@@ -2,6 +2,7 @@ import 'scope-declaration.dart';
 import 'scope-start.dart';
 import '../semantic-error.dart';
 import '../ast-nodes/declaration.dart';
+import '../ast-nodes/routine-declaration.dart';
 
 /// An abstract element in the scope's linked list (scope chain).
 abstract class ScopeElement {
@@ -23,6 +24,20 @@ abstract class ScopeElement {
     ScopeElement item = this;
     while (item != null) {
       if (item is ScopeDeclaration && item.declaration.name == name) {
+        return item.declaration;
+      } else if (item is ScopeStart) {
+        item = (item as ScopeStart).parent;
+      }
+      item = item.next;
+    }
+
+    return null;
+  }
+
+  Declaration getNearestRoutine() {
+    ScopeElement item = this;
+    while (item != null) {
+      if (item is ScopeDeclaration && item.declaration is RoutineDeclaration) {
         return item.declaration;
       } else if (item is ScopeStart) {
         item = (item as ScopeStart).parent;
