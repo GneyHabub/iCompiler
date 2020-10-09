@@ -16,7 +16,8 @@ void main(List<String> args) {
     var tokens = splitToTokens(sourceFile.readAsStringSync());
     var programAST = Program.parse(tokens);
     var symbolTable = programAST.buildSymbolTable();
-    print(symbolTable);
+    programAST.checkSemantics();
+    print(programAST);
   } on SyntaxError catch (e) {
     print(e);
   }
