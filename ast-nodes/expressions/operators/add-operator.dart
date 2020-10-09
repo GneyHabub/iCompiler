@@ -48,6 +48,7 @@ class AddOperator extends BinaryRelation implements Sum {
       this.resultType = IntegerType();
     }
 
-    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
+    this.isConstant =
+        this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }

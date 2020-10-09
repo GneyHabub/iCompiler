@@ -29,6 +29,7 @@ class AndOperator extends BinaryRelation {
     this.leftOperand = ensureType(this.leftOperand, BooleanType());
     this.rightOperand = ensureType(this.rightOperand, BooleanType());
 
-    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
+    this.isConstant =
+        this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }

@@ -35,7 +35,8 @@ class MulOperator extends BinaryRelation implements Product {
     this.leftOperand.checkSemantics();
     this.rightOperand.checkSemantics();
 
-    if (this.leftOperand.resultType is RealType || this.rightOperand.resultType is RealType) {
+    if (this.leftOperand.resultType is RealType ||
+        this.rightOperand.resultType is RealType) {
       this.leftOperand = ensureType(this.leftOperand, RealType());
       this.rightOperand = ensureType(this.rightOperand, RealType());
       this.resultType = RealType();
@@ -45,6 +46,7 @@ class MulOperator extends BinaryRelation implements Product {
       this.resultType = IntegerType();
     }
 
-    this.isConstant = (this.leftOperand.isConstant && this.rightOperand.isConstant);
+    this.isConstant =
+        (this.leftOperand.isConstant && this.rightOperand.isConstant);
   }
 }

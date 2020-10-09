@@ -49,6 +49,7 @@ class GreaterOperator extends BinaryRelation implements Comparison {
       throw SemanticError(this, "Cannot compare objects of such types");
     }
 
-    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
+    this.isConstant =
+        this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }

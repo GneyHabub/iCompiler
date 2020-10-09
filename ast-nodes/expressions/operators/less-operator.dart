@@ -49,6 +49,7 @@ class LessOperator extends BinaryRelation implements Comparison {
       throw SemanticError(this, "Objects of these types are incomparable!");
     }
 
-    this.isConstant = this.leftOperand.isConstant && this.rightOperand.isConstant;
+    this.isConstant =
+        this.leftOperand.isConstant && this.rightOperand.isConstant;
   }
 }

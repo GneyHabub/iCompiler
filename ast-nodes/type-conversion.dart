@@ -8,7 +8,8 @@ class TypeConversion implements Expression {
   bool isConstant;
   ScopeElement scopeMark;
 
-  TypeConversion(this.expression, this.resultType) : isConstant = expression.isConstant;
+  TypeConversion(this.expression, this.resultType)
+      : isConstant = expression.isConstant;
 
   @override
   void checkSemantics() {}
@@ -22,8 +23,7 @@ class TypeConversion implements Expression {
   @override
   String toString({int depth = 0, String prefix = ''}) {
     return (drawDepth(
-            '${prefix}TypeConversion(${this.resultType.runtimeType})',
-            depth) +
+            '${prefix}TypeConversion(${this.resultType.runtimeType})', depth) +
         (this.expression?.toString(depth: depth + 1, prefix: '') ?? ''));
   }
 

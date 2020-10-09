@@ -7,10 +7,8 @@ Expression ensureType(Expression expression, VarType type) {
   if (expType == type) {
     return expression;
   } else {
-    /**
-     * Conversion between non-equal types possible only for built-in types
-     * and not allowed for converting from real to bool
-     */
+    // Conversion between non-equal types possible only for built-in types
+    // and not allowed for converting from real to bool
     if (expType is RecordType ||
         expType is ArrayType ||
         expType is NamedType ||

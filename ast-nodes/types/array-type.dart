@@ -79,7 +79,7 @@ class ArrayType implements VarType {
       this.size.checkSemantics();
       if (!this.size.isConstant) {
         throw SemanticError(
-          this.size, 'The array size must be a constant expression');
+            this.size, 'The array size must be a constant expression');
       }
       if (this.size.resultType is! IntegerType) {
         throw SemanticError(this.size, 'The array size must be integer');
