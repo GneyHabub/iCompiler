@@ -1,5 +1,14 @@
 type ten_int_arr is array[10] integer;
 
+routine linear_search_ten_int(arr : ten_int_arr, el : integer) : integer is
+    for i in 1 .. 10 loop
+        if arr[i] = el then
+            return el;
+        end
+    end
+    return -1;
+end
+
 routine main() : integer is
     var myArray : ten_int_arr;
 
@@ -10,13 +19,4 @@ routine main() : integer is
     var ans is linear_search_ten_int(myArray, 5);
 
     return 0;
-end
-
-routine linear_search_ten_int(arr : ten_int_arr, el : integer) : integer is
-    for i in 1 .. 10 loop
-        if arr[i] = el then
-            return el;
-        end
-    end
-    return -1;
 end

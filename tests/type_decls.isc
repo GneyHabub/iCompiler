@@ -1,0 +1,12 @@
+type myint is integer;
+type myotherint is integer;
+
+routine main(): integer is
+  var a: myint is 5;
+  var ara: array [5] integer;
+  var arb: array [2+(6/2)] myotherint;
+  var b: myotherint is 6;
+  var c: real is a + b;
+  ara := arb;
+  return 0;
+end

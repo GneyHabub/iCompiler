@@ -8,4 +8,5 @@ routine main(a : integer , b : integer) : integer is
 			return - 1
 		end
 	end
+	return 0;
 end

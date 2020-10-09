@@ -1,4 +1,4 @@
-routine main() is
+routine main(): integer is
   var my_array: array [25] integer;
   var temp: integer;
 
