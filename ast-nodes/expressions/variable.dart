@@ -33,6 +33,6 @@ class Variable implements ModifiablePrimary {
     if (declaration is! VariableDeclaration) {
       throw SemanticError(this, "Variable ${this.name} is not declared");
     }
-    this.resultType = (declaration as VariableDeclaration).type;
+    this.resultType = (declaration as VariableDeclaration).type.resolve();
   }
 }

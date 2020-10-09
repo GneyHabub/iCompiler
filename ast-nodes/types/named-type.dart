@@ -20,8 +20,7 @@ class NamedType implements VarType {
 
   @override
   bool operator ==(Object other) {
-    return (this.scopeMark.resolve(this.name) as TypeDeclaration).value ==
-        other;
+    return this.resolve() == other;
   }
 
   @override
