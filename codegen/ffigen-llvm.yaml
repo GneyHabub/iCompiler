@@ -1,0 +1,15 @@
+output: 'llvm.dart'
+name: 'LLVM'
+description: 'Bindings to Core.h, Analysis.h and BitWriter.h of LLVM'
+compiler-opts: '-I/usr/lib/clang/10.0.1/include'
+functions:
+  include:
+    - LLVM.*
+structs:
+  include:
+    - LLVM.*
+headers:
+  entry-points:
+    - '/usr/include/llvm-c/Core.h'
+    - '/usr/include/llvm-c/Analysis.h'
+    - '/usr/include/llvm-c/BitWriter.h'
