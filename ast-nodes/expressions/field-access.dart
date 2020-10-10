@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A record field access by [name] – for either reading or writing.
 ///
@@ -56,5 +58,10 @@ class FieldAccess implements ModifiablePrimary {
         .resolve(this.name);
     this.isConstant = false;
     this.resultType = (fieldDecl as VariableDeclaration).type;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

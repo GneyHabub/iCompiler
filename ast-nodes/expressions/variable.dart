@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A variable reference by [name] – for either reading or writing.
 class Variable implements ModifiablePrimary {
@@ -31,5 +33,10 @@ class Variable implements ModifiablePrimary {
       throw SemanticError(this, "Variable ${this.name} is not declared");
     }
     this.resultType = (declaration as VariableDeclaration).type.resolve();
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

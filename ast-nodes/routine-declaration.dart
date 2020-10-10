@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A routine declaration has [parameters], a [returnType] and a [body].
 class RoutineDeclaration extends Declaration implements ScopeCreator {
@@ -125,5 +127,26 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       throw SemanticError(
           this, "The function has a return type but no return statements");
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    var paramTypes = MemoryManager.getArray(this.parameters.length).cast<Pointer<LLVMOpaqueType>>();
+    for (var i = 0; i < this.parameters.length; i++) {
+      paramTypes.elementAt(i).value = this.parameters[i].type.getLlvmType(module);
+    }
+
+    var routine = module.addRoutine(
+      this.name,
+      llvm.LLVMFunctionType(
+        this.returnType.getLlvmType(module),
+        paramTypes,
+        this.parameters.length,
+        0,
+      )
+    );
+
+    // iterate over statements and add basic blocks
+
+    return routine;
   }
 }

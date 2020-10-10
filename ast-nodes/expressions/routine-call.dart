@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A routine call by [name], passing zero or more [arguments].
 class RoutineCall implements Primary {
@@ -101,5 +103,10 @@ class RoutineCall implements Primary {
         throw SemanticError(this, "Incorrect argument type");
       }
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

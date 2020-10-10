@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../utils/index.dart';
+import '../../../codegen/index.dart';
 
 /// Numeric division operator.
 ///
@@ -39,5 +41,10 @@ class DivOperator extends BinaryRelation implements Product {
       resultType = IntegerType();
       isConstant = leftOperand.isConstant && rightOperand.isConstant;
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

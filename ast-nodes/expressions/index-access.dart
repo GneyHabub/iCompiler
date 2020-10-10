@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// An array element access by [index] – for either reading or writing.
 ///
@@ -52,5 +54,10 @@ class IndexAccess implements ModifiablePrimary {
     }
 
     this.resultType = (this.object.resultType as ArrayType).elementType;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

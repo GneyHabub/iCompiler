@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import 'routine-declaration.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A built-in routine declaration doesn't appear in code but instead does a predefined action.
 class BuiltinRoutineDeclaration extends RoutineDeclaration {
@@ -11,4 +13,9 @@ class BuiltinRoutineDeclaration extends RoutineDeclaration {
   }
 
   void checkSemantics() {}
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
 }

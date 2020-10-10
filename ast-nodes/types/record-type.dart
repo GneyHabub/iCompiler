@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A compound type that has several [fields] inside.
 class RecordType implements VarType, ScopeCreator {
@@ -100,5 +102,14 @@ class RecordType implements VarType, ScopeCreator {
 
   VarType resolve() {
     return this;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
+
+  Pointer<LLVMOpaqueType> getLlvmType(Module module) {
+    
   }
 }

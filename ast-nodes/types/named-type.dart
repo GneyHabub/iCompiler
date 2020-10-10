@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A type that was specified by the [name].
 ///
@@ -44,5 +46,14 @@ class NamedType implements VarType {
 
   VarType resolve() {
     return (this.scopeMark.resolve(this.name) as TypeDeclaration).value;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
+
+  Pointer<LLVMOpaqueType> getLlvmType(Module module) {
+    return this.resolve().getLlvmType(module);
   }
 }

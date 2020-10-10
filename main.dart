@@ -2,6 +2,7 @@ import 'dart:io';
 import 'lexer/split-to-tokens.dart';
 import 'errors/index.dart';
 import 'ast-nodes/index.dart';
+import 'codegen/index.dart';
 
 void main(List<String> args) {
   File sourceFile;
@@ -13,12 +14,16 @@ void main(List<String> args) {
   }
 
   try {
+    var llvmModule = Module(sourceFile.path);
     var tokens = splitToTokens(sourceFile.readAsStringSync());
     var programAST = Program.parse(tokens);
     programAST.buildSymbolTable();
     programAST.checkSemantics();
-    print(programAST);
+    programAST.generateCode(llvmModule);
+    print(llvmModule);
   } on SyntaxError catch (e) {
     print(e);
   }
+
+  MemoryManager.dispose();
 }

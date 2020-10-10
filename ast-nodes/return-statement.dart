@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A return statement in a function.
 class ReturnStatement implements Statement {
@@ -42,5 +44,10 @@ class ReturnStatement implements Statement {
       this.value = ensureType(this.value, routine.returnType);
       routine.hasReturnStatement = true;
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

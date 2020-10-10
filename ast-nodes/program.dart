@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A program is a list of [Declaration]s.
 ///
@@ -117,5 +119,16 @@ class Program implements Node, ScopeCreator {
     for (var declaration in this.declarations) {
       declaration.checkSemantics();
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    for (var declaration in this.declarations) {
+      if (declaration is RoutineDeclaration) {
+        declaration.generateCode(module);
+      } else {
+        print('Can only handle routine declarations for now!');
+      }
+    }
+    return null;
   }
 }

@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../utils/index.dart';
+import '../../../codegen/index.dart';
 
 /// Logical NOT operator.
 ///
@@ -18,5 +20,10 @@ class NotOperator extends UnaryRelation {
     this.operand.checkSemantics();
     this.operand = ensureType(this.operand, BooleanType());
     this.isConstant = this.operand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

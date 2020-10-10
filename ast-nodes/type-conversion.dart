@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../utils/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 class TypeConversion implements Expression {
   Expression expression;
@@ -30,5 +32,10 @@ class TypeConversion implements Expression {
   @override
   Literal evaluate() {
     return (this.expression.evaluate());
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

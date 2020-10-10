@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A prioritized expression.
 class Prioritized implements Product {
@@ -43,5 +45,10 @@ class Prioritized implements Product {
     this.operand.checkSemantics();
     this.resultType = this.operand.resultType;
     this.isConstant = this.operand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

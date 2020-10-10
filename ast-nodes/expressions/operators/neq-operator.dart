@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../utils/index.dart';
 import '../../../errors/index.dart';
+import '../../../codegen/index.dart';
 
 /// Universal _not equal to_ operator.
 ///
@@ -48,5 +50,10 @@ class NeqOperator extends BinaryRelation implements Comparison {
 
     this.isConstant =
         this.leftOperand.isConstant && this.rightOperand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

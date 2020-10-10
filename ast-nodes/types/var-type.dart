@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
+import '../../codegen/index.dart';
 
 /// A type of a variable.
 abstract class VarType implements Node {
@@ -41,4 +43,6 @@ abstract class VarType implements Node {
   }
 
   VarType resolve();
+
+  Pointer<LLVMOpaqueType> getLlvmType(Module module);
 }

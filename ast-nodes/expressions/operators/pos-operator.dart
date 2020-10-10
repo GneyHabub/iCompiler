@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../utils/index.dart';
 import '../../../errors/index.dart';
+import '../../../codegen/index.dart';
 
 /// Numeric unary plus operator.
 ///
@@ -29,5 +31,10 @@ class PosOperator extends UnaryRelation implements Primary {
       throw SemanticError(this, "'+' operator cannot be applied to this type!");
     }
     this.isConstant = this.operand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../lexer/token.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A routine parameter, characterized by the [name] and the [type].
 class Parameter implements Node {
@@ -42,5 +44,10 @@ class Parameter implements Node {
 
   void checkSemantics() {
     this.type.checkSemantics();
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

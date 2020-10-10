@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// The built-in integer type.
 class IntegerType implements VarType {
@@ -35,5 +37,14 @@ class IntegerType implements VarType {
 
   VarType resolve() {
     return this;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
+
+  Pointer<LLVMOpaqueType> getLlvmType(Module module) {
+    return llvm.LLVMInt32TypeInContext(module.context);
   }
 }

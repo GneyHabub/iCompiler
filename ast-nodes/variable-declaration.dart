@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A variable declaration contains a [type] and the initial [value].
 ///
@@ -74,5 +76,10 @@ class VariableDeclaration extends Declaration {
     } else {
       throw SemanticError(this, "Type and value cannot be both null");
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

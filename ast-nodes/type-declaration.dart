@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A type declaration gives a name to some type [value].
 class TypeDeclaration extends Declaration {
@@ -40,5 +42,10 @@ class TypeDeclaration extends Declaration {
   void checkSemantics() {
     this.scopeMark.ensureNoOther(this.name);
     value.checkSemantics();
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../lexer/token.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// An assignment of the value on the right hand side ([rhs]) to the left hand side ([lhs]).
 class Assignment implements Statement {
@@ -53,5 +55,10 @@ class Assignment implements Statement {
             'Types ${lhs.resultType.runtimeType} and ${rhs.resultType.runtimeType} are inconvertable!');
       }
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

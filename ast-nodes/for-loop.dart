@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../lexer/token.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A `for` loop.
 class ForLoop implements Statement, ScopeCreator {
@@ -90,5 +92,10 @@ class ForLoop implements Statement, ScopeCreator {
     for (var statement in this.body) {
       statement.checkSemantics();
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

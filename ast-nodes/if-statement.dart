@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../utils/index.dart';
 import '../lexer/token.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A conditional statement.
 class IfStatement implements Statement, ScopeCreator {
@@ -110,5 +112,10 @@ class IfStatement implements Statement, ScopeCreator {
     for (var statement in this.blockFalse) {
       statement.checkSemantics();
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

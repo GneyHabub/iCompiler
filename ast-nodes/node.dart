@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import '../lexer/token.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// An abstract node of the AST.
 abstract class Node {
@@ -16,4 +18,6 @@ abstract class Node {
   void propagateScopeMark(ScopeElement parentMark);
 
   void checkSemantics();
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module);
 }

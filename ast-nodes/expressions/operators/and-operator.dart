@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../utils/index.dart';
+import '../../../codegen/index.dart';
 
 /// Logical AND operator.
 ///
@@ -26,5 +28,10 @@ class AndOperator extends BinaryRelation {
 
     this.isConstant =
         this.leftOperand.isConstant && this.rightOperand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

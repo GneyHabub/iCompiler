@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../utils/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// A literal integer number in code.
 class IntegerLiteral implements Literal {
@@ -65,4 +67,9 @@ class IntegerLiteral implements Literal {
   }
 
   void checkSemantics() {}
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
 }

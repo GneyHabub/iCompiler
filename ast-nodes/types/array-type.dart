@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
 import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
+import '../../codegen/index.dart';
 
 /// An array type with optional [size].
 class ArrayType implements VarType {
@@ -85,5 +87,14 @@ class ArrayType implements VarType {
 
   VarType resolve() {
     return this;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
+  }
+
+  Pointer<LLVMOpaqueType> getLlvmType(Module module) {
+
   }
 }

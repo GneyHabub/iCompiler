@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import '../../index.dart';
 import '../../../errors/index.dart';
+import '../../../codegen/index.dart';
 
 /// Numeric negation operator.
 ///
@@ -29,5 +31,10 @@ class NegOperator extends UnaryRelation implements Primary {
       throw SemanticError(this, "Cannot apply operator to object of such type");
     }
     this.isConstant = this.operand.isConstant;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

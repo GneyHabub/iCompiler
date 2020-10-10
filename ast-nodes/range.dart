@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// An iteration range for the `for` loop.
 class Range implements Node {
@@ -44,5 +46,10 @@ class Range implements Node {
     end.checkSemantics();
     start = ensureType(start, IntegerType());
     end = ensureType(end, IntegerType());
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }

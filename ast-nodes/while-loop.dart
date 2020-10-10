@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'index.dart';
 import '../lexer/token.dart';
 import '../utils/index.dart';
 import '../errors/index.dart';
 import '../symbol-table/index.dart';
+import '../codegen/index.dart';
 
 /// A `while` loop.
 class WhileLoop implements Statement, ScopeCreator {
@@ -80,5 +82,10 @@ class WhileLoop implements Statement, ScopeCreator {
     for (var statement in this.body) {
       statement.checkSemantics();
     }
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    // TODO: implement
+    return null;
   }
 }
