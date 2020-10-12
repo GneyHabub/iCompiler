@@ -1,9 +1,22 @@
 import 'dart:ffi';
+import 'dart:io' show Platform;
 import 'memory-manager.dart';
 import 'package:ffi/ffi.dart';
 import 'llvm.dart';
 
-final llvm = LLVM(DynamicLibrary.open('/usr/lib/libLLVM-10.so'));
+String getLlvmPath() {
+  if (Platform.isLinux) {
+    return '/usr/lib/libLLVM-10.so';
+  } else if (Platform.isMacOS) {
+    return '/usr/local/Cellar/llvm/10.0.1_1/lib/libLLVM.dylib ';
+  } else if (Platform.isWindows) {
+    return 'C:/Program Files/LLVM/bin/LLVM-C.dll';
+  }
+  throw Exception('Platform not supported');
+}
+
+final llvm = LLVM(DynamicLibrary.open(getLlvmPath()));
+
 
 /// A wrapper around the LLVM Module for easier use.
 class Module {
