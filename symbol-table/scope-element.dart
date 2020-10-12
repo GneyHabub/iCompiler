@@ -6,6 +6,8 @@ import '../ast-nodes/index.dart';
 /// An abstract element in the scope's linked list (scope chain).
 abstract class ScopeElement {
   ScopeElement next;
+  
+  bool readOnly = false;
 
   /// Ensure that no other declaration in the chain has the same [name].
   void ensureNoOther(String name) {
