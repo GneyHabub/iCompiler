@@ -57,7 +57,10 @@ class IndexAccess implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return llvm.LLVMBuildExtractValue(
+        module.builder,
+        (this.object as Variable).generateCode(module),
+        index.evaluate().integerValue - 1,
+        MemoryManager.getCString('index_access'));
   }
 }
