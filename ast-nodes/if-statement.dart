@@ -170,8 +170,12 @@ class IfStatement implements Statement, ScopeCreator {
 
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);
-
-      lastBlock = thisBlock;
+      if (module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)] == null) {
+        lastBlock = thisBlock;
+      } else {
+        lastBlock = llvm.LLVMValueAsBasicBlock(
+            module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)]);
+      }
     }
     llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, endBlock);
@@ -182,12 +186,19 @@ class IfStatement implements Statement, ScopeCreator {
 
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);
-
-      lastBlock = thisBlock;
+      if (module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)] == null) {
+        lastBlock = thisBlock;
+      } else {
+        lastBlock = llvm.LLVMValueAsBasicBlock(
+            module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)]);
+      }
     }
     llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, endBlock);
     
-    return llvm.LLVMBasicBlockAsValue(endBlock);
+    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(ifBlock)] = 
+        llvm.LLVMBasicBlockAsValue(endBlock);
+
+    return llvm.LLVMBasicBlockAsValue(ifBlock);
   }
 }
