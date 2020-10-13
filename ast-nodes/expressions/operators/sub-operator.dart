@@ -46,7 +46,16 @@ class SubOperator extends BinaryRelation implements Sum {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    if (this.resultType is IntegerType) {
+      return llvm.LLVMConstSub(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    } else {
+      return llvm.LLVMConstFSub(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    }
   }
 }

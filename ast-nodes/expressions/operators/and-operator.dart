@@ -31,7 +31,9 @@ class AndOperator extends BinaryRelation {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return llvm.LLVMConstAnd(
+      this.leftOperand.generateCode(module), 
+      this.rightOperand.generateCode(module)
+    );
   }
 }

@@ -1,0 +1,63 @@
+routine main2(): integer is
+  return 1+5;
+end
+
+routine main1(): real is
+  return 1.0+5.0;
+end
+
+routine main3(): integer is
+  return 1-5;
+end
+
+routine main13(): integer is
+  return -5;
+end
+
+routine main4(): integer is
+  return 1+7-5;
+end
+
+routine main5(): real is
+  return 5.0-1.0;
+end
+
+routine main6(): integer is
+  return 5*2;
+end
+
+routine main7(): integer is
+  return 5.0*2;
+end
+
+routine main8(): real is
+  return 5/2;
+end
+
+routine main9(): real is
+  return 5.0/2;
+end
+
+routine main10(): boolean is
+  return true and false;
+end
+
+routine main11(): boolean is
+  return true or false;
+end
+
+routine main12(): boolean is
+  return not false;
+end
+
+routine main14(): integer is
+  return 5%3;
+end
+
+routine main16(): real is
+  return 5.0%3.1;
+end
+
+routine main15(): integer is
+  return 10 xor 01;
+end
