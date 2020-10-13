@@ -23,7 +23,8 @@ class NotOperator extends UnaryRelation {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return llvm.LLVMConstNot(
+      this.operand.generateCode(module)
+    );
   }
 }

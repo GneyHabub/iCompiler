@@ -64,7 +64,17 @@ class Assignment implements Statement {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    var block = llvm.LLVMAppendBasicBlock(
+        module.getLastRoutine(), MemoryManager.getCString('assignment'));
+    llvm.LLVMPositionBuilderAtEnd(module.builder, block);
+
+    llvm.LLVMBuildStore(
+        module.builder,
+        this.rhs.generateCode(module),
+        this.lhs
+            .scopeMark
+            .resolve((this.lhs as Variable).name) //Assume it is a var
+            .valueRef);
+    return llvm.LLVMBasicBlockAsValue(block);
   }
 }

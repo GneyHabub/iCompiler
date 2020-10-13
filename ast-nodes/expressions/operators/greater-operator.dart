@@ -47,7 +47,18 @@ class GreaterOperator extends BinaryRelation implements Comparison {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    if (this.resultType is IntegerType) {
+      return llvm.LLVMConstICmp(
+        LLVMIntPredicate.LLVMIntSGT, 
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    } else {
+      return llvm.LLVMConstFCmp(
+        LLVMRealPredicate.LLVMRealOGT, 
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    }
   }
 }

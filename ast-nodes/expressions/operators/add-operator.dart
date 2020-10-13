@@ -47,7 +47,16 @@ class AddOperator extends BinaryRelation implements Sum {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    if (this.resultType is IntegerType) {
+      return llvm.LLVMConstAdd(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    } else {
+      return llvm.LLVMConstFAdd(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    }
   }
 }

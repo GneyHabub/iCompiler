@@ -41,6 +41,10 @@ class Module {
     return llvm.LLVMGetLastFunction(this._module);
   }
 
+  Pointer<LLVMOpaqueValue> getRoutine(String name) {
+    return llvm.LLVMGetNamedFunction(this._module, MemoryManager.getCString(name));
+  }
+
   /// Get the string representation of the module.
   ///
   /// This includes metadata like the name as well as the instruction dump.

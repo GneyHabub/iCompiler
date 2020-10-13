@@ -82,7 +82,7 @@ class VariableDeclaration extends Declaration {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     var block = llvm.LLVMAppendBasicBlock(
-        module.getLastRoutine(), MemoryManager.getCString('var declaration'));
+        module.getLastRoutine(), MemoryManager.getCString('var_declaration'));
     llvm.LLVMPositionBuilderAtEnd(module.builder, block);
 
     this.valueRef = llvm.LLVMBuildAlloca(

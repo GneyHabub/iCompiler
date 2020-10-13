@@ -85,7 +85,61 @@ class WhileLoop implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    var currentRoutine = module.getLastRoutine();
+    var conditionValue = condition.generateCode(module);
+
+    Pointer<LLVMOpaqueValue> whileCond = llvm.LLVMBuildICmp(
+      module.builder,
+      LLVMIntPredicate.LLVMIntNE,
+      conditionValue,
+      llvm.LLVMConstInt(
+        BooleanType().getLlvmType(module),
+        0,
+        0,  // SignExtend: false
+      ),
+      MemoryManager.getCString('whilecond')
+    );
+
+    var whileBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('while')
+    );
+
+    var doBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('do')
+    );
+
+    var endBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('end')
+    );
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, whileBlock);
+
+    llvm.LLVMBuildCondBr(
+      module.builder,
+      whileCond,
+      doBlock,
+      endBlock
+    );
+
+    Pointer<LLVMOpaqueBasicBlock> lastBlock = doBlock;
+    Pointer<LLVMOpaqueBasicBlock> thisBlock;
+    for (var statement in this.body) {
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
+      lastBlock = thisBlock;
+    }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+    llvm.LLVMBuildBr(module.builder, whileBlock);
+
+    return llvm.LLVMBasicBlockAsValue(endBlock);
   }
 }
