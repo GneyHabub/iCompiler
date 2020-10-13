@@ -19,8 +19,12 @@ void main(List<String> args) {
     var programAST = Program.parse(tokens);
     programAST.buildSymbolTable();
     programAST.checkSemantics();
+    var callBlocks = programAST.generateEntrypoint(llvmModule);
     programAST.generateCode(llvmModule);
+    programAST.wireUpRoutines(llvmModule, callBlocks);
     print(llvmModule);
+    llvmModule.validate();
+    llvmModule.dumpBitcode('out.bc');
   } on SyntaxError catch (e) {
     print(e);
   }

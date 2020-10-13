@@ -17,6 +17,7 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
 
   bool hasReturnStatement = false;
   Pointer<LLVMOpaqueType> signature;
+  Pointer<LLVMOpaqueValue> valueRef;
 
   RoutineDeclaration(name, this.parameters, this.returnType, this.body)
       : super(name);
@@ -146,13 +147,13 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       0, // IsVariadic: false
     );
 
-    var routine = module.addRoutine(
+    this.valueRef = module.addRoutine(
       this.name,
       this.signature,
     );
 
     for (var i = 0; i < this.parameters.length; i++) {
-      var parameter = llvm.LLVMGetParam(routine, i);
+      var parameter = llvm.LLVMGetParam(this.valueRef, i);
       this.scopes[0].lastChild.resolve(parameters[i].name).valueRef = parameter;
       llvm.LLVMSetValueName2(
           parameter,
@@ -171,6 +172,6 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       lastBlock = thisBlock;
     }
 
-    return routine;
+    return this.valueRef;
   }
 }

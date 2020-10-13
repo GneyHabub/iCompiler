@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'memory-manager.dart';
 import 'package:ffi/ffi.dart';
 import 'llvm.dart';
+import '../utils/index.dart';
 
 String getLlvmPath() {
   if (Platform.isLinux) {
@@ -23,6 +24,10 @@ class Module {
   Pointer<LLVMOpaqueContext> context;
   Pointer<LLVMOpaqueBuilder> builder;
   Pointer<LLVMOpaqueModule> _module;
+  Pointer<LLVMOpaqueType> printfSignature;
+  Pointer<LLVMOpaqueType> strcmpSignature;
+  Pointer<LLVMOpaqueValue> printf;
+  Pointer<LLVMOpaqueValue> strcmp;
 
   Module(String name) {
     this.context = llvm.LLVMContextCreate();
@@ -31,6 +36,11 @@ class Module {
       this.context,
     );
     this.builder = llvm.LLVMCreateBuilderInContext(this.context);
+    
+    printfSignature = getPrintfSignature(this);
+    printf = this.addRoutine('printf', printfSignature);
+    strcmpSignature = getStrcmpSignature(this);
+    strcmp = this.addRoutine('strcmp', strcmpSignature);
   }
 
   Pointer<LLVMOpaqueValue> addRoutine(String name, Pointer<LLVMOpaqueType> type) {
@@ -53,6 +63,19 @@ class Module {
     var representation = Utf8.fromUtf8(stringPtr.cast<Utf8>());
     llvm.LLVMDisposeMessage(stringPtr);
     return representation;
+  }
+
+  void validate() {
+    Pointer<Pointer<Int8>> error = allocate<Pointer<Int8>>(count: 1);
+    error.value = nullptr;
+    llvm.LLVMVerifyModule(this._module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
+    llvm.LLVMDisposeMessage(error.value);
+  }
+
+  void dumpBitcode(String filename) {
+    if (llvm.LLVMWriteBitcodeToFile(this._module, MemoryManager.getCString(filename)) != 0) {
+      throw StateError('Failed to write bitcode to \'$filename\'');
+    }
   }
 
   /// Free the memory occupied by this module.
