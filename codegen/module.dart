@@ -38,7 +38,7 @@ class Module {
       this.context,
     );
     this.builder = llvm.LLVMCreateBuilderInContext(this.context);
-    
+
     printfSignature = getPrintfSignature(this);
     printf = this.addRoutine('printf', printfSignature);
     strcmpSignature = getStrcmpSignature(this);
@@ -85,12 +85,5 @@ class Module {
     llvm.LLVMDisposeModule(this._module);
     llvm.LLVMDisposeBuilder(this.builder);
     llvm.LLVMContextDispose(this.context);
-  }
-
-  void validate() {
-    Pointer<Pointer<Int8>> error = allocate<Pointer<Int8>>(count: 1);
-    error.value = nullptr;
-    llvm.LLVMVerifyModule(this._module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
-    llvm.LLVMDisposeMessage(error.value);
   }
 }

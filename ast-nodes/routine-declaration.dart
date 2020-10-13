@@ -160,7 +160,7 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
           parameters[i].name.length);
     }
     if (parameters.length != 0) {
-      var paramAllocBlock = llvm.LLVMAppendBasicBlock(routine, MemoryManager.getCString('initialize parameters'));
+      var paramAllocBlock = llvm.LLVMAppendBasicBlock(this.valueRef, MemoryManager.getCString('initialize parameters'));
       llvm.LLVMPositionBuilderAtEnd(module.builder, paramAllocBlock);
       for (var parameter in this.parameters) {
         this.scopes[0].lastChild.resolve(parameter.name).valueRef = llvm.LLVMBuildAlloca(
