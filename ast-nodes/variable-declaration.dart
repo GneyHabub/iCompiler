@@ -17,7 +17,7 @@ class VariableDeclaration extends Declaration {
 
   bool readOnly;
 
-  VariableDeclaration(name, this.type, this.value, [this.readOnly = false]) : super(name);
+  VariableDeclaration(name, this.type, this.value, {this.readOnly = false}) : super(name);
 
   factory VariableDeclaration.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
