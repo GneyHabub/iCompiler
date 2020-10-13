@@ -55,7 +55,7 @@ class LessOperator extends BinaryRelation implements Comparison {
       );
     } else {
       return llvm.LLVMConstFCmp(
-        9, 
+        5, 
         this.leftOperand.generateCode(module), 
         this.rightOperand.generateCode(module)
       );

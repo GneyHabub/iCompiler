@@ -61,7 +61,7 @@ class NeqOperator extends BinaryRelation implements Comparison {
       );
     } else {
       return llvm.LLVMConstFCmp(
-        2, 
+        7, 
         this.leftOperand.generateCode(module), 
         this.rightOperand.generateCode(module)
       );

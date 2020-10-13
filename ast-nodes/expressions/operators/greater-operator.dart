@@ -55,7 +55,7 @@ class GreaterOperator extends BinaryRelation implements Comparison {
       );
     } else {
       return llvm.LLVMConstFCmp(
-        7, 
+        3, 
         this.leftOperand.generateCode(module), 
         this.rightOperand.generateCode(module)
       );

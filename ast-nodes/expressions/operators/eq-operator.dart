@@ -61,7 +61,7 @@ class EqOperator extends BinaryRelation implements Comparison {
       );
     } else {
       return llvm.LLVMConstFCmp(
-        1, 
+        2, 
         this.leftOperand.generateCode(module), 
         this.rightOperand.generateCode(module)
       );
