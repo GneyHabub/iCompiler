@@ -44,7 +44,7 @@ class Assignment implements Statement {
     lhs.checkSemantics();
     rhs.checkSemantics();
     
-    if (lhs is Variable && lhs.scopeMark.resolve((lhs as Variable).name).scopeMark?.readOnly == true) {
+    if (lhs is Variable && lhs.scopeMark.resolve((lhs as Variable).name).scopeMark?.readOnly) {
       throw SemanticError(this, 'Cannot assign new value to read only variable!');
     }
     
