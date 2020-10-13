@@ -115,7 +115,79 @@ class IfStatement implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    var currentRoutine = module.getLastRoutine();
+    var conditionValue = condition.generateCode(module);
+
+    var ifCond = llvm.LLVMBuildICmp(
+      module.builder,
+      LLVMIntPredicate.LLVMIntNE,
+      conditionValue,
+      llvm.LLVMConstInt(
+        BooleanType().getLlvmType(module),
+        0,
+        0,  // SignExtend: false
+      ),
+      MemoryManager.getCString('ifcond')
+    );
+
+    var ifBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('if')
+    );
+
+    var thenBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('then')
+    );
+
+    var elseBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('else')
+    );
+
+    var endBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('end')
+    );
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, ifBlock);
+
+    llvm.LLVMBuildCondBr(
+      module.builder,
+      ifCond,
+      thenBlock,
+      elseBlock
+    );
+
+    Pointer<LLVMOpaqueBasicBlock> lastBlock = thenBlock;
+    Pointer<LLVMOpaqueBasicBlock> thisBlock;
+    for (var statement in this.blockTrue) {
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
+      lastBlock = thisBlock;
+    }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+    llvm.LLVMBuildBr(module.builder, endBlock);
+
+    lastBlock = elseBlock;
+    for (var statement in this.blockFalse) {
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
+      lastBlock = thisBlock;
+    }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+    llvm.LLVMBuildBr(module.builder, endBlock);
+    
+    return llvm.LLVMBasicBlockAsValue(endBlock);
   }
 }
