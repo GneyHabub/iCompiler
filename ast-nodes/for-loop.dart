@@ -77,7 +77,7 @@ class ForLoop implements Statement, ScopeCreator {
     var scope = Scope();
     this.scopes = [scope];
     ScopeElement currentMark = scope.addDeclaration(
-        VariableDeclaration(this.loopVariable.name, IntegerType(), null));
+        VariableDeclaration(this.loopVariable.name, IntegerType(), null, true));
 
     for (var statement in this.body) {
       statement.propagateScopeMark(currentMark);

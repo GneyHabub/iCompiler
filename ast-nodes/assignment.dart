@@ -43,6 +43,12 @@ class Assignment implements Statement {
   void checkSemantics() {
     lhs.checkSemantics();
     rhs.checkSemantics();
+
+    if (lhs is Variable && 
+          (lhs.scopeMark.resolve((lhs as Variable).name) as VariableDeclaration).readOnly) {
+      throw SemanticError(this, 'Cannot assign new value to read only variable!');
+    }
+
     if (lhs.resultType != rhs.resultType) {
       if (lhs.resultType is IntegerType) {
         rhs = ensureType(rhs, IntegerType());
