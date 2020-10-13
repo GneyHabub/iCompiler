@@ -115,44 +115,42 @@ class IfStatement implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    var currentRoutine = module.getLastRoutine();
+    var conditionValue = condition.generateCode(module);
 
-    Pointer<LLVMOpaqueValue> conditionValue = condition.generateCode(module);
-    if (conditionValue==null) {
-      return null;
-    }
-
-    Pointer<LLVMOpaqueValue> ifCond = llvm.LLVMBuildICmp(
+    var ifCond = llvm.LLVMBuildICmp(
       module.builder,
       LLVMIntPredicate.LLVMIntNE,
       conditionValue,
       llvm.LLVMConstInt(
-        IntegerType().getLlvmType(module),
+        BooleanType().getLlvmType(module),
         0,
-        1
+        0,  // SignExtend: false
       ),
       MemoryManager.getCString('ifcond')
     );
 
-    var currentRoutine = module.getLastRoutine();
-
     var ifBlock = llvm.LLVMAppendBasicBlockInContext(
-      module.context, 
-      currentRoutine, 
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('if')
     );
 
-    var thenBlock = llvm.LLVMCreateBasicBlockInContext(
-      module.context, 
+    var thenBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('then')
     );
 
-    var elseBlock = llvm.LLVMCreateBasicBlockInContext(
-      module.context, 
+    var elseBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('else')
     );
 
-    var endBlock = llvm.LLVMCreateBasicBlockInContext(
-      module.context, 
+    var endBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('end')
     );
 
@@ -165,56 +163,31 @@ class IfStatement implements Statement, ScopeCreator {
       elseBlock
     );
 
-    llvm.LLVMAppendExistingBasicBlock(currentRoutine, thenBlock);
-
     Pointer<LLVMOpaqueBasicBlock> lastBlock = thenBlock;
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.blockTrue) {
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
-      if (lastBlock != null) {
-        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
-        if (statement is ReturnStatement) {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
-          statement.value != null
-              ? llvm.LLVMBuildRet(
-                  module.builder, statement.value.generateCode(module))
-              : llvm.LLVMBuildRetVoid(module.builder);
-        } else {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-        }
-      }
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
       lastBlock = thisBlock;
     }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, endBlock);
-    thenBlock = llvm.LLVMGetInsertBlock(module.builder);
-
-    llvm.LLVMAppendExistingBasicBlock(currentRoutine, elseBlock);
 
     lastBlock = elseBlock;
     for (var statement in this.blockFalse) {
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
-      if (lastBlock != null) {
-        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
-        if (statement is ReturnStatement) {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
-          statement.value != null
-              ? llvm.LLVMBuildRet(
-                  module.builder, statement.value.generateCode(module))
-              : llvm.LLVMBuildRetVoid(module.builder);
-        } else {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-        }
-      }
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
       lastBlock = thisBlock;
     }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, endBlock);
-    elseBlock = llvm.LLVMGetInsertBlock(module.builder);
-
-    llvm.LLVMAppendExistingBasicBlock(currentRoutine, endBlock);
-    llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
-
-    return llvm.LLVMBasicBlockAsValue(ifBlock);
+    
+    return llvm.LLVMBasicBlockAsValue(endBlock);
   }
 }
