@@ -68,13 +68,21 @@ class Assignment implements Statement {
         module.getLastRoutine(), MemoryManager.getCString('assignment'));
     llvm.LLVMPositionBuilderAtEnd(module.builder, block);
 
-    llvm.LLVMBuildStore(
+    if (this.lhs is Variable) {
+      llvm.LLVMBuildStore(
+          module.builder,
+          this.rhs.generateCode(module),
+          this
+              .lhs
+              .scopeMark
+              .resolve((this.lhs as Variable).name) //Assume it is a var
+              .valueRef);
+    } else if (this.lhs is IndexAccess) {
+      llvm.LLVMBuildStore(
         module.builder,
         this.rhs.generateCode(module),
-        this.lhs
-            .scopeMark
-            .resolve((this.lhs as Variable).name) //Assume it is a var
-            .valueRef);
+        (this.lhs as IndexAccess).getPointer(module));
+    }
     return llvm.LLVMBasicBlockAsValue(block);
   }
 }
