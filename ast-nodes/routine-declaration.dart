@@ -145,8 +145,32 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
       )
     );
 
+    for (var i = 0; i < this.parameters.length; i++) {
+      var parameter = llvm.LLVMGetParam(routine, i);
+      this.scopes[0].lastChild.resolve(parameters[i].name).valueRef = parameter;
+      llvm.LLVMSetValueName2(
+          parameter,
+          MemoryManager.getCString(parameters[i].name),
+          parameters[i].name.length);
+    }
+    Pointer<LLVMOpaqueBasicBlock> lastBlock;
+    Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.body) {
-      statement.generateCode(module);
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      if (lastBlock != null) {
+        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+        if (statement is ReturnStatement) {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
+          statement.value != null
+              ? llvm.LLVMBuildRet(
+                  module.builder, statement.value.generateCode(module))
+              : llvm.LLVMBuildRetVoid(module.builder);
+        } else {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+        }
+      }
+      lastBlock = thisBlock;
     }
 
     return routine;

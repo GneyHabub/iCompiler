@@ -1,10 +1,13 @@
 import 'index.dart';
 import '../lexer/token.dart';
 import '../errors/index.dart';
+import 'dart:ffi';
+import '../codegen/index.dart';
 
 /// A declaration is a [Statement] that creates a new entity with a [name].
 abstract class Declaration implements Statement {
   String name;
+  Pointer<LLVMOpaqueValue> valueRef;
 
   Declaration(this.name);
 
