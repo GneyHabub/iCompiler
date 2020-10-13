@@ -15,7 +15,9 @@ class VariableDeclaration extends Declaration {
   VarType type;
   Expression value;
 
-  VariableDeclaration(name, this.type, this.value) : super(name);
+  bool readOnly;
+
+  VariableDeclaration(name, this.type, this.value, {this.readOnly = false}) : super(name);
 
   factory VariableDeclaration.parse(Iterable<Token> tokens) {
     final iter = tokens.iterator;
@@ -79,7 +81,19 @@ class VariableDeclaration extends Declaration {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    var block = llvm.LLVMAppendBasicBlock(
+        module.getLastRoutine(), MemoryManager.getCString('var declaration'));
+    llvm.LLVMPositionBuilderAtEnd(module.builder, block);
+
+    this.valueRef = llvm.LLVMBuildAlloca(
+        module.builder,
+        this.type.resolve().getLlvmType(module),
+        MemoryManager.getCString(this.name));
+    if (this.value != null) {
+      llvm.LLVMBuildStore(
+          module.builder, this.value.generateCode(module), this.valueRef);
+    }
+
+    return llvm.LLVMBasicBlockAsValue(block);
   }
 }

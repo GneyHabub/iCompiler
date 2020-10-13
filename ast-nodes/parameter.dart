@@ -47,7 +47,6 @@ class Parameter implements Node {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
     return null;
   }
 }
