@@ -36,6 +36,7 @@ class Variable implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return scopeMark.resolve(name).valueRef;
+    
+    return llvm.LLVMBuildLoad(module.builder, scopeMark.resolve(name).valueRef, MemoryManager.getCString('load_${this.name}'));
   }
 }
