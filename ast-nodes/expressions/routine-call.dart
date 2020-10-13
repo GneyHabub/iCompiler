@@ -6,6 +6,7 @@ import '../../errors/index.dart';
 import '../../symbol-table/index.dart';
 import '../../codegen/index.dart';
 
+
 /// A routine call by [name], passing zero or more [arguments].
 class RoutineCall implements Primary {
   VarType resultType;
@@ -106,7 +107,19 @@ class RoutineCall implements Primary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    final callee = module.getRoutine(name);
+    final args = MemoryManager.getArray(this.arguments.length)
+                              .cast<Pointer<LLVMOpaqueValue>>();
+
+    for (var i = 0; i < this.arguments.length; i++) {
+      args.elementAt(i).value = this.arguments[i].generateCode(module);
+    }
+    
+    return llvm.LLVMBuildCall2(module.builder,
+                               resultType.getLlvmType(module),
+                               callee,
+                               args,
+                               this.arguments.length,
+                               MemoryManager.getCString("$name-call"));
   }
 }
