@@ -93,29 +93,28 @@ class WhileLoop implements Statement, ScopeCreator {
       LLVMIntPredicate.LLVMIntNE,
       conditionValue,
       llvm.LLVMConstInt(
-        IntegerType().getLlvmType(module),
+        BooleanType().getLlvmType(module),
         0,
-        0,      // SignExtend: false
+        0,  // SignExtend: false
       ),
       MemoryManager.getCString('whilecond')
     );
 
-
     var whileBlock = llvm.LLVMAppendBasicBlockInContext(
-      module.context, 
-      currentRoutine, 
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('while')
     );
 
     var doBlock = llvm.LLVMAppendBasicBlockInContext(
-      module.context, 
-      currentRoutine, 
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('do')
     );
 
     var endBlock = llvm.LLVMAppendBasicBlockInContext(
-      module.context, 
-      currentRoutine, 
+      module.context,
+      currentRoutine,
       MemoryManager.getCString('end')
     );
 
@@ -132,25 +131,14 @@ class WhileLoop implements Statement, ScopeCreator {
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.body) {
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
-      if (lastBlock != null) {
-        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
-        if (statement is ReturnStatement) {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
-          statement.value != null
-              ? llvm.LLVMBuildRet(
-                  module.builder, statement.value.generateCode(module))
-              : llvm.LLVMBuildRetVoid(module.builder);
-        } else {
-          llvm.LLVMBuildBr(module.builder, thisBlock);
-        }
-      }
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
       lastBlock = thisBlock;
     }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, whileBlock);
-    doBlock = llvm.LLVMGetInsertBlock(module.builder);
-
-    llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
 
     return llvm.LLVMBasicBlockAsValue(endBlock);
   }
