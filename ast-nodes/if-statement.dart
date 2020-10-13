@@ -121,14 +121,16 @@ class IfStatement implements Statement, ScopeCreator {
       return null;
     }
 
-    Pointer<LLVMOpaqueValue> ifCond = llvm.LLVMConstICmp(
+    Pointer<LLVMOpaqueValue> ifCond = llvm.LLVMBuildICmp(
+      module.builder,
       LLVMIntPredicate.LLVMIntNE,
       conditionValue,
       llvm.LLVMConstInt(
         IntegerType().getLlvmType(module),
         0,
         1
-      )
+      ),
+      MemoryManager.getCString('ifcond')
     );
 
     var currentRoutine = module.getLastRoutine();
@@ -164,16 +166,48 @@ class IfStatement implements Statement, ScopeCreator {
     );
 
     llvm.LLVMAppendExistingBasicBlock(currentRoutine, thenBlock);
+
+    Pointer<LLVMOpaqueBasicBlock> lastBlock = thenBlock;
+    Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.blockTrue) {
-      statement.generateCode(module);
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      if (lastBlock != null) {
+        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+        if (statement is ReturnStatement) {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
+          statement.value != null
+              ? llvm.LLVMBuildRet(
+                  module.builder, statement.value.generateCode(module))
+              : llvm.LLVMBuildRetVoid(module.builder);
+        } else {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+        }
+      }
+      lastBlock = thisBlock;
     }
     llvm.LLVMBuildBr(module.builder, endBlock);
     thenBlock = llvm.LLVMGetInsertBlock(module.builder);
 
     llvm.LLVMAppendExistingBasicBlock(currentRoutine, elseBlock);
-    llvm.LLVMPositionBuilderAtEnd(module.builder, elseBlock);
+
+    lastBlock = elseBlock;
     for (var statement in this.blockFalse) {
-      statement.generateCode(module);
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      if (lastBlock != null) {
+        llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+        if (statement is ReturnStatement) {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+          llvm.LLVMPositionBuilderAtEnd(module.builder, thisBlock);
+          statement.value != null
+              ? llvm.LLVMBuildRet(
+                  module.builder, statement.value.generateCode(module))
+              : llvm.LLVMBuildRetVoid(module.builder);
+        } else {
+          llvm.LLVMBuildBr(module.builder, thisBlock);
+        }
+      }
+      lastBlock = thisBlock;
     }
     llvm.LLVMBuildBr(module.builder, endBlock);
     elseBlock = llvm.LLVMGetInsertBlock(module.builder);
@@ -181,6 +215,6 @@ class IfStatement implements Statement, ScopeCreator {
     llvm.LLVMAppendExistingBasicBlock(currentRoutine, endBlock);
     llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
 
-    return currentRoutine;
+    return llvm.LLVMBasicBlockAsValue(ifBlock);
   }
 }
