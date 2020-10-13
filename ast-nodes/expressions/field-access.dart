@@ -64,4 +64,10 @@ class FieldAccess implements ModifiablePrimary {
     // TODO: implement
     return null;
   }
+
+  @override
+  Pointer<LLVMOpaqueValue> getPointer(Module module) {
+    // TODO: implement getPointer
+    throw UnimplementedError();
+  }
 }

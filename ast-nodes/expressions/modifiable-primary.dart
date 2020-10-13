@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import '../../codegen/index.dart';
 import '../index.dart';
 import '../../lexer/token.dart';
 import '../../utils/index.dart';
@@ -43,4 +45,5 @@ abstract class ModifiablePrimary implements Primary {
     }
     return result;
   }
+  Pointer<LLVMOpaqueValue> getPointer(Module module);
 }

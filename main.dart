@@ -21,6 +21,7 @@ void main(List<String> args) {
     programAST.checkSemantics();
     programAST.generateCode(llvmModule);
     print(llvmModule);
+    llvmModule.validate();
   } on SyntaxError catch (e) {
     print(e);
   }
