@@ -168,7 +168,12 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
         llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
         llvm.LLVMBuildBr(module.builder, thisBlock);
       }
-      lastBlock = thisBlock;
+      if (module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)] == null) {
+        lastBlock = thisBlock;
+      } else {
+        lastBlock = llvm.LLVMValueAsBasicBlock(
+            module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)]);
+      }
     }
 
     return routine;

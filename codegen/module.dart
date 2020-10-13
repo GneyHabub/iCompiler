@@ -24,6 +24,8 @@ class Module {
   Pointer<LLVMOpaqueBuilder> builder;
   Pointer<LLVMOpaqueModule> _module;
 
+  var LLVMValuesStorage = new Map();
+
   Module(String name) {
     this.context = llvm.LLVMContextCreate();
     this._module = llvm.LLVMModuleCreateWithNameInContext(
