@@ -1,0 +1,7 @@
+routine sub(): integer is
+  return 42;
+end
+
+routine main(): integer is
+  return sub();
+end

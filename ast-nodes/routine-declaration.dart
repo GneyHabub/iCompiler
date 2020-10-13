@@ -16,6 +16,7 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   List<Statement> body;
 
   bool hasReturnStatement = false;
+  Pointer<LLVMOpaqueType> signature;
 
   RoutineDeclaration(name, this.parameters, this.returnType, this.body)
       : super(name);
@@ -130,19 +131,24 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    var paramTypes = MemoryManager.getArray(this.parameters.length).cast<Pointer<LLVMOpaqueType>>();
+    var paramTypes = MemoryManager.getArray(this.parameters.length)
+        .cast<Pointer<LLVMOpaqueType>>();
     for (var i = 0; i < this.parameters.length; i++) {
-      paramTypes.elementAt(i).value = this.parameters[i].type.getLlvmType(module);
+      paramTypes.elementAt(i).value =
+          this.parameters[i].type.getLlvmType(module);
     }
+
+    this.signature = llvm.LLVMFunctionType(
+      this.returnType?.getLlvmType(module) ??
+          llvm.LLVMVoidTypeInContext(module.context),
+      paramTypes,
+      this.parameters.length,
+      0, // IsVariadic: false
+    );
 
     var routine = module.addRoutine(
       this.name,
-      llvm.LLVMFunctionType(
-        this.returnType?.getLlvmType(module) ?? llvm.LLVMVoidTypeInContext(module.context),
-        paramTypes,
-        this.parameters.length,
-        0,
-      )
+      this.signature,
     );
 
     for (var statement in this.body) {
