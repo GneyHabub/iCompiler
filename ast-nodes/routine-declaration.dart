@@ -153,7 +153,6 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
 
     for (var i = 0; i < this.parameters.length; i++) {
       var parameter = llvm.LLVMGetParam(routine, i);
-      this.scopes[0].lastChild.resolve(parameters[i].name).valueRef = parameter;
       llvm.LLVMSetValueName2(
           parameter,
           MemoryManager.getCString(parameters[i].name),
@@ -162,10 +161,18 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
 
     Pointer<LLVMOpaqueBasicBlock> lastBlock;
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
-    for (var statement in this.body) {
-      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+    for (var i = 0; i < this.body.length; i++) {
+      thisBlock = llvm.LLVMValueAsBasicBlock(this.body[i].generateCode(module));
       if (lastBlock != null) {
         llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+        if (i == 1) {
+          for (var j = 0; j < this.parameters.length; j++) {
+            this.scopes[0].lastChild.resolve(parameters[i].name).valueRef = llvm.LLVMBuildAlloca(
+              module.builder,
+              parameters[i].type.resolve().getLlvmType(module),
+              MemoryManager.getCString(parameters[i].name));
+          }
+        }
         llvm.LLVMBuildBr(module.builder, thisBlock);
       }
       lastBlock = thisBlock;
