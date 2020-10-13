@@ -46,7 +46,16 @@ class ModOperator extends BinaryRelation implements Product {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    if (this.resultType is IntegerType) {
+      return llvm.LLVMConstSRem(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    } else {
+      return llvm.LLVMConstFRem(
+        this.leftOperand.generateCode(module), 
+        this.rightOperand.generateCode(module)
+      );
+    }
   }
 }

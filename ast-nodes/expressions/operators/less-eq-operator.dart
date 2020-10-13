@@ -47,7 +47,10 @@ class LessEqOperator extends BinaryRelation implements Comparison {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return llvm.LLVMConstICmp(
+      10, 
+      this.leftOperand.generateCode(module), 
+      this.rightOperand.generateCode(module)
+    );
   }
 }

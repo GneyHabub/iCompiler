@@ -34,7 +34,14 @@ class NegOperator extends UnaryRelation implements Primary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    if (this.resultType is IntegerType) {
+      return llvm.LLVMConstNeg(
+        this.operand.generateCode(module)
+      );
+    } else {
+      return llvm.LLVMConstFNeg(
+        this.operand.generateCode(module)
+      );
+    }
   }
 }
