@@ -135,11 +135,20 @@ class WhileLoop implements Statement, ScopeCreator {
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);
 
-      lastBlock = thisBlock;
+      if (module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)] == null) {
+        lastBlock = thisBlock;
+      } else {
+        lastBlock = llvm.LLVMValueAsBasicBlock(
+            module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)]);
+      }
     }
     llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, whileBlock);
 
-    return llvm.LLVMBasicBlockAsValue(endBlock);
+    llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
+    
+    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(whileBlock)] = 
+        llvm.LLVMBasicBlockAsValue(endBlock);
+    return llvm.LLVMBasicBlockAsValue(whileBlock);
   }
 }
