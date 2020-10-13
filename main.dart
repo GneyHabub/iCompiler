@@ -24,7 +24,7 @@ void main(List<String> args) {
     programAST.wireUpRoutines(llvmModule, callBlocks);
     print(llvmModule);
     llvmModule.validate();
-    llvmModule.dumpBitcode('out.bc');
+    // llvmModule.dumpBitcode('out.bc');
   } on SyntaxError catch (e) {
     print(e);
   }

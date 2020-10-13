@@ -35,7 +35,15 @@ class Variable implements ModifiablePrimary {
     this.resultType = (declaration as VariableDeclaration).type.resolve();
   }
 
-  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+  Pointer<LLVMOpaqueValue> getPointer(Module module) {
     return scopeMark.resolve(name).valueRef;
+  }
+
+  Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    return llvm.LLVMBuildLoad2(
+        module.builder,
+        resultType.getLlvmType(module),
+        scopeMark.resolve(name).valueRef,
+        MemoryManager.getCString('load_${this.name}'));
   }
 }

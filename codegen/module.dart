@@ -9,7 +9,7 @@ String getLlvmPath() {
   if (Platform.isLinux) {
     return '/usr/lib/libLLVM-10.so';
   } else if (Platform.isMacOS) {
-    return '/usr/local/Cellar/llvm/10.0.1_1/lib/libLLVM.dylib ';
+    return '/usr/local/Cellar/llvm/10.0.1_1/lib/libLLVM.dylib';
   } else if (Platform.isWindows) {
     return 'C:/Program Files/LLVM/bin/LLVM-C.dll';
   }
@@ -85,5 +85,12 @@ class Module {
     llvm.LLVMDisposeModule(this._module);
     llvm.LLVMDisposeBuilder(this.builder);
     llvm.LLVMContextDispose(this.context);
+  }
+
+  void validate() {
+    Pointer<Pointer<Int8>> error = allocate<Pointer<Int8>>(count: 1);
+    error.value = nullptr;
+    llvm.LLVMVerifyModule(this._module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
+    llvm.LLVMDisposeMessage(error.value);
   }
 }

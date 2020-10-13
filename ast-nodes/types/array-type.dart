@@ -90,11 +90,11 @@ class ArrayType implements VarType {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
     return null;
   }
 
   Pointer<LLVMOpaqueType> getLlvmType(Module module) {
-
+    return llvm.LLVMArrayType(
+        elementType.getLlvmType(module), size.evaluate().integerValue);
   }
 }
