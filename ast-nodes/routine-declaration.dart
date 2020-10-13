@@ -147,7 +147,7 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
 
     for (var i = 0; i < this.parameters.length; i++) {
       var parameter = llvm.LLVMGetParam(routine, i);
-      parameters[i].scopeMark.resolve(parameters[i].name).valueRef = parameter;
+      this.scopes[0].lastChild.resolve(parameters[i].name).valueRef = parameter;
       llvm.LLVMSetValueName2(
           parameter,
           MemoryManager.getCString(parameters[i].name),

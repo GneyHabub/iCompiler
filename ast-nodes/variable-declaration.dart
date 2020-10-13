@@ -79,12 +79,19 @@ class VariableDeclaration extends Declaration {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    this.valueRef = llvm.LLVMBuildAlloca(module.builder,
-        this.type.resolve().getLlvmType(module), MemoryManager.getCString(this.name));
+    var block = llvm.LLVMAppendBasicBlock(
+        module.getLastRoutine(), MemoryManager.getCString('var declaration'));
+    llvm.LLVMPositionBuilderAtEnd(module.builder, block);
+
+    this.valueRef = llvm.LLVMBuildAlloca(
+        module.builder,
+        this.type.resolve().getLlvmType(module),
+        MemoryManager.getCString(this.name));
     if (this.value != null) {
       llvm.LLVMBuildStore(
           module.builder, this.value.generateCode(module), this.valueRef);
     }
-    return null;
+
+    return llvm.LLVMBasicBlockAsValue(block);
   }
 }
