@@ -106,7 +106,20 @@ class RoutineCall implements Primary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    RoutineDeclaration callee = this.scopeMark.resolve(this.name);
+    final args = MemoryManager.getArray(this.arguments.length)
+        .cast<Pointer<LLVMOpaqueValue>>();
+
+    for (var i = 0; i < this.arguments.length; i++) {
+      args.elementAt(i).value = this.arguments[i].generateCode(module);
+    }
+
+    return llvm.LLVMBuildCall2(
+        module.builder,
+        callee.signature,
+        module.getRoutine(this.name),
+        args,
+        this.arguments.length,
+        MemoryManager.getCString("$name-call"));
   }
 }
