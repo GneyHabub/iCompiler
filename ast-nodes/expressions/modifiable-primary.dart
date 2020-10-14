@@ -45,5 +45,6 @@ abstract class ModifiablePrimary implements Primary {
     }
     return result;
   }
+
   Pointer<LLVMOpaqueValue> getPointer(Module module);
 }

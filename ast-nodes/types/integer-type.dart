@@ -40,7 +40,6 @@ class IntegerType implements VarType {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
     return null;
   }
 

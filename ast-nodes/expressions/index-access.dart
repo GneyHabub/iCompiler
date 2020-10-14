@@ -57,23 +57,44 @@ class IndexAccess implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return llvm.LLVMBuildExtractValue(
+    var indices = MemoryManager.getArray(2).cast<Pointer<LLVMOpaqueValue>>();
+    indices.elementAt(0).value = llvm.LLVMConstInt(
+      IntegerType().getLlvmType(module),
+      0,
+      1,
+    );
+    indices.elementAt(1).value = this.index.generateCode(module);
+    return llvm.LLVMBuildLoad2(
         module.builder,
-        (this.object as Variable).generateCode(module),
-        index.evaluate().integerValue - 1,
-        MemoryManager.getCString('index_access'));
+        resultType.getLlvmType(module),
+        llvm.LLVMBuildInBoundsGEP2(
+          module.builder,
+          this.object.resultType.getLlvmType(module),
+          // this.object.generateCode(module),
+          this.object.getPointer(module),
+          indices,
+          2,
+          MemoryManager.getCString('index_access')
+        ),
+        MemoryManager.getCString('load_array'));
   }
 
   @override
   Pointer<LLVMOpaqueValue> getPointer(Module module) {
-    var indices = MemoryManager.getArray(1).cast<Pointer<LLVMOpaqueValue>>();
-    indices.elementAt(0).value = this.index.generateCode(module);
-    return llvm.LLVMBuildGEP2(
-      module.builder,
-      this.resultType.getLlvmType(module),
-      this.object.generateCode(module),
-      indices,
+    var indices = MemoryManager.getArray(2).cast<Pointer<LLVMOpaqueValue>>();
+    indices.elementAt(0).value = llvm.LLVMConstInt(
+      IntegerType().getLlvmType(module),
+      0,
       1,
+    );
+    indices.elementAt(1).value = this.index.generateCode(module);
+    return llvm.LLVMBuildInBoundsGEP2(
+      module.builder,
+      this.object.resultType.getLlvmType(module),
+      // this.object.generateCode(module),
+      this.object.getPointer(module),
+      indices,
+      2,
       MemoryManager.getCString('index_access')
     );
   }
