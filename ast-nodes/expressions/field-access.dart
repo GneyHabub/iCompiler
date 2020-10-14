@@ -61,27 +61,50 @@ class FieldAccess implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return llvm.LLVMBuildExtractValue(
-      module.builder,
-      this.object.generateCode(module),
+    var indices = MemoryManager.getArray(2).cast<Pointer<LLVMOpaqueValue>>();
+    indices.elementAt(0).value = llvm.LLVMConstInt(
+      IntegerType().getLlvmType(module),
+      0,
+      1,
+    );
+    indices.elementAt(1).value = llvm.LLVMConstInt(
+      this.resultType.getLlvmType(module),
       (this.object.resultType as RecordType).fields.indexWhere((el) => el.name == this.name),
-      MemoryManager.getCString('field_access'));
+      1,  // SignExtend: true
+    );
+    return llvm.LLVMBuildLoad2(
+        module.builder,
+        resultType.getLlvmType(module),
+        llvm.LLVMBuildGEP2(
+          module.builder,
+          this.object.resultType.getLlvmType(module),
+          this.object.getPointer(module),
+          indices,
+          2,
+          MemoryManager.getCString('field_access')
+        ),
+        MemoryManager.getCString('load_struct'));
   }
 
   @override
   Pointer<LLVMOpaqueValue> getPointer(Module module) {
-    var indices = MemoryManager.getArray(1).cast<Pointer<LLVMOpaqueValue>>();
+    var indices = MemoryManager.getArray(2).cast<Pointer<LLVMOpaqueValue>>();
     indices.elementAt(0).value = llvm.LLVMConstInt(
+      IntegerType().getLlvmType(module),
+      0,
+      1,
+    );
+    indices.elementAt(1).value = llvm.LLVMConstInt(
       this.resultType.getLlvmType(module),
       (this.object.resultType as RecordType).fields.indexWhere((el) => el.name == this.name),
       1,  // SignExtend: true
-    );;
+    );
     return llvm.LLVMBuildGEP2(
       module.builder,
-      this.resultType.getLlvmType(module),
-      this.object.generateCode(module),
+      this.object.resultType.getLlvmType(module),
+      this.object.getPointer(module),
       indices,
-      1,
+      2,
       MemoryManager.getCString('field_access')
     );
   }

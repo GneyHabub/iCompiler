@@ -70,7 +70,6 @@ class IndexAccess implements ModifiablePrimary {
         llvm.LLVMBuildInBoundsGEP2(
           module.builder,
           this.object.resultType.getLlvmType(module),
-          // this.object.generateCode(module),
           this.object.getPointer(module),
           indices,
           2,
