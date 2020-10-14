@@ -30,6 +30,7 @@ class Module {
   Pointer<LLVMOpaqueValue> printf;
   Pointer<LLVMOpaqueValue> strcmp;
   bool isGlobal = true;
+  bool isStatement = false;
 
   var LLVMValuesStorage = new Map();
 

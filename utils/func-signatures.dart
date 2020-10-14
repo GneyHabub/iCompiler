@@ -67,3 +67,23 @@ Pointer<LLVMOpaqueType> getPrintfSignature(Module module) {
     1, // IsVariadic: true
   );
 }
+
+/// Returns the signature of the `print` function for this language's standard library.
+///
+/// The C equivalent of the signature is:
+/// ```c
+/// void print(int number);
+/// ```
+Pointer<LLVMOpaqueType> getPrintSignature(Module module) {
+  var parameterAmount = 1;
+  var paramTypes =
+      MemoryManager.getArray(parameterAmount).cast<Pointer<LLVMOpaqueType>>();
+  paramTypes.elementAt(0).value = llvm.LLVMInt32TypeInContext(module.context);
+
+  return llvm.LLVMFunctionType(
+    llvm.LLVMInt32TypeInContext(module.context),
+    paramTypes,
+    parameterAmount,
+    0, // IsVariadic: false
+  );
+}

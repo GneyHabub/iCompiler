@@ -106,20 +106,44 @@ class RoutineCall implements Primary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    RoutineDeclaration callee = this.scopeMark.resolve(this.name);
-    final args = MemoryManager.getArray(this.arguments.length)
-        .cast<Pointer<LLVMOpaqueValue>>();
+    Pointer<LLVMOpaqueBasicBlock> block = null;
+    if (module.isStatement) {
+      module.isStatement = false;
+      block = llvm.LLVMAppendBasicBlock(
+          module.getLastRoutine(), MemoryManager.getCString('routine-call'));
+      llvm.LLVMPositionBuilderAtEnd(module.builder, block);
+      RoutineDeclaration callee = this.scopeMark.resolve(this.name);
+      final args = MemoryManager.getArray(this.arguments.length)
+          .cast<Pointer<LLVMOpaqueValue>>();
 
-    for (var i = 0; i < this.arguments.length; i++) {
-      args.elementAt(i).value = this.arguments[i].generateCode(module);
+      for (var i = 0; i < this.arguments.length; i++) {
+        args.elementAt(i).value = this.arguments[i].generateCode(module);
+      }
+
+      llvm.LLVMBuildCall2(
+          module.builder,
+          callee.signature,
+          module.getRoutine(this.name),
+          args,
+          this.arguments.length,
+          MemoryManager.getCString("unused"));
+      return llvm.LLVMBasicBlockAsValue(block);
+    } else {
+      RoutineDeclaration callee = this.scopeMark.resolve(this.name);
+      final args = MemoryManager.getArray(this.arguments.length)
+          .cast<Pointer<LLVMOpaqueValue>>();
+
+      for (var i = 0; i < this.arguments.length; i++) {
+        args.elementAt(i).value = this.arguments[i].generateCode(module);
+      }
+
+      return llvm.LLVMBuildCall2(
+          module.builder,
+          callee.signature,
+          module.getRoutine(this.name),
+          args,
+          this.arguments.length,
+          MemoryManager.getCString("$name-call"));
     }
-
-    return llvm.LLVMBuildCall2(
-        module.builder,
-        callee.signature,
-        module.getRoutine(this.name),
-        args,
-        this.arguments.length,
-        MemoryManager.getCString("$name-call"));
   }
 }

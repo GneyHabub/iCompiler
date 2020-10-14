@@ -20,6 +20,7 @@ void main(List<String> args) {
     programAST.buildSymbolTable();
     programAST.checkSemantics();
     var callBlocks = programAST.generateEntrypoint(llvmModule);
+    programAST.generateStdLib(llvmModule);
     programAST.generateCode(llvmModule);
     programAST.wireUpRoutines(llvmModule, callBlocks);
     print(llvmModule);

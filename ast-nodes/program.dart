@@ -126,7 +126,13 @@ class Program implements Node, ScopeCreator {
       if (declaration is TypeDeclaration) {
         continue;
       }
+      if (declaration is RoutineDeclaration) {
+        module.isGlobal = false;
+      }
       declaration.generateCode(module);
+      if (declaration is RoutineDeclaration) {
+        module.isGlobal = true;
+      }
     }
     return null;
   }
@@ -351,5 +357,36 @@ class Program implements Node, ScopeCreator {
         1,  // SignExtend: true
       ));
     }
+  }
+
+  /// Generate the built-in routines for the language.
+  ///
+  /// Currently only print(double)
+  void generateStdLib(Module module) {
+    RoutineDeclaration printDecl = this.scopes[0].lastChild.resolve('print');
+    printDecl.signature = getPrintSignature(module);
+    printDecl.valueRef = module.addRoutine('print', printDecl.signature);
+    var printfCall = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      printDecl.valueRef,
+      MemoryManager.getCString('printf-call')
+    );
+    llvm.LLVMPositionBuilderAtEnd(module.builder, printfCall);
+    var args = MemoryManager.getArray(2).cast<Pointer<LLVMOpaqueValue>>();
+    args.elementAt(0).value = llvm.LLVMBuildGlobalStringPtr(
+      module.builder,
+      MemoryManager.getCString('%d\n'),
+      MemoryManager.getCString('print-output-str'),
+    );
+    args.elementAt(1).value = llvm.LLVMGetParam(printDecl.valueRef, 0);
+
+    llvm.LLVMBuildRet(module.builder, llvm.LLVMBuildCall2(
+      module.builder,
+      module.printfSignature,
+      module.printf,
+      args,
+      2,
+      MemoryManager.getCString('printf-print-output'),
+    ));
   }
 }
