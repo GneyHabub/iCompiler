@@ -1,0 +1,5 @@
+var b: real is 6.0;
+
+routine main(): real is
+  return b;
+end

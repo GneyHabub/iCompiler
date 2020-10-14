@@ -123,11 +123,11 @@ class Program implements Node, ScopeCreator {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     for (var declaration in this.declarations) {
-      if (declaration is RoutineDeclaration) {
+///      if (declaration is RoutineDeclaration) {
         declaration.generateCode(module);
-      } else {
-        print('Can only handle routine declarations for now!');
-      }
+///      } else {
+///        print('Can only handle routine declarations for now!');
+///      }
     }
     return null;
   }

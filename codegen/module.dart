@@ -23,17 +23,18 @@ final llvm = LLVM(DynamicLibrary.open(getLlvmPath()));
 class Module {
   Pointer<LLVMOpaqueContext> context;
   Pointer<LLVMOpaqueBuilder> builder;
-  Pointer<LLVMOpaqueModule> _module;
+  Pointer<LLVMOpaqueModule> module;
   Pointer<LLVMOpaqueType> printfSignature;
   Pointer<LLVMOpaqueType> strcmpSignature;
   Pointer<LLVMOpaqueValue> printf;
   Pointer<LLVMOpaqueValue> strcmp;
+  bool isGlobal = true;
 
   var LLVMValuesStorage = new Map();
 
   Module(String name) {
     this.context = llvm.LLVMContextCreate();
-    this._module = llvm.LLVMModuleCreateWithNameInContext(
+    this.module = llvm.LLVMModuleCreateWithNameInContext(
       MemoryManager.getCString(name),
       this.context,
     );
@@ -46,22 +47,22 @@ class Module {
   }
 
   Pointer<LLVMOpaqueValue> addRoutine(String name, Pointer<LLVMOpaqueType> type) {
-    return llvm.LLVMAddFunction(this._module, MemoryManager.getCString(name), type);
+    return llvm.LLVMAddFunction(this.module, MemoryManager.getCString(name), type);
   }
 
   Pointer<LLVMOpaqueValue> getLastRoutine() {
-    return llvm.LLVMGetLastFunction(this._module);
+    return llvm.LLVMGetLastFunction(this.module);
   }
 
   Pointer<LLVMOpaqueValue> getRoutine(String name) {
-    return llvm.LLVMGetNamedFunction(this._module, MemoryManager.getCString(name));
+    return llvm.LLVMGetNamedFunction(this.module, MemoryManager.getCString(name));
   }
 
   /// Get the string representation of the module.
   ///
   /// This includes metadata like the name as well as the instruction dump.
   String toString() {
-    var stringPtr = llvm.LLVMPrintModuleToString(this._module);
+    var stringPtr = llvm.LLVMPrintModuleToString(this.module);
     var representation = Utf8.fromUtf8(stringPtr.cast<Utf8>());
     llvm.LLVMDisposeMessage(stringPtr);
     return representation;
@@ -70,19 +71,19 @@ class Module {
   void validate() {
     Pointer<Pointer<Int8>> error = allocate<Pointer<Int8>>(count: 1);
     error.value = nullptr;
-    llvm.LLVMVerifyModule(this._module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
+    llvm.LLVMVerifyModule(this.module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
     llvm.LLVMDisposeMessage(error.value);
   }
 
   void dumpBitcode(String filename) {
-    if (llvm.LLVMWriteBitcodeToFile(this._module, MemoryManager.getCString(filename)) != 0) {
+    if (llvm.LLVMWriteBitcodeToFile(this.module, MemoryManager.getCString(filename)) != 0) {
       throw StateError('Failed to write bitcode to \'$filename\'');
     }
   }
 
   /// Free the memory occupied by this module.
   void dispose() {
-    llvm.LLVMDisposeModule(this._module);
+    llvm.LLVMDisposeModule(this.module);
     llvm.LLVMDisposeBuilder(this.builder);
     llvm.LLVMContextDispose(this.context);
   }
