@@ -1,6 +1,10 @@
-routine main(a : integer , b : integer) : integer is
+routine submain(a : integer , b : integer) : integer is
 	while a > b loop
 		a := a - 2
 	end
 	return 0
+end
+
+routine main() : integer is
+	return submain(5, 3);
 end

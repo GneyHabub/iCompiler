@@ -224,7 +224,7 @@ class Program implements Node, ScopeCreator {
     var nameStrings = <String, Pointer<LLVMOpaqueValue>>{};
     var routineNames = this
         .declarations
-        .where((declaration) => declaration is RoutineDeclaration)
+        .where((declaration) => declaration is RoutineDeclaration && declaration.parameters.length == 0)
         .map((declaration) => declaration.name)
         .toList();
 
