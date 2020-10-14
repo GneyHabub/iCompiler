@@ -63,7 +63,7 @@ class FieldAccess implements ModifiablePrimary {
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     return llvm.LLVMBuildExtractValue(
       module.builder,
-      (this.object as Variable).generateCode(module),
+      this.object.generateCode(module),
       (this.object.resultType as RecordType).fields.indexWhere((el) => el.name == this.name),
       MemoryManager.getCString('field_access'));
   }
