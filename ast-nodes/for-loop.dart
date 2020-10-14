@@ -77,7 +77,7 @@ class ForLoop implements Statement, ScopeCreator {
     var scope = Scope();
     this.scopes = [scope];
     ScopeElement currentMark = scope.addDeclaration(
-        VariableDeclaration(this.loopVariable.name, IntegerType(), null, readOnly: true));
+        VariableDeclaration(this.loopVariable.name, IntegerType(), this.range.start, readOnly: true));
 
     for (var statement in this.body) {
       statement.propagateScopeMark(currentMark);
@@ -101,7 +101,100 @@ class ForLoop implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    var currentRoutine = module.getLastRoutine();
+    VariableDeclaration loopVarDecl = this.scopes[0].lastChild.resolve(this.loopVariable.name);
+    var initBlock = llvm.LLVMValueAsBasicBlock(loopVarDecl.generateCode(module));
+
+    var condBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('cond')
+    );
+
+    var doBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('do')
+    );
+
+    var updateBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('update')
+    );
+
+    var endBlock = llvm.LLVMAppendBasicBlockInContext(
+      module.context,
+      currentRoutine,
+      MemoryManager.getCString('end')
+    );
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, initBlock);
+    llvm.LLVMBuildBr(module.builder, condBlock);
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, condBlock);
+    var conditionValue = llvm.LLVMBuildICmp(
+      module.builder,
+      this.isReversed ? LLVMIntPredicate.LLVMIntSGE : LLVMIntPredicate.LLVMIntSLE,
+      llvm.LLVMBuildLoad2(
+          module.builder,
+          IntegerType().getLlvmType(module),
+          loopVarDecl.valueRef,
+          MemoryManager.getCString('load_loop_var')),
+      this.range.end.generateCode(module),
+      MemoryManager.getCString('for-loop-cond')
+    );
+
+    llvm.LLVMBuildCondBr(
+      module.builder,
+      conditionValue,
+      doBlock,
+      endBlock
+    );
+
+    Pointer<LLVMOpaqueBasicBlock> lastBlock = doBlock;
+    Pointer<LLVMOpaqueBasicBlock> thisBlock;
+    for (var statement in this.body) {
+      thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+
+      llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+      llvm.LLVMBuildBr(module.builder, thisBlock);
+
+      if (module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)] == null) {
+        lastBlock = thisBlock;
+      } else {
+        lastBlock = llvm.LLVMValueAsBasicBlock(
+            module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(thisBlock)]);
+      }
+    }
+    llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
+    llvm.LLVMBuildBr(module.builder, updateBlock);
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, updateBlock);
+    var updatedLoopVar = llvm.LLVMBuildAdd(
+      module.builder,
+      llvm.LLVMBuildLoad2(
+          module.builder,
+          IntegerType().getLlvmType(module),
+          loopVarDecl.valueRef,
+          MemoryManager.getCString('load_loop_var')),
+      llvm.LLVMConstInt(
+        IntegerType().getLlvmType(module),
+        this.isReversed ? -1 : 1,
+        1,  // SignExtend: true
+      ),
+      MemoryManager.getCString('loop-var-update')
+    );
+    llvm.LLVMBuildStore(
+        module.builder,
+        updatedLoopVar,
+        loopVarDecl.valueRef);
+    llvm.LLVMBuildBr(module.builder, condBlock);
+
+    llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
+
+    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(initBlock)] =
+        llvm.LLVMBasicBlockAsValue(endBlock);
+    return llvm.LLVMBasicBlockAsValue(initBlock);
   }
 }

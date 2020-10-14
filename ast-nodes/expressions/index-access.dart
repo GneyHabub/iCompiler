@@ -63,7 +63,16 @@ class IndexAccess implements ModifiablePrimary {
       0,
       1,
     );
-    indices.elementAt(1).value = this.index.generateCode(module);
+    indices.elementAt(1).value = llvm.LLVMBuildSub(
+      module.builder,
+      this.index.generateCode(module),
+      llvm.LLVMConstInt(
+        IntegerType().getLlvmType(module),
+        1,
+        1,  // SignExtend: true
+      ),
+      MemoryManager.getCString('index_align'),
+    );
     return llvm.LLVMBuildLoad2(
         module.builder,
         resultType.getLlvmType(module),
@@ -86,7 +95,16 @@ class IndexAccess implements ModifiablePrimary {
       0,
       1,
     );
-    indices.elementAt(1).value = this.index.generateCode(module);
+    indices.elementAt(1).value = llvm.LLVMBuildSub(
+      module.builder,
+      this.index.generateCode(module),
+      llvm.LLVMConstInt(
+        IntegerType().getLlvmType(module),
+        1,
+        1,  // SignExtend: true
+      ),
+      MemoryManager.getCString('index_align'),
+    );
     return llvm.LLVMBuildInBoundsGEP2(
       module.builder,
       this.object.resultType.getLlvmType(module),

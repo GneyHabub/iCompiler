@@ -86,19 +86,6 @@ class WhileLoop implements Statement, ScopeCreator {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     var currentRoutine = module.getLastRoutine();
-    var conditionValue = condition.generateCode(module);
-
-    Pointer<LLVMOpaqueValue> whileCond = llvm.LLVMBuildICmp(
-      module.builder,
-      LLVMIntPredicate.LLVMIntNE,
-      conditionValue,
-      llvm.LLVMConstInt(
-        BooleanType().getLlvmType(module),
-        0,
-        0,  // SignExtend: false
-      ),
-      MemoryManager.getCString('whilecond')
-    );
 
     var whileBlock = llvm.LLVMAppendBasicBlockInContext(
       module.context,
@@ -119,6 +106,18 @@ class WhileLoop implements Statement, ScopeCreator {
     );
 
     llvm.LLVMPositionBuilderAtEnd(module.builder, whileBlock);
+    var conditionValue = condition.generateCode(module);
+    Pointer<LLVMOpaqueValue> whileCond = llvm.LLVMBuildICmp(
+      module.builder,
+      LLVMIntPredicate.LLVMIntNE,
+      conditionValue,
+      llvm.LLVMConstInt(
+        BooleanType().getLlvmType(module),
+        0,
+        0,  // SignExtend: false
+      ),
+      MemoryManager.getCString('whilecond')
+    );
 
     llvm.LLVMBuildCondBr(
       module.builder,
@@ -146,8 +145,8 @@ class WhileLoop implements Statement, ScopeCreator {
     llvm.LLVMBuildBr(module.builder, whileBlock);
 
     llvm.LLVMPositionBuilderAtEnd(module.builder, endBlock);
-    
-    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(whileBlock)] = 
+
+    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(whileBlock)] =
         llvm.LLVMBasicBlockAsValue(endBlock);
     return llvm.LLVMBasicBlockAsValue(whileBlock);
   }

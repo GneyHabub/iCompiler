@@ -44,7 +44,7 @@ class Assignment implements Statement {
     lhs.checkSemantics();
     rhs.checkSemantics();
 
-    if (lhs is Variable && 
+    if (lhs is Variable &&
           (lhs.scopeMark.resolve((lhs as Variable).name) as VariableDeclaration).readOnly) {
       throw SemanticError(this, 'Cannot assign new value to read only variable!');
     }
@@ -75,7 +75,7 @@ class Assignment implements Statement {
           this
               .lhs
               .scopeMark
-              .resolve((this.lhs as Variable).name) //Assume it is a var
+              .resolve((this.lhs as Variable).name)
               .valueRef);
     } else if (this.lhs is IndexAccess) {
       llvm.LLVMBuildStore(
