@@ -45,14 +45,18 @@ class DivOperator extends BinaryRelation implements Product {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstSDiv(
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildSDiv(
+        module.builder,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('division'),
       );
     } else {
-      return llvm.LLVMConstFDiv(
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFDiv(
+        module.builder,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('division'),
       );
     }
   }

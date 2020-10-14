@@ -48,16 +48,20 @@ class LessOperator extends BinaryRelation implements Comparison {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstICmp(
-        LLVMIntPredicate.LLVMIntSLT, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildICmp(
+        module.builder,
+        LLVMIntPredicate.LLVMIntSLT,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('less-than'),
       );
     } else {
-      return llvm.LLVMConstFCmp(
-        LLVMRealPredicate.LLVMRealOLT, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFCmp(
+        module.builder,
+        LLVMRealPredicate.LLVMRealOLT,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('less-than'),
       );
     }
   }

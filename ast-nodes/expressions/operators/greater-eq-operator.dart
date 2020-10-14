@@ -48,16 +48,20 @@ class GreaterEqOperator extends BinaryRelation implements Comparison {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstICmp(
-        LLVMIntPredicate.LLVMIntSGE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildICmp(
+        module.builder,
+        LLVMIntPredicate.LLVMIntSGE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('greater-eq'),
       );
     } else {
-      return llvm.LLVMConstFCmp(
-        LLVMRealPredicate.LLVMRealOGE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFCmp(
+        module.builder,
+        LLVMRealPredicate.LLVMRealOGE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('greater-eq'),
       );
     }
   }

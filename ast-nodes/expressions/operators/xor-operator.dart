@@ -31,9 +31,11 @@ class XorOperator extends BinaryRelation {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return llvm.LLVMConstXor(
-      this.leftOperand.generateCode(module), 
-      this.rightOperand.generateCode(module)
+    return llvm.LLVMBuildXor(
+      module.builder,
+      this.leftOperand.generateCode(module),
+      this.rightOperand.generateCode(module),
+      MemoryManager.getCString('exclusive-or'),
     );
   }
 }

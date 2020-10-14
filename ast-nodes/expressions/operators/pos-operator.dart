@@ -34,7 +34,6 @@ class PosOperator extends UnaryRelation implements Primary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return this.operand.generateCode(module);
   }
 }

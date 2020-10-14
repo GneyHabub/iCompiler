@@ -48,7 +48,6 @@ class Prioritized implements Product {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return this.operand.generateCode(module);
   }
 }

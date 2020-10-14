@@ -1,0 +1,6 @@
+routine main(): integer is
+  var a: integer is 5;
+  var b: integer;
+  b := a + 5;
+  return b;
+end

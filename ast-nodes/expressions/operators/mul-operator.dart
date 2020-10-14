@@ -46,14 +46,18 @@ class MulOperator extends BinaryRelation implements Product {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstMul(
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildMul(
+        module.builder,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('multiplication'),
       );
     } else {
-      return llvm.LLVMConstFMul(
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFMul(
+        module.builder,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('multiplication'),
       );
     }
   }

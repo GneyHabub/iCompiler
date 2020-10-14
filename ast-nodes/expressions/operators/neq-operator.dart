@@ -54,16 +54,20 @@ class NeqOperator extends BinaryRelation implements Comparison {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstICmp(
-        LLVMIntPredicate.LLVMIntNE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildICmp(
+        module.builder,
+        LLVMIntPredicate.LLVMIntNE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('inequality'),
       );
     } else {
-      return llvm.LLVMConstFCmp(
-        LLVMRealPredicate.LLVMRealONE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFCmp(
+        module.builder,
+        LLVMRealPredicate.LLVMRealONE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('inequality'),
       );
     }
   }

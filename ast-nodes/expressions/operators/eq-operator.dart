@@ -54,16 +54,20 @@ class EqOperator extends BinaryRelation implements Comparison {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstICmp(
-        LLVMIntPredicate.LLVMIntEQ, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildICmp(
+        module.builder,
+        LLVMIntPredicate.LLVMIntEQ,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('equality'),
       );
     } else {
-      return llvm.LLVMConstFCmp(
-        LLVMRealPredicate.LLVMRealOEQ, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFCmp(
+        module.builder,
+        LLVMRealPredicate.LLVMRealOEQ,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('equality'),
       );
     }
   }

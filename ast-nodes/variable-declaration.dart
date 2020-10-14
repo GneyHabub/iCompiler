@@ -94,18 +94,11 @@ class VariableDeclaration extends Declaration {
         llvm.LLVMBuildStore(
             module.builder, this.value.generateCode(module), this.valueRef);
       }
+      return llvm.LLVMBasicBlockAsValue(block);
     }
     else {
-      this.valueRef = llvm.LLVMAddGlobal(
-          module.module,
-          this.type.resolve().getLlvmType(module),
-          MemoryManager.getCString(this.name));
-      if (this.value != null) {
-        llvm.LLVMBuildStore(
-            module.builder, this.value.generateCode(module), this.valueRef);
-      }
+      this.valueRef = module.addGlobalVariable(this.name, this.type, this.value);
+      return null;
     }
-
-    return llvm.LLVMBasicBlockAsValue(block);
   }
 }

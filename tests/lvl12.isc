@@ -1,0 +1,8 @@
+type my_int is integer;
+
+routine main(): integer is
+  var a: my_int;
+  a := 5;
+  print(a);
+  return 0
+end

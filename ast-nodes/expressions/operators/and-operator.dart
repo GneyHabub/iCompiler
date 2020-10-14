@@ -31,9 +31,11 @@ class AndOperator extends BinaryRelation {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return llvm.LLVMConstAnd(
-      this.leftOperand.generateCode(module), 
-      this.rightOperand.generateCode(module)
+    return llvm.LLVMBuildAnd(
+      module.builder,
+      this.leftOperand.generateCode(module),
+      this.rightOperand.generateCode(module),
+      MemoryManager.getCString('conjunction'),
     );
   }
 }

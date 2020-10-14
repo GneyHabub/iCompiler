@@ -48,16 +48,20 @@ class LessEqOperator extends BinaryRelation implements Comparison {
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
     if (this.resultType is IntegerType) {
-      return llvm.LLVMConstICmp(
-        LLVMIntPredicate.LLVMIntSLE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildICmp(
+        module.builder,
+        LLVMIntPredicate.LLVMIntSLE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('less-eq'),
       );
     } else {
-      return llvm.LLVMConstFCmp(
-        LLVMRealPredicate.LLVMRealOLE, 
-        this.leftOperand.generateCode(module), 
-        this.rightOperand.generateCode(module)
+      return llvm.LLVMBuildFCmp(
+        module.builder,
+        LLVMRealPredicate.LLVMRealOLE,
+        this.leftOperand.generateCode(module),
+        this.rightOperand.generateCode(module),
+        MemoryManager.getCString('less-eq'),
       );
     }
   }

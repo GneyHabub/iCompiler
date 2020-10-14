@@ -1,0 +1,5 @@
+routine main(): integer is
+  var my_array: array [3 + 5] integer;
+  my_array[5] := 5;
+  return my_array[5];
+end

@@ -30,9 +30,11 @@ class OrOperator extends BinaryRelation {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    return llvm.LLVMConstOr(
-      this.leftOperand.generateCode(module), 
-      this.rightOperand.generateCode(module)
+    return llvm.LLVMBuildOr(
+      module.builder,
+      this.leftOperand.generateCode(module),
+      this.rightOperand.generateCode(module),
+      MemoryManager.getCString('disjunction'),
     );
   }
 }
