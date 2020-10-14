@@ -105,11 +105,16 @@ class RecordType implements VarType, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
     return null;
   }
 
   Pointer<LLVMOpaqueType> getLlvmType(Module module) {
-    
+    var fieldTypes = MemoryManager.getArray(this.fields.length)
+        .cast<Pointer<LLVMOpaqueType>>();
+    for (var i = 0; i < this.fields.length; i++) {
+      fieldTypes.elementAt(i).value = this.fields[i].type.getLlvmType(module);
+    }
+    return llvm.LLVMStructTypeInContext(
+        module.context, fieldTypes, this.fields.length, 0);
   }
 }
