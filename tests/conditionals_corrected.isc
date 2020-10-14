@@ -1,12 +1,16 @@
-routine main(a : integer , b : integer) : integer is
+routine submain(a : integer , b : integer) : integer is
 	if a = b then
-		return 0
+		print(0)
 	else
 		if a > b then
-			return 1
+			print(1)
 		else
-			return - 1
+			print(-1)
 		end
 	end
 	return 0;
+end
+
+routine main(): integer is
+	return submain(1, 1);
 end

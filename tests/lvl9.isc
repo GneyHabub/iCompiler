@@ -1,8 +1,10 @@
+type myRecord is record
+  var field: integer
+  var field2: integer
+end;
+
 routine main(): integer is
-  var my_array: record
-    var field: integer
-    var field2: integer
-  end;
+  var my_array: myRecord;
   my_array.field2 := 5;
   return my_array.field2;
 end

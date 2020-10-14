@@ -2,5 +2,5 @@ routine main() : integer is
     var ans : integer;
     ans := (((5 - -3)/2) * 4 + 1) % 5;
 
-    return 0;
+    return ans;
 end

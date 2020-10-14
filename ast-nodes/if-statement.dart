@@ -115,21 +115,8 @@ class IfStatement implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    module.isStatement = false;
     var currentRoutine = module.getLastRoutine();
-    var conditionValue = condition.generateCode(module);
-
-    var ifCond = llvm.LLVMBuildICmp(
-      module.builder,
-      LLVMIntPredicate.LLVMIntNE,
-      conditionValue,
-      llvm.LLVMConstInt(
-        BooleanType().getLlvmType(module),
-        0,
-        0,  // SignExtend: false
-      ),
-      MemoryManager.getCString('ifcond')
-    );
-
     var ifBlock = llvm.LLVMAppendBasicBlockInContext(
       module.context,
       currentRoutine,
@@ -155,6 +142,19 @@ class IfStatement implements Statement, ScopeCreator {
     );
 
     llvm.LLVMPositionBuilderAtEnd(module.builder, ifBlock);
+    var conditionValue = condition.generateCode(module);
+
+    var ifCond = llvm.LLVMBuildICmp(
+      module.builder,
+      LLVMIntPredicate.LLVMIntNE,
+      conditionValue,
+      llvm.LLVMConstInt(
+        BooleanType().getLlvmType(module),
+        0,
+        0,  // SignExtend: false
+      ),
+      MemoryManager.getCString('ifcond')
+    );
 
     llvm.LLVMBuildCondBr(
       module.builder,
@@ -166,7 +166,9 @@ class IfStatement implements Statement, ScopeCreator {
     Pointer<LLVMOpaqueBasicBlock> lastBlock = thenBlock;
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.blockTrue) {
+      module.isStatement = true;
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      module.isStatement = false;
 
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);
@@ -182,7 +184,9 @@ class IfStatement implements Statement, ScopeCreator {
 
     lastBlock = elseBlock;
     for (var statement in this.blockFalse) {
+      module.isStatement = true;
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      module.isStatement = false;
 
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);
@@ -195,8 +199,8 @@ class IfStatement implements Statement, ScopeCreator {
     }
     llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
     llvm.LLVMBuildBr(module.builder, endBlock);
-    
-    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(ifBlock)] = 
+
+    module.LLVMValuesStorage[llvm.LLVMBasicBlockAsValue(ifBlock)] =
         llvm.LLVMBasicBlockAsValue(endBlock);
 
     return llvm.LLVMBasicBlockAsValue(ifBlock);

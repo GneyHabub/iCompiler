@@ -1,5 +1,5 @@
-var b: real is 6.0;
+var b: integer is 6;
 
-routine main(): real is
+routine main(): integer is
   return b;
 end

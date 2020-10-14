@@ -85,6 +85,7 @@ class WhileLoop implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    module.isStatement = false;
     var currentRoutine = module.getLastRoutine();
 
     var whileBlock = llvm.LLVMAppendBasicBlockInContext(

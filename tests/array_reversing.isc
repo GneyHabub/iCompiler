@@ -8,8 +8,8 @@ routine main(): integer is
 
   for i in 1..25 loop
     temp := my_array[i];
-    my_array[i] := my_array[25 - i];
-    my_array[25 - i] := temp;
+    my_array[i] := my_array[26 - i];
+    my_array[26 - i] := temp;
   end
 
   for i in 1..25 loop

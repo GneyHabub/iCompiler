@@ -4,5 +4,9 @@ end;
 
 var a:real is 1.0;
 var b:real is 4.8;
-var c:real is sum (a, b);
 
+routine main(): integer is
+  var c: integer;
+  c := sum(a, b)
+  return c;
+end

@@ -47,6 +47,7 @@ class ReturnStatement implements Statement {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    module.isStatement = false;
     var currentRoutine = module.getLastRoutine();
     var block = llvm.LLVMAppendBasicBlockInContext(
       module.context,
@@ -60,7 +61,7 @@ class ReturnStatement implements Statement {
     } else {
       llvm.LLVMBuildRet(module.builder, this.value.generateCode(module));
     }
-    
+
     return llvm.LLVMBasicBlockAsValue(block);
   }
 }

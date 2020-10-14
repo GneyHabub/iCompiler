@@ -101,6 +101,7 @@ class ForLoop implements Statement, ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    module.isStatement = false;
     var currentRoutine = module.getLastRoutine();
     VariableDeclaration loopVarDecl = this.scopes[0].lastChild.resolve(this.loopVariable.name);
     var initBlock = llvm.LLVMValueAsBasicBlock(loopVarDecl.generateCode(module));
@@ -155,7 +156,9 @@ class ForLoop implements Statement, ScopeCreator {
     Pointer<LLVMOpaqueBasicBlock> lastBlock = doBlock;
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.body) {
+      module.isStatement = true;
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
+      module.isStatement = false;
 
       llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
       llvm.LLVMBuildBr(module.builder, thisBlock);

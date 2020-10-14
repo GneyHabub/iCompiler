@@ -1,8 +1,8 @@
-routine bubble_sort(this_array: array [] integer) is
+routine bubble_sort(this_array: array [5] integer): integer is
   var temp: integer;
 
-  for i in 1..this_array.length loop
-    for j in i..this_array.length loop
+  for i in 1..5 loop
+    for j in i..5 loop
       if this_array[i] > this_array[j] then
         temp := this_array[i];
         this_array[i] := this_array[j];
@@ -10,9 +10,10 @@ routine bubble_sort(this_array: array [] integer) is
       end
     end
   end
+  return 0;
 end
 
-routine main() is
+routine main(): integer is
   var my_array: array [5] integer;
   my_array[1] := 4;
   my_array[2] := 1;
@@ -25,4 +26,6 @@ routine main() is
   for i in 1..5 loop
     print(my_array[i]);
   end
+
+  return 0;
 end
