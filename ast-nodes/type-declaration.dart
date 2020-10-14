@@ -45,7 +45,6 @@ class TypeDeclaration extends Declaration {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
     return null;
   }
 }

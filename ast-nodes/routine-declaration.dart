@@ -175,6 +175,9 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
     Pointer<LLVMOpaqueBasicBlock> lastBlock;
     Pointer<LLVMOpaqueBasicBlock> thisBlock;
     for (var statement in this.body) {
+      if (statement is TypeDeclaration) {
+        continue;
+      }
       thisBlock = llvm.LLVMValueAsBasicBlock(statement.generateCode(module));
       if (lastBlock != null) {
         llvm.LLVMPositionBuilderAtEnd(module.builder, lastBlock);
