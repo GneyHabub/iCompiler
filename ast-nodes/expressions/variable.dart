@@ -40,17 +40,10 @@ class Variable implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    if (true) {
-      return llvm.LLVMBuildLoad2(
-          module.builder,
-          resultType.getLlvmType(module),
-          scopeMark.resolve(name).valueRef,
-          MemoryManager.getCString('load_${this.name}'));
-    }
-    else {
-      return llvm.LLVMGetNamedGlobal(
-          module.module,
-          MemoryManager.getCString('load_${this.name}'));
-    }
+    return llvm.LLVMBuildLoad2(
+        module.builder,
+        resultType.getLlvmType(module),
+        scopeMark.resolve(name).valueRef,
+        MemoryManager.getCString('load_${this.name}'));
   }
 }

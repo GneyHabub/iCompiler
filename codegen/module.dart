@@ -1,8 +1,9 @@
 import 'dart:ffi';
 import 'dart:io' show Platform;
-import 'memory-manager.dart';
 import 'package:ffi/ffi.dart';
+import 'memory-manager.dart';
 import 'llvm.dart';
+import '../ast-nodes/index.dart';
 import '../utils/index.dart';
 
 String getLlvmPath() {
@@ -23,7 +24,7 @@ final llvm = LLVM(DynamicLibrary.open(getLlvmPath()));
 class Module {
   Pointer<LLVMOpaqueContext> context;
   Pointer<LLVMOpaqueBuilder> builder;
-  Pointer<LLVMOpaqueModule> module;
+  Pointer<LLVMOpaqueModule> _module;
   Pointer<LLVMOpaqueType> printfSignature;
   Pointer<LLVMOpaqueType> strcmpSignature;
   Pointer<LLVMOpaqueValue> printf;
@@ -34,7 +35,7 @@ class Module {
 
   Module(String name) {
     this.context = llvm.LLVMContextCreate();
-    this.module = llvm.LLVMModuleCreateWithNameInContext(
+    this._module = llvm.LLVMModuleCreateWithNameInContext(
       MemoryManager.getCString(name),
       this.context,
     );
@@ -47,22 +48,49 @@ class Module {
   }
 
   Pointer<LLVMOpaqueValue> addRoutine(String name, Pointer<LLVMOpaqueType> type) {
-    return llvm.LLVMAddFunction(this.module, MemoryManager.getCString(name), type);
+    return llvm.LLVMAddFunction(this._module, MemoryManager.getCString(name), type);
   }
 
   Pointer<LLVMOpaqueValue> getLastRoutine() {
-    return llvm.LLVMGetLastFunction(this.module);
+    return llvm.LLVMGetLastFunction(this._module);
   }
 
   Pointer<LLVMOpaqueValue> getRoutine(String name) {
-    return llvm.LLVMGetNamedFunction(this.module, MemoryManager.getCString(name));
+    return llvm.LLVMGetNamedFunction(this._module, MemoryManager.getCString(name));
+  }
+
+  Pointer<LLVMOpaqueValue> addGlobalVariable(String name, VarType type, Expression value) {
+    var resolvedType = type.resolve();
+    var variable = llvm.LLVMAddGlobal(
+        this._module,
+        resolvedType.getLlvmType(this),
+        MemoryManager.getCString(name));
+    if (resolvedType is IntegerType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstInt(
+        resolvedType.getLlvmType(this),
+        value.evaluate().integerValue,
+        1,  // SignExtend: true
+      ));
+    } else if (resolvedType is BooleanType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstInt(
+        resolvedType.getLlvmType(this),
+        value.evaluate().integerValue,
+        0,  // SignExtend: false
+      ));
+    } else if (resolvedType is RealType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstReal(
+        resolvedType.getLlvmType(this),
+        value.evaluate().realValue,
+      ));
+    }
+    return variable;
   }
 
   /// Get the string representation of the module.
   ///
   /// This includes metadata like the name as well as the instruction dump.
   String toString() {
-    var stringPtr = llvm.LLVMPrintModuleToString(this.module);
+    var stringPtr = llvm.LLVMPrintModuleToString(this._module);
     var representation = Utf8.fromUtf8(stringPtr.cast<Utf8>());
     llvm.LLVMDisposeMessage(stringPtr);
     return representation;
@@ -71,19 +99,19 @@ class Module {
   void validate() {
     Pointer<Pointer<Int8>> error = allocate<Pointer<Int8>>(count: 1);
     error.value = nullptr;
-    llvm.LLVMVerifyModule(this.module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
+    llvm.LLVMVerifyModule(this._module, LLVMVerifierFailureAction.LLVMAbortProcessAction, error);
     llvm.LLVMDisposeMessage(error.value);
   }
 
   void dumpBitcode(String filename) {
-    if (llvm.LLVMWriteBitcodeToFile(this.module, MemoryManager.getCString(filename)) != 0) {
+    if (llvm.LLVMWriteBitcodeToFile(this._module, MemoryManager.getCString(filename)) != 0) {
       throw StateError('Failed to write bitcode to \'$filename\'');
     }
   }
 
   /// Free the memory occupied by this module.
   void dispose() {
-    llvm.LLVMDisposeModule(this.module);
+    llvm.LLVMDisposeModule(this._module);
     llvm.LLVMDisposeBuilder(this.builder);
     llvm.LLVMContextDispose(this.context);
   }
