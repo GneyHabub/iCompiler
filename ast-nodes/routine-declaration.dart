@@ -132,6 +132,7 @@ class RoutineDeclaration extends Declaration implements ScopeCreator {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
+    module.isGlobal = false;
     var paramTypes = MemoryManager.getArray(this.parameters.length)
         .cast<Pointer<LLVMOpaqueType>>();
     for (var i = 0; i < this.parameters.length; i++) {

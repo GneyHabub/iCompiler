@@ -1,8 +1,9 @@
 import 'dart:ffi';
 import 'dart:io' show Platform;
-import 'memory-manager.dart';
 import 'package:ffi/ffi.dart';
+import 'memory-manager.dart';
 import 'llvm.dart';
+import '../ast-nodes/index.dart';
 import '../utils/index.dart';
 
 String getLlvmPath() {
@@ -28,6 +29,7 @@ class Module {
   Pointer<LLVMOpaqueType> strcmpSignature;
   Pointer<LLVMOpaqueValue> printf;
   Pointer<LLVMOpaqueValue> strcmp;
+  bool isGlobal = true;
 
   var LLVMValuesStorage = new Map();
 
@@ -55,6 +57,33 @@ class Module {
 
   Pointer<LLVMOpaqueValue> getRoutine(String name) {
     return llvm.LLVMGetNamedFunction(this._module, MemoryManager.getCString(name));
+  }
+
+  Pointer<LLVMOpaqueValue> addGlobalVariable(String name, VarType type, Expression value) {
+    var resolvedType = type.resolve();
+    var variable = llvm.LLVMAddGlobal(
+        this._module,
+        resolvedType.getLlvmType(this),
+        MemoryManager.getCString(name));
+    if (resolvedType is IntegerType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstInt(
+        resolvedType.getLlvmType(this),
+        value.evaluate().integerValue,
+        1,  // SignExtend: true
+      ));
+    } else if (resolvedType is BooleanType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstInt(
+        resolvedType.getLlvmType(this),
+        value.evaluate().integerValue,
+        0,  // SignExtend: false
+      ));
+    } else if (resolvedType is RealType) {
+      llvm.LLVMSetInitializer(variable, llvm.LLVMConstReal(
+        resolvedType.getLlvmType(this),
+        value.evaluate().realValue,
+      ));
+    }
+    return variable;
   }
 
   /// Get the string representation of the module.
