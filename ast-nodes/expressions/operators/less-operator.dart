@@ -47,7 +47,7 @@ class LessOperator extends BinaryRelation implements Comparison {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    if (this.resultType is IntegerType) {
+    if (this.leftOperand.resultType is IntegerType) {
       return llvm.LLVMBuildICmp(
         module.builder,
         LLVMIntPredicate.LLVMIntSLT,
