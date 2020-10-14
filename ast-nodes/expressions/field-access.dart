@@ -61,13 +61,28 @@ class FieldAccess implements ModifiablePrimary {
   }
 
   Pointer<LLVMOpaqueValue> generateCode(Module module) {
-    // TODO: implement
-    return null;
+    return llvm.LLVMBuildExtractValue(
+      module.builder,
+      (this.object as Variable).generateCode(module),
+      (this.object.resultType as RecordType).fields.indexWhere((el) => el.name == this.name),
+      MemoryManager.getCString('field_access'));
   }
 
   @override
   Pointer<LLVMOpaqueValue> getPointer(Module module) {
-    // TODO: implement getPointer
-    throw UnimplementedError();
+    var indices = MemoryManager.getArray(1).cast<Pointer<LLVMOpaqueValue>>();
+    indices.elementAt(0).value = llvm.LLVMConstInt(
+      this.resultType.getLlvmType(module),
+      (this.object.resultType as RecordType).fields.indexWhere((el) => el.name == this.name),
+      1,  // SignExtend: true
+    );;
+    return llvm.LLVMBuildGEP2(
+      module.builder,
+      this.resultType.getLlvmType(module),
+      this.object.generateCode(module),
+      indices,
+      1,
+      MemoryManager.getCString('field_access')
+    );
   }
 }

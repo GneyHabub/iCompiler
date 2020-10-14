@@ -82,6 +82,11 @@ class Assignment implements Statement {
         module.builder,
         this.rhs.generateCode(module),
         (this.lhs as IndexAccess).getPointer(module));
+    } else if (this.lhs is FieldAccess) {
+      llvm.LLVMBuildStore(
+        module.builder,
+        this.rhs.generateCode(module),
+        (this.lhs as FieldAccess).getPointer(module));
     }
     return llvm.LLVMBasicBlockAsValue(block);
   }
